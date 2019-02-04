@@ -15,10 +15,10 @@ class Session {
         
     }
     
-    public static var shared = Session()
+    public static let shared = Session()
     
-    var token: Int = 0
-    var userId: String = ""
+    var userId: Int = 0
+    var token: String = ""
     
-     
+    
 }
