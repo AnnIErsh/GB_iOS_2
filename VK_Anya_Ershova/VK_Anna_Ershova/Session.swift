@@ -20,5 +20,5 @@ class Session {
     var token: Int = 0
     var userId: String = ""
     
-    
+     
 }
