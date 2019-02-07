@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="Swf-c8-uA4">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
@@ -342,6 +342,41 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="5KL-9m-dsW" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="420" y="465.51724137931041"/>
+        </scene>
+        <!--Login Vk View Controller-->
+        <scene sceneID="RmS-7t-RXd">
+            <objects>
+                <viewController id="Swf-c8-uA4" customClass="LoginVkViewController" customModule="VK_Anna_Ershova" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="ls1-4m-dpM">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <wkWebView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Swe-Hf-Iqg">
+                                <rect key="frame" x="0.0" y="20" width="375" height="647"/>
+                                <color key="backgroundColor" red="0.36078431370000003" green="0.38823529410000002" blue="0.4039215686" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <wkWebViewConfiguration key="configuration">
+                                    <audiovisualMediaTypes key="mediaTypesRequiringUserActionForPlayback" none="YES"/>
+                                    <wkPreferences key="preferences"/>
+                                </wkWebViewConfiguration>
+                            </wkWebView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="Swe-Hf-Iqg" firstAttribute="leading" secondItem="Ohn-wD-hOf" secondAttribute="leading" id="M1p-p0-iHU"/>
+                            <constraint firstItem="Swe-Hf-Iqg" firstAttribute="top" secondItem="Ohn-wD-hOf" secondAttribute="top" id="NVo-4J-5TN"/>
+                            <constraint firstItem="Ohn-wD-hOf" firstAttribute="bottom" secondItem="Swe-Hf-Iqg" secondAttribute="bottom" id="neC-m0-5mF"/>
+                            <constraint firstItem="Ohn-wD-hOf" firstAttribute="trailing" secondItem="Swe-Hf-Iqg" secondAttribute="trailing" id="sWx-B2-UrJ"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="Ohn-wD-hOf"/>
+                    </view>
+                    <connections>
+                        <outlet property="webView" destination="Swe-Hf-Iqg" id="cRe-bx-3Bx"/>
+                        <segue destination="DE0-hE-RKr" kind="presentation" identifier="VKLogin" id="gLC-rm-XqX"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="B0t-eM-F8b" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-1983" y="-715"/>
         </scene>
         <!--Login Form Controller-->
         <scene sceneID="tne-QT-ifu">
@@ -766,6 +801,7 @@
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="GhU-Nv-JRa"/>
+        <segue reference="gLC-rm-XqX"/>
     </inferredMetricsTieBreakers>
     <color key="tintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
 </document>
