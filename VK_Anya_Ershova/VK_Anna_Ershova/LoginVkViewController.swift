@@ -19,7 +19,7 @@ class LoginVkViewController: UIViewController {
         }
     }
     
-    //private var sessionToken = Session.shared.token
+    //var sessionToken = Session.shared.token
         
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -40,7 +40,10 @@ class LoginVkViewController: UIViewController {
         
         webView.load(request)
         
+        //var sessionToken = Session.shared.token
         
+
+
     }
     
     
@@ -66,27 +69,29 @@ extension LoginVkViewController: WKNavigationDelegate {
                 return dict
         }
         
-        print("my token before:" , Session.shared.token)
+        //print("my token before:" , sessionToken)
 
         print(params)
-
+        
+        
         guard let token = params["access_token"], let userId = Int(params["user_id"]!) else {
             decisionHandler(.cancel)
             return
         }
-        
-        
+
 
         Session.shared.token = token
         print(token, userId)
         //loadGroups()
         performSegue(withIdentifier: "VKLogin", sender: nil)
         decisionHandler(.cancel)
-        
-        print("my token after: ", Session.shared.token)
+        //print("my token after: ", sessionToken)
+        Session.shared.printTokenSession()
         
 
     }
+    
+    
     
 
     

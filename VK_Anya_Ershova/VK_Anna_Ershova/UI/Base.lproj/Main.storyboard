@@ -371,7 +371,7 @@
                     </view>
                     <connections>
                         <outlet property="webView" destination="Swe-Hf-Iqg" id="cRe-bx-3Bx"/>
-                        <segue destination="DE0-hE-RKr" kind="presentation" identifier="VKLogin" id="gLC-rm-XqX"/>
+                        <segue destination="BYZ-38-t0r" kind="presentation" identifier="VKLogin" id="Vpr-Kq-7x7"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="B0t-eM-F8b" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -800,8 +800,7 @@
         <image name="newsIcon" width="22.5" height="22.5"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="GhU-Nv-JRa"/>
-        <segue reference="gLC-rm-XqX"/>
+        <segue reference="WmZ-gH-NZk"/>
     </inferredMetricsTieBreakers>
     <color key="tintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
 </document>

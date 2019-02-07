@@ -152,8 +152,14 @@ class LoginFormController: UIViewController {
         view.addSubview(cloudView)
         view.addSubview(refreshView)
         
-
         
+        //networking
+
+        let networkingService = VKService()
+        networkingService.loadGroups()
+        networkingService.loadFriends()
+        networkingService.loadPhoto()
+        networkingService.searchGroups()
         
     }
     
