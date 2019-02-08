@@ -20,7 +20,7 @@ class Session {
     var userId: Int = 0
     var token: String = ""
     
-    public func printTokenSession(){
-        Swift.print("my token", token)
-    }
+//    public func printTokenSession(){
+//        Swift.print("my token", token)
+//    }
 }

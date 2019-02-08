@@ -69,7 +69,7 @@ extension LoginVkViewController: WKNavigationDelegate {
                 return dict
         }
         
-        //print("my token before:" , sessionToken)
+
 
         print(params)
         
@@ -81,12 +81,13 @@ extension LoginVkViewController: WKNavigationDelegate {
 
 
         Session.shared.token = token
+        Session.shared.userId = userId
         print(token, userId)
         //loadGroups()
         performSegue(withIdentifier: "VKLogin", sender: nil)
         decisionHandler(.cancel)
         //print("my token after: ", sessionToken)
-        Session.shared.printTokenSession()
+        //Session.shared.printTokenSession()
         
 
     }

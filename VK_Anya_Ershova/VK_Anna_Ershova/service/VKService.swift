@@ -58,10 +58,10 @@ class VKService {
         }
     }
     
-    func searchGroups() {
+    func searchGroups(isSearching: String) {
         
         
-        let isSearching = "A"
+        //let isSearching = "A"
         let path = "/method/groups.search"
         let params: Parameters = [
             "count": 5,
@@ -80,11 +80,11 @@ class VKService {
     
     func loadPhoto() {
         
-        let path = "/method/photos.get"
+        let path = "/method/photos.getAll"
         let params: Parameters = [
             "access_token" : sessionToken,
-            //"owner_id" : ,
-            "album_id" : "profile",
+            //"owner_id" : sessionToken,
+            //"album_id" : "profile",
             "count": 5,
             "extended" : 1,
             "v": "5.92"
@@ -94,6 +94,25 @@ class VKService {
             guard let value = response.value else { return }
             
             print("____________ Loading Photos ____________: \(value) -----------")
+        }
+    }
+    
+    
+    func loadPhotoById(_ ownerId: Int) {
+        let path = "/method/photos.get"
+        let params: Parameters = [
+            "access_token" : sessionToken,
+            "owner_id" : "\(ownerId)",
+            "album_id" : "profile",
+            "count": 5,
+            "extended" : 1,
+            "v": "5.92"
+        ]
+        
+        Alamofire.request(url+path, method: .get, parameters: params).responseJSON { response in
+            guard let value = response.value else { return }
+            
+            print("____________ Loading Photos by ID ____________: \(value) -----------")
         }
     }
 }

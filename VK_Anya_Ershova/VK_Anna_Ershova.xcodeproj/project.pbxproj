@@ -136,11 +136,10 @@
 		0B1BB40721C861A600B3F9AB /* VK_Anna_Ershova */ = {
 			isa = PBXGroup;
 			children = (
-				0BA04F532208652800655A82 /* Session.swift */,
-				0BE9EE08220C6E5400E2F347 /* LoginVkViewController.swift */,
+				0B54A3C3220D2523004E7ECD /* service */,
 				0B1BB40A21C861A600B3F9AB /* LoginFormController.swift */,
-				0B62FDCC220CA61E005A5E9D /* VKService.swift */,
 				0B1BB40821C861A600B3F9AB /* AppDelegate.swift */,
+				0B1BB40C21C861A600B3F9AB /* Main.storyboard */,
 				0B1BB41421C861A800B3F9AB /* Info.plist */,
 				0BA04F52220864B000655A82 /* UI */,
 			);
@@ -179,6 +178,16 @@
 			path = CustomControl;
 			sourceTree = "<group>";
 		};
+		0B54A3C3220D2523004E7ECD /* service */ = {
+			isa = PBXGroup;
+			children = (
+				0BA04F532208652800655A82 /* Session.swift */,
+				0B62FDCC220CA61E005A5E9D /* VKService.swift */,
+				0BE9EE08220C6E5400E2F347 /* LoginVkViewController.swift */,
+			);
+			path = service;
+			sourceTree = "<group>";
+		};
 		0B6BA46421F65D1800AF2042 /* News */ = {
 			isa = PBXGroup;
 			children = (
@@ -204,7 +213,6 @@
 		0BA04F52220864B000655A82 /* UI */ = {
 			isa = PBXGroup;
 			children = (
-				0B1BB40C21C861A600B3F9AB /* Main.storyboard */,
 				0B1BB40F21C861A800B3F9AB /* Assets.xcassets */,
 				0B1BB41121C861A800B3F9AB /* LaunchScreen.storyboard */,
 				0B2B00A221D507EF001E67A2 /* CollectionFriends */,
