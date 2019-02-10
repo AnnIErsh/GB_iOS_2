@@ -110,6 +110,35 @@ class LoginFormController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        
+        
+        // MARK: console output
+        
+        let networkingService = VKService()
+        networkingService.loadGroups()
+        networkingService.loadFriends()
+        networkingService.loadPhoto()
+        networkingService.searchGroups(isSearching: "api")
+        
+        //networkingService.loadPhotobyId(210700286)
+        networkingService.loadPhotoById(Session.shared.userId)
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
         // жест нажатия
         let hideKeyboardGesture = UITapGestureRecognizer(target: self, action: #selector(hideKeyboard))
         // присваиваем его UIScrollVIew
@@ -153,7 +182,6 @@ class LoginFormController: UIViewController {
         view.addSubview(refreshView)
         
 
-        
         
     }
     
