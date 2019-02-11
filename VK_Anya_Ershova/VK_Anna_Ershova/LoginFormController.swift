@@ -44,6 +44,29 @@ class LoginFormController: UIViewController {
     //очистка логина и пароля
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
+        
+        
+        
+        
+        
+        // MARK: console output
+        
+        let networkingService = VKService()
+        networkingService.loadGroups()
+        networkingService.loadFriends()
+        networkingService.loadPhoto()
+        networkingService.searchGroups(isSearching: "api")
+        
+        //networkingService.loadPhotobyId(210700286)
+        networkingService.loadPhotoById(Session.shared.userId)
+        
+        
+        
+        
+        
+        
+        
+        
         loginTextField.text = ""
         passwordTextField.text = ""
         
@@ -109,34 +132,6 @@ class LoginFormController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        
-        
-        // MARK: console output
-        
-        let networkingService = VKService()
-        networkingService.loadGroups()
-        networkingService.loadFriends()
-        networkingService.loadPhoto()
-        networkingService.searchGroups(isSearching: "api")
-        
-        //networkingService.loadPhotobyId(210700286)
-        networkingService.loadPhotoById(Session.shared.userId)
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
         
         
         // жест нажатия
