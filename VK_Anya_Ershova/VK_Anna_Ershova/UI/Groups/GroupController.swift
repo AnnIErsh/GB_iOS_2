@@ -14,7 +14,9 @@ class GroupController: UITableViewController{
     var groups = ["Barbie", "Bratz", "Myscene", "Monsterhigh"]
     //private var imagesGr = ["Barbie", "Bratz", "Myscene", "Monsterhigh"]
     
-    
+    var groupsVK = [Group]()
+    var groupService = VKService()
+    var groupname = [String]()
     
     @IBAction func add(segue: UIStoryboardSegue) {
         if segue.identifier == "add" {
@@ -40,6 +42,18 @@ class GroupController: UITableViewController{
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        groupService.loadGroups(){ [weak self] groupsVK, error in
+            if let error = error {
+                print(error.localizedDescription)
+                return
+            } else if let groupsVK = groupsVK, let self = self {
+                self.groupsVK = groupsVK
+        
+                DispatchQueue.main.async {
+                    self.tableView.reloadData()
+                }
+            }
+        }
 
     }
 
@@ -52,16 +66,17 @@ class GroupController: UITableViewController{
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        return groups.count
+        return groupsVK.count
     }
 
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "GroupCell", for: indexPath) as! GroupCell
     
-        let group = groups[indexPath.row]
-        let img = UIImage(named: group)
-        cell.configure(friend: group, img: img!)
+//        let group = groups[indexPath.row]
+//        let img = UIImage(named: group)
+//        cell.configure(friend: group, img: img!)
+        cell.configured(with: groupsVK[indexPath.row])
 
 
         return cell
@@ -74,7 +89,7 @@ class GroupController: UITableViewController{
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
             // Delete the row from the data source
-            groups.remove(at: indexPath.row)
+            groupsVK.remove(at: indexPath.row)
             //imagesGr.remove(at: indexPath.row)
             tableView.deleteRows(at: [indexPath], with: .fade)
             tableView.reloadData()

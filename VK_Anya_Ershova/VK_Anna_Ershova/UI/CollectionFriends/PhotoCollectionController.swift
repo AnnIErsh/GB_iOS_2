@@ -12,6 +12,11 @@ import UIKit
 
 class PhotoCollectionController: UICollectionViewController {
     var photoFriend: String = ""
+    
+    var photosFriends = [Photo]()
+    var photoService = VKService()
+    var ownerId: Int = 0
+    
 
    
    
@@ -21,7 +26,24 @@ class PhotoCollectionController: UICollectionViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        photoService.loadPhoto(ownerId: ownerId) { [weak self] photosFriends, error in
+            if let error = error {
+                print(error.localizedDescription)
+                return
+            } else if let photosFriends = photosFriends, let self = self {
+                self.photosFriends = photosFriends
+                
+                
+                
+                DispatchQueue.main.async {
+                    self.collectionView.reloadData()
+                }
 
+            }
+            
+        }
+        
     }
     
 
@@ -48,12 +70,12 @@ class PhotoCollectionController: UICollectionViewController {
 
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of items
-        return 1
+        return photosFriends.count
     }
 
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "photoIDCell", for: indexPath) as! PhotoViewCollectionCell
-        cell.photoFriendView.image = UIImage(named: photoFriend)
+        //cell.photoFriendView.image = UIImage(named: photoFriend)
   
     
         //cell.photoFriendView.image = UIImage(named: photoFriend)
@@ -80,7 +102,7 @@ class PhotoCollectionController: UICollectionViewController {
 //        animationIn.beginTime = CACurrentMediaTime()
 //        animationIn.fillMode = CAMediaTimingFillMode.backwards
 //        cell.photoFriendView.layer.add(animationIn, forKey: nil)
-        
+        cell.configured(with: photosFriends[indexPath.row])
         
         
         

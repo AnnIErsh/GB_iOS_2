@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Kingfisher
 
 class AllFriendsCell: UITableViewCell {
     
@@ -38,6 +39,16 @@ class AllFriendsCell: UITableViewCell {
     }
     
     
+    func configured(with friend: User) {
+        
+        let userName = friend.name
+        friendName.text = userName
+        
+        let img = friend.avatar
+        imageName.kf.setImage(with: URL(string: img))
+    }
+    
+    
     // MARK: LifeCycle
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -48,3 +59,11 @@ class AllFriendsCell: UITableViewCell {
     }
     
 }
+//    func configure(with friend: User) {
+//
+//        let userName = friend.firstname + " " + friend.lastname
+//        friendName.text = userName
+//
+//        let img = friend.avatar
+//        imageName.kf.setImage(with: URL(string: img))
+//    }

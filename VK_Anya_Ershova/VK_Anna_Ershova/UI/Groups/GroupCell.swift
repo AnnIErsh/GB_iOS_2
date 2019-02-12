@@ -26,6 +26,15 @@ class GroupCell: UITableViewCell {
         imageGr.image = img
     }
     
+    func configured(with group: Group) {
+        
+        let name = group.name
+        grdName.text = name
+        
+        let img = group.photo
+        imageGr.kf.setImage(with: URL(string: img))
+    }
+    
     
     
     override func awakeFromNib() {

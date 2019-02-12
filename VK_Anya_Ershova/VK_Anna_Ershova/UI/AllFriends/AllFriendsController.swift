@@ -7,20 +7,29 @@
 //
 
 import UIKit
+import Kingfisher
 
 
 
 class AllFriendsController: UITableViewController, UISearchBarDelegate {
+    
+    
+    private let userService = VKService()
+    var users = [User]()
+    var friendId = 0
+    public var fullname = [String]()
+    //    public var firstname = [String]()
+    public var fullImage = [String]()
+    
     @IBOutlet weak var searchBar: UISearchBar!
     
     // MARK: Private Properties
     private var friends = ["Cameron", "Chloe", "Jade", "Sasha", "Yasmin", "Dipper", "Mabel", "Stanly", "Will", "Irma", "Taranee", "Cornelia", "Haylin"].sorted(by: {$0 < $1})
     
-    // private var images = ["Cameron", "Chloe", "Jade", "Sasha", "Yasmin", "Dipper", "Mabel", "Stanly", "Will", "Irma", "Taranee", "Cornelia", "Haylin"]
     
     
-    private var friendsIndexTitles = ["C","D","H","I","J","M","S","T", "W", "Y"]
-    
+    private var friendsIndexTitles = [String]()
+    //["C","D","H","I","J","M","S","T", "W", "Y"]
     //let searchController = UISearchController(searchResultsController: nil)
     
     //var dividedArray: NSMutableArray = []
@@ -32,6 +41,32 @@ class AllFriendsController: UITableViewController, UISearchBarDelegate {
     override func viewDidLoad() {
         
         super.viewDidLoad()
+        
+        userService.loadFriends() { [weak self] users, error in
+            if let error = error {
+                print(error.localizedDescription)
+                return
+            } else if let users = users, let self = self {
+                self.users = users
+                
+                
+                
+                DispatchQueue.main.async {
+                    self.tableView.reloadData()
+                }
+                for index in users {
+                    let friendIndexTitle = index.name.first
+                    self.fullname.append(index.name)
+                    //                    self.firstname.append(index.firstname)
+                    self.fullImage.append(index.avatar)
+                    
+                    if !self.friendsIndexTitles.contains(String(friendIndexTitle!)) {
+                        self.friendsIndexTitles.append(String(friendIndexTitle!))
+                    }
+                }
+                self.friendsIndexTitles.sort()
+            }
+        }
         
         //        for index in friendsIndexTitles{
         //            let helpArray: NSMutableArray = []
@@ -70,7 +105,7 @@ class AllFriendsController: UITableViewController, UISearchBarDelegate {
         if isSearch {
             devider = filterFr
         } else {
-            devider = friends.filter {$0[$0.startIndex] == Character(friendsIndexTitles[section])
+            devider = fullname.filter {$0[$0.startIndex] == Character(friendsIndexTitles[section])
             }
         }
         //return (dividedArray[section] as! NSMutableArray).count
@@ -80,7 +115,7 @@ class AllFriendsController: UITableViewController, UISearchBarDelegate {
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "FriendCell", for: indexPath) as! AllFriendsCell
-        
+        //let friendUser = users[indexPath.row]
         
         if isSearch {
             devider = filterFr
@@ -94,15 +129,15 @@ class AllFriendsController: UITableViewController, UISearchBarDelegate {
             //            cell.friendName.text = friend
             //            cell.configure(friend: friend!, img: img!)
             
-            devider = friends.filter {$0[$0.startIndex] == Character(friendsIndexTitles[indexPath.section]) }
-            let friend = devider[indexPath.row]
-            let img = UIImage(named: friend)
-            cell.configure(friend: friend, img: img!)
+            //devider = fullname.filter {$0[$0.startIndex] == Character(friendsIndexTitles[indexPath.section]) }
+            //let friend = devider[indexPath.row]
+            //let img = UIImage(named: friend)
+            cell.configured(with: users[indexPath.row])
         }
         
-        let friend = devider[indexPath.row]
-        let img = UIImage(named: friend)
-        cell.configure(friend: friend, img: img!)
+        //let friend = devider[indexPath.row]
+        //let img = UIImage(named: friend)
+        cell.configured(with: users[indexPath.row])
         
         //        let helpArray = dividedArray[indexPath.section] as! NSMutableArray
         //        let friend = helpArray[indexPath.row] as? String
@@ -144,25 +179,32 @@ class AllFriendsController: UITableViewController, UISearchBarDelegate {
     
     
     
+//    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+//        if segue.identifier == "showPhoto" {
+//            let destinationVC : PhotoCollectionController = segue.destination as! PhotoCollectionController
+//            let sourceVC = segue.source as! AllFriendsController
+//            if let indexPath = sourceVC.tableView.indexPathForSelectedRow {
+//                if isSearch {
+//                    devider = filterFr
+//                } else {
+//
+//                    devider = fullname.filter {$0[$0.startIndex] == Character(friendsIndexTitles[indexPath.section]) }
+//                }
+//                let photoFriend = sourceVC.devider[indexPath.row]
+//                destinationVC.photoFriend = photoFriend
+//
+//            }
+//        }
+//
+//    }
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "showPhoto" {
-            let destinationVC : PhotoCollectionController = segue.destination as! PhotoCollectionController
-            let sourceVC = segue.source as! AllFriendsController
-            if let indexPath = sourceVC.tableView.indexPathForSelectedRow {
-                if isSearch {
-                    devider = filterFr
-                } else {
-                    
-                    devider = friends.filter {$0[$0.startIndex] == Character(friendsIndexTitles[indexPath.section]) }
-                }
-                let photoFriend = sourceVC.devider[indexPath.row]
-                destinationVC.photoFriend = photoFriend
-                
+            if let indexPath = self.tableView.indexPathForSelectedRow {
+                let controller = segue.destination as! PhotoCollectionController
+                controller.ownerId = users[indexPath.row].id 
             }
         }
-        
     }
-    
     
     internal override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let secView = UIView()
@@ -191,7 +233,7 @@ class AllFriendsController: UITableViewController, UISearchBarDelegate {
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         if searchText != "" {
             isSearch = true
-            filterFr = friends.filter({ (group) -> Bool in
+            filterFr = fullname.filter({ (group) -> Bool in
                 group.lowercased().contains(searchText.lowercased())
             })
             
@@ -314,14 +356,14 @@ class AllFriendsController: UITableViewController, UISearchBarDelegate {
         opacityUp.duration = 0.8
         opacityUp.timingFunction = CAMediaTimingFunction(name: CAMediaTimingFunctionName.easeOut)
         cell.layer.add(opacityUp, forKey: nil)
-//        
-//        let scaleUp = CABasicAnimation(keyPath: "transform.scale")
-//        scaleUp.beginTime = CACurrentMediaTime()
-//        scaleUp.fromValue = 0.5
-//        scaleUp.toValue = 1
-//        scaleUp.duration = 0.3
-//        scaleUp.timingFunction = CAMediaTimingFunction(name: CAMediaTimingFunctionName.easeOut)
-//        cell.layer.add(scaleUp, forKey: nil)
+        //
+        //        let scaleUp = CABasicAnimation(keyPath: "transform.scale")
+        //        scaleUp.beginTime = CACurrentMediaTime()
+        //        scaleUp.fromValue = 0.5
+        //        scaleUp.toValue = 1
+        //        scaleUp.duration = 0.3
+        //        scaleUp.timingFunction = CAMediaTimingFunction(name: CAMediaTimingFunctionName.easeOut)
+        //        cell.layer.add(scaleUp, forKey: nil)
     }
     
     
@@ -334,13 +376,13 @@ class AllFriendsController: UITableViewController, UISearchBarDelegate {
         opacityDown.timingFunction = CAMediaTimingFunction(name: CAMediaTimingFunctionName.easeOut)
         cell.layer.add(opacityDown, forKey: nil)
         
-//        let scaleDown = CABasicAnimation(keyPath: "transform.scale")
-//        scaleDown.beginTime = CACurrentMediaTime()
-//        scaleDown.fromValue = 1
-//        scaleDown.toValue = 0.5
-//        scaleDown.duration = 0.3
-//        scaleDown.timingFunction = CAMediaTimingFunction(name: CAMediaTimingFunctionName.easeOut)
-//        cell.layer.add(scaleDown, forKey: nil)
+        //        let scaleDown = CABasicAnimation(keyPath: "transform.scale")
+        //        scaleDown.beginTime = CACurrentMediaTime()
+        //        scaleDown.fromValue = 1
+        //        scaleDown.toValue = 0.5
+        //        scaleDown.duration = 0.3
+        //        scaleDown.timingFunction = CAMediaTimingFunction(name: CAMediaTimingFunctionName.easeOut)
+        //        cell.layer.add(scaleDown, forKey: nil)
     }
     
 }

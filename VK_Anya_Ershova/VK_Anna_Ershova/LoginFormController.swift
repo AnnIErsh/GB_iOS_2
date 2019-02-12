@@ -52,13 +52,13 @@ class LoginFormController: UIViewController {
         // MARK: console output
         
         let networkingService = VKService()
-        networkingService.loadGroups()
-        networkingService.loadFriends()
-        networkingService.loadPhoto()
-        networkingService.searchGroups(isSearching: "api")
+        //networkingService.loadGroups()
+        //networkingService.loadFriends()
+        networkingService.loadPhoto(ownerId: Session.shared.userId)
+        //networkingService.searchGroups(isSearching: "api")
         
         //networkingService.loadPhotobyId(210700286)
-        networkingService.loadPhotoById(Session.shared.userId)
+        //networkingService.loadPhotoById(Session.shared.userId)
         
         
         
