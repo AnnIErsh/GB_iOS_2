@@ -48,6 +48,31 @@ class VKService {
         }
         
     }
+    func searchFriends(isSearching: String ,completion: (([User]?, Error?) -> Void)? = nil) {
+        
+        let path = "/method/friends.search"
+        let params: Parameters = [
+            //"count": 3,
+            "access_token" : sessionToken,
+            "q" : isSearching,
+            "v": "5.92",
+            //"order" : "name"
+        ]
+        
+        Alamofire.request(url+path, method: .get, parameters: params).responseJSON { repsonse in
+            switch repsonse.result {
+            case .failure(let error):
+                print(error.localizedDescription)
+            case .success(let value):
+                let json = JSON(value)
+                let users = json["response"]["items"].arrayValue.map { User(json: $0) }
+                completion?(users, nil)
+                print("____________ Get Friends ____________: \(value) -----------")
+                users.forEach{print($0)}
+            }
+        }
+        
+    }
     
     
     
@@ -75,8 +100,79 @@ class VKService {
             }
         }
     }
+    func searchGroups(isSearching: String, completion: (([Group]?, Error?) -> Void)? = nil) {
+        let path = "/method/groups.search"
+        let params: Parameters = [
+            "count": 30,
+            "access_token" : sessionToken,
+            "extended" : 1,
+            "q": isSearching,
+            "v": "5.92"
+        ]
+        Alamofire.request(url+path, method: .get, parameters: params).responseJSON  { repsonse in
+            switch repsonse.result {
+            case .failure(let error):
+                print(error.localizedDescription)
+            case .success(let value):
+                let json = JSON(value)
+                let groups = json["response"]["items"].arrayValue.map { Group(json: $0) }
+                completion?(groups, nil)
+                print("____________ Search Groups ____________: \(value) -----------")
+                groups.forEach{print($0)}
+            }
+        }
+    }
     
-    func searchGroups(completion: (([GlobalGroup]?, Error?) -> Void)? = nil) {
+    func leftGroups(for group_id: Int, completion: (([Group]?, Error?) -> Void)? = nil) {
+        let path = "/method/groups.leave"
+        let params: Parameters = [
+            //"count": 30,
+            "access_token" : sessionToken,
+            "group_id" : group_id,
+            "v": "5.92"
+        ]
+        Alamofire.request(url+path, method: .get, parameters: params).responseJSON  { repsonse in
+            switch repsonse.result {
+            case .failure(let error):
+                print(error.localizedDescription)
+            case .success(let value):
+                let json = JSON(value)
+                let groups = json["response"]["items"].arrayValue.map { Group(json: $0) }
+                completion?(groups, nil)
+                print("____________ Left Groups ____________: \(value) -----------")
+                groups.forEach{print($0)}
+            }
+        }
+    }
+    func addGroups(for group_id: Int, completion: (([Group]?, Error?) -> Void)? = nil) {
+        let path = "/method/groups.join"
+        let params: Parameters = [
+            //"count": 30,
+            "access_token" : sessionToken,
+            "group_id" : group_id,
+            "v": "5.92"
+        ]
+        Alamofire.request(url+path, method: .get, parameters: params).responseJSON  { repsonse in
+            switch repsonse.result {
+            case .failure(let error):
+                print(error.localizedDescription)
+            case .success(let value):
+                let json = JSON(value)
+                let groups = json["response"]["items"].arrayValue.map { Group(json: $0) }
+                completion?(groups, nil)
+                print("____________ Left Groups ____________: \(value) -----------")
+                groups.forEach{print($0)}
+            }
+        }
+    }
+    
+    
+    
+    
+    
+    
+    
+    func searchGlobalGroups(completion: (([GlobalGroup]?, Error?) -> Void)? = nil) {
         
         
         //let isSearching = "A"

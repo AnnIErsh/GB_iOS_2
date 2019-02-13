@@ -17,9 +17,14 @@ class AllFriendsController: UITableViewController, UISearchBarDelegate {
     private let userService = VKService()
     var users = [User]()
     var friendId = 0
-    public var fullname = [String]()
+    var fullname = [String]()
     //    public var firstname = [String]()
-    public var fullImage = [String]()
+    var fullImage = [String]()
+    
+    
+    
+    
+    
     
     @IBOutlet weak var searchBar: UISearchBar!
     
@@ -36,7 +41,8 @@ class AllFriendsController: UITableViewController, UISearchBarDelegate {
     var devider = [""]
     
     var isSearch = false
-    var filterFr = [String]()
+    var filterFr = [User]()
+    var nofilterFr = [User]()
     
     override func viewDidLoad() {
         
@@ -98,29 +104,35 @@ class AllFriendsController: UITableViewController, UISearchBarDelegate {
         if isSearch {
             return 1
         } else {
-            return friendsIndexTitles.count
+            return filteringText(in: users).count
+            //return friendsIndexTitles.count
         }
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if isSearch {
-            devider = filterFr
+            //devider = filterFr
+            return filter(of: users, in: section).count
         } else {
-            devider = fullname.filter {$0[$0.startIndex] == Character(friendsIndexTitles[section])}
+            
+            return filter(of: users, in: section).count
+            // devider = fullname.filter {$0[$0.startIndex] == Character(friendsIndexTitles[section])}
         }
         //return (dividedArray[section] as! NSMutableArray).count
-        return devider.count
+        //return users.count
     }
-    
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "FriendCell", for: indexPath) as! AllFriendsCell
         //let friendUser = users[indexPath.row]
-        
+        var friendAfter = [User]()
         if isSearch {
-            devider = filterFr
-            cell.friendName.text = devider[indexPath.row]
+            //devider = filterFr
+            friendAfter = filter(of: filterFr, in: indexPath.section)
+            //cell.friendName.text = devider[indexPath.row]
         } else {
+            
+            friendAfter = filter(of: users, in: indexPath.section)
             //
             //            let helpArray = dividedArray[indexPath.section] as! NSMutableArray
             //            let friend = helpArray[indexPath.row] as? String
@@ -137,7 +149,7 @@ class AllFriendsController: UITableViewController, UISearchBarDelegate {
         
         //let friend = devider[indexPath.row]
         //let img = UIImage(named: friend)
-        cell.configured(with: users[indexPath.row])
+        cell.configured(with: friendAfter[indexPath.row])
         
         //        let helpArray = dividedArray[indexPath.section] as! NSMutableArray
         //        let friend = helpArray[indexPath.row] as? String
@@ -164,7 +176,8 @@ class AllFriendsController: UITableViewController, UISearchBarDelegate {
         if isSearch {
             return nil
         } else {
-            return self.friendsIndexTitles
+            return filteringText(in: users)
+            //return self.friendsIndexTitles
             
         }
     }
@@ -233,9 +246,12 @@ class AllFriendsController: UITableViewController, UISearchBarDelegate {
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         if searchText != "" {
             isSearch = true
-            filterFr = fullname.filter({ (group) -> Bool in
-                group.lowercased().contains(searchText.lowercased())
-            })
+            filterFr = users.filter({( name ) -> Bool in
+                return name.name.lowercased().contains(searchText.lowercased()) || name.name.lowercased().contains(searchText.lowercased())})
+          
+//            filterFr = fullname.filter({ (group) -> Bool in
+//                group.lowercased().contains(searchText.lowercased())
+//            })
             
             tableView.reloadData()
             
@@ -387,6 +403,27 @@ class AllFriendsController: UITableViewController, UISearchBarDelegate {
     
 }
 
-
+extension AllFriendsController {
+    
+    func filteringSearchingText(for text: String, _ : String = "All"){
+        filterFr = users.filter({( name ) -> Bool in
+            return name.name.lowercased().contains(text.lowercased()) || name.name.lowercased().contains(text.lowercased())})
+        tableView.reloadData()
+    }
+    
+    func filter (of users: [User], in section: Int) -> [User] {
+        let key = filteringText(in: users)[section]
+        return users.filter { $0.name.first! == Character(key) }
+    }
+    
+    func filteringText (in users: [User]) -> [String] {
+        var initText = [String]()
+        for user in users {
+            initText.append(String(user.name.first!))
+        }
+        return Array(Set(initText)).sorted()
+    }
+    
+}
 
 

@@ -29,7 +29,7 @@ class AllGroupController: UITableViewController, UISearchBarDelegate {
         
         filterGr = groupsAll
         
-        allgroupService.searchGroups(){ [weak self] allgroupsVK, error in
+        allgroupService.searchGlobalGroups(){ [weak self] allgroupsVK, error in
             if let error = error {
                 print(error.localizedDescription)
                 return
