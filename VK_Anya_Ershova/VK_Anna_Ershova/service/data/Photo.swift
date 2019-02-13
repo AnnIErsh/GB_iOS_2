@@ -13,9 +13,11 @@ class Photo : CustomStringConvertible {
     var description: String {
         return " The photos are \(photoURL) "
     }
+    var id = 0
     var photoURL : String
 
     init(json: JSON)  {
+        self.id = json["id"].intValue
         self.photoURL = json["sizes"][8]["url"].stringValue
     }
 }

@@ -26,10 +26,30 @@ class GroupController: UITableViewController{
 //            let allGroupController = segue.source as! AllGroupController
 //            if let indexPath = allGroupController.tableView.indexPathForSelectedRow {
 //
-//                let gr = allGroupController.filterGr[indexPath.row]
+//                let gr = allGroupController.filterGr[indexPath.row].id
 //                //let grAll = allGroupController.groupsAll[indexPath.row]
-//                if !groupsVK.contains(where: gr) {
-//                    groupsVK.append(gr)
+//                if  groupsVK[indexPath.row].id == gr {
+//                    groupsVK.append(allGroupController.filterGr[indexPath.row])
+//                    tableView.reloadData()
+//                }
+//
+//            }
+//
+//        }
+//
+//    }
+//
+//    @IBAction func add(segue: UIStoryboardSegue) {
+//        if segue.identifier == "add" {
+//
+//            let allGroupController = segue.source as! AllGroupController
+//            if let indexPath = allGroupController.tableView.indexPathForSelectedRow {
+//
+//                let gr = allGroupController.filterGr[indexPath.row].id
+//                //let grAll = allGroupController.groupsAll[indexPath.row]
+//                if  groupsVK[indexPath.row].id == gr {
+//                    groupService.addGroups(gr)
+//                    //groupsVK.append(allGroupController.filterGr[indexPath.row])
 //                    tableView.reloadData()
 //                }
 //

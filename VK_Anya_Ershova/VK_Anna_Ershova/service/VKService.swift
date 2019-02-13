@@ -67,7 +67,7 @@ class VKService {
                 let json = JSON(value)
                 let users = json["response"]["items"].arrayValue.map { User(json: $0) }
                 completion?(users, nil)
-                print("____________ Get Friends ____________: \(value) -----------")
+                print("____________ Search Friends ____________: \(value) -----------")
                 users.forEach{print($0)}
             }
         }
@@ -82,7 +82,7 @@ class VKService {
         let path = "/method/groups.get"
         let params: Parameters = [
             "access_token" : sessionToken,
-            "count": 5,
+            "count": 42,
             "extended" : 1,
             "v": "5.92"
         ]
@@ -100,6 +100,7 @@ class VKService {
             }
         }
     }
+    
     func searchGroups(isSearching: String, completion: (([Group]?, Error?) -> Void)? = nil) {
         let path = "/method/groups.search"
         let params: Parameters = [
@@ -144,12 +145,12 @@ class VKService {
             }
         }
     }
-    func addGroups(for group_id: Int, completion: (([Group]?, Error?) -> Void)? = nil) {
+    func addGroups(_ groupId: Int, completion: (([Group]?, Error?) -> Void)? = nil) {
         let path = "/method/groups.join"
         let params: Parameters = [
             //"count": 30,
             "access_token" : sessionToken,
-            "group_id" : group_id,
+            "group_id" : groupId,
             "v": "5.92"
         ]
         Alamofire.request(url+path, method: .get, parameters: params).responseJSON  { repsonse in
@@ -160,7 +161,7 @@ class VKService {
                 let json = JSON(value)
                 let groups = json["response"]["items"].arrayValue.map { Group(json: $0) }
                 completion?(groups, nil)
-                print("____________ Left Groups ____________: \(value) -----------")
+                print("____________ Join Groups ____________: \(value) -----------")
                 groups.forEach{print($0)}
             }
         }
@@ -172,32 +173,32 @@ class VKService {
     
     
     
-    func searchGlobalGroups(completion: (([Group]?, Error?) -> Void)? = nil) {
-        
-        
-        //let isSearching = "A"
-        let path = "/method/groups.search"
-        let params: Parameters = [
-            "count": 30,
-            "access_token" : sessionToken,
-            "extended" : 1,
-            "q": "Api",
-            "v": "5.92"
-        ]
-        
-        Alamofire.request(url+path, method: .get, parameters: params).responseJSON   { repsonse in
-            switch repsonse.result {
-            case .failure(let error):
-                print(error.localizedDescription)
-            case .success(let value):
-                let json = JSON(value)
-                let groups = json["response"]["items"].arrayValue.map { Group(json: $0) }
-                completion?(groups, nil)
-                print("____________ Get Global Groups ____________: \(value) -----------")
-                groups.forEach{print($0)}
-            }
-        }
-    }
+//    func searchGlobalGroups(completion: (([Group]?, Error?) -> Void)? = nil) {
+//
+//
+//        //let isSearching = "A"
+//        let path = "/method/groups.search"
+//        let params: Parameters = [
+//            "count": 30,
+//            "access_token" : sessionToken,
+//            "extended" : 1,
+//            "q": "Api",
+//            "v": "5.92"
+//        ]
+//
+//        Alamofire.request(url+path, method: .get, parameters: params).responseJSON   { repsonse in
+//            switch repsonse.result {
+//            case .failure(let error):
+//                print(error.localizedDescription)
+//            case .success(let value):
+//                let json = JSON(value)
+//                let groups = json["response"]["items"].arrayValue.map { Group(json: $0) }
+//                completion?(groups, nil)
+//                print("____________ Get Global Groups ____________: \(value) -----------")
+//                groups.forEach{print($0)}
+//            }
+//        }
+//    }
     
     func loadPhoto(ownerId: Int, completion: (([Photo]?, Error?) -> Void)? = nil) {
         

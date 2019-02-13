@@ -30,13 +30,13 @@ class AllGroupController: UITableViewController, UISearchBarDelegate {
         
         filterGr = allgroupsVK
         
-        allgroupService.searchGlobalGroups(){ [weak self] allgroupsVK, error in
+        allgroupService.searchGroups(isSearching: "Api"){ [weak self] allgroupsVK, error in
             if let error = error {
                 print(error.localizedDescription)
                 return
             } else if let allgroupsVK = allgroupsVK, let self = self {
                 self.allgroupsVK = allgroupsVK
-                
+
                 DispatchQueue.main.async {
                     self.tableView.reloadData()
                 }
@@ -103,6 +103,7 @@ class AllGroupController: UITableViewController, UISearchBarDelegate {
         
         if searchText != "" {
             isSearch = true
+            
             filterGr = allgroupsVK.filter({( groups ) -> Bool in
                 return groups.name.lowercased().contains(searchText.lowercased())})
             
