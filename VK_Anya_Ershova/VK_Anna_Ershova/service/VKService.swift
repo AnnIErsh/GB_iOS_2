@@ -172,7 +172,7 @@ class VKService {
     
     
     
-    func searchGlobalGroups(completion: (([GlobalGroup]?, Error?) -> Void)? = nil) {
+    func searchGlobalGroups(completion: (([Group]?, Error?) -> Void)? = nil) {
         
         
         //let isSearching = "A"
@@ -181,7 +181,7 @@ class VKService {
             "count": 30,
             "access_token" : sessionToken,
             "extended" : 1,
-            "q": "api",
+            "q": "Api",
             "v": "5.92"
         ]
         
@@ -191,10 +191,10 @@ class VKService {
                 print(error.localizedDescription)
             case .success(let value):
                 let json = JSON(value)
-                let globalGroups = json["response"]["items"].arrayValue.map { GlobalGroup(json: $0) }
-                completion?(globalGroups, nil)
+                let groups = json["response"]["items"].arrayValue.map { Group(json: $0) }
+                completion?(groups, nil)
                 print("____________ Get Global Groups ____________: \(value) -----------")
-                globalGroups.forEach{print($0)}
+                groups.forEach{print($0)}
             }
         }
     }

@@ -17,9 +17,9 @@ class AllFriendsController: UITableViewController, UISearchBarDelegate {
     private let userService = VKService()
     var users = [User]()
     var friendId = 0
-    var fullname = [String]()
+    //var fullname = [String]()
     //    public var firstname = [String]()
-    var fullImage = [String]()
+    //var fullImage = [String]()
     
     
     
@@ -38,7 +38,7 @@ class AllFriendsController: UITableViewController, UISearchBarDelegate {
     //let searchController = UISearchController(searchResultsController: nil)
     
     //var dividedArray: NSMutableArray = []
-    var devider = [""]
+    //var devider = [""]
     
     var isSearch = false
     var filterFr = [User]()
@@ -60,18 +60,9 @@ class AllFriendsController: UITableViewController, UISearchBarDelegate {
                 DispatchQueue.main.async {
                     self.tableView.reloadData()
                 }
-                for index in users {
-                    let friendIndexTitle = index.name.first
-                    self.fullname.append(index.name)
-                    //                    self.firstname.append(index.firstname)
-                    self.fullImage.append(index.avatar)
-                    
-                    if !self.friendsIndexTitles.contains(String(friendIndexTitle!)) {
-                        self.friendsIndexTitles.append(String(friendIndexTitle!))
-                    }
-                }
-                self.friendsIndexTitles.sort()
+                
             }
+            
         }
         
         //        for index in friendsIndexTitles{
@@ -129,7 +120,7 @@ class AllFriendsController: UITableViewController, UISearchBarDelegate {
         if isSearch {
             //devider = filterFr
             friendAfter = filter(of: filterFr, in: indexPath.section)
-            //cell.friendName.text = devider[indexPath.row]
+            //cell.friendName.text = friendAfter[indexPath.row].name
         } else {
             
             friendAfter = filter(of: users, in: indexPath.section)
@@ -186,37 +177,56 @@ class AllFriendsController: UITableViewController, UISearchBarDelegate {
     }
     
     internal override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        return self.friendsIndexTitles[section] as String
+        if isSearch {
+            return nil
+        } else {
+            return filteringText(in: users)[section]
+            //return self.friendsIndexTitles
+            
+        }
     }
     
     
     
     
-//    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-//        if segue.identifier == "showPhoto" {
-//            let destinationVC : PhotoCollectionController = segue.destination as! PhotoCollectionController
-//            let sourceVC = segue.source as! AllFriendsController
-//            if let indexPath = sourceVC.tableView.indexPathForSelectedRow {
-//                if isSearch {
-//                    devider = filterFr
-//                } else {
-//
-//                    devider = fullname.filter {$0[$0.startIndex] == Character(friendsIndexTitles[indexPath.section]) }
-//                }
-//                let photoFriend = sourceVC.devider[indexPath.row]
-//                destinationVC.photoFriend = photoFriend
-//
-//            }
-//        }
-//
-//    }
+    //    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+    //        if segue.identifier == "showPhoto" {
+    //            let destinationVC : PhotoCollectionController = segue.destination as! PhotoCollectionController
+    //            let sourceVC = segue.source as! AllFriendsController
+    //            if let indexPath = sourceVC.tableView.indexPathForSelectedRow {
+    //                if isSearch {
+    //                    devider = filterFr
+    //                } else {
+    //
+    //                    devider = fullname.filter {$0[$0.startIndex] == Character(friendsIndexTitles[indexPath.section]) }
+    //                }
+    //                let photoFriend = sourceVC.devider[indexPath.row]
+    //                destinationVC.photoFriend = photoFriend
+    //
+    //            }
+    //        }
+    //
+    //    }
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "showPhoto" {
             if let indexPath = self.tableView.indexPathForSelectedRow {
+                
                 let controller = segue.destination as! PhotoCollectionController
-                controller.ownerId = users[indexPath.row].id
+                var friendAfter = [User]()
+                
+                if isSearch {
+                    
+                    friendAfter = filter(of: filterFr, in: indexPath.section)
+                    
+                } else {
+                    
+                    friendAfter = filter(of: users, in: indexPath.section)
+                    
+                }
+                controller.ownerId = friendAfter[indexPath.row].id
             }
         }
+        
     }
     
     internal override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
@@ -225,12 +235,12 @@ class AllFriendsController: UITableViewController, UISearchBarDelegate {
         
         
         let secText = UILabel()
-        secText.text = friendsIndexTitles[section] as String
+        //secText.text = friendsIndexTitles[section] as String
         secText.frame = CGRect(x: 5, y: 5, width: 80, height: 30)
         if isSearch {
             secText.text = "..."
         } else {
-            secText.text = friendsIndexTitles[section]
+            secText.text = filteringText(in: users)[section]
         }
         
         secView.addSubview(secText)
@@ -248,17 +258,15 @@ class AllFriendsController: UITableViewController, UISearchBarDelegate {
             isSearch = true
             filterFr = users.filter({( name ) -> Bool in
                 return name.name.lowercased().contains(searchText.lowercased()) || name.name.lowercased().contains(searchText.lowercased())})
-          
-//            filterFr = fullname.filter({ (group) -> Bool in
-//                group.lowercased().contains(searchText.lowercased())
-//            })
+            
+            //            filterFr = fullname.filter({ (group) -> Bool in
+            //                group.lowercased().contains(searchText.lowercased())
+            //            })
             
             tableView.reloadData()
             
         } else {
             isSearch = false
-            
-            
             tableView.reloadData()
         }
     }
@@ -267,11 +275,6 @@ class AllFriendsController: UITableViewController, UISearchBarDelegate {
         super.didReceiveMemoryWarning()
     }
     
-    //    func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
-    //        isSearch = true
-    //        tableView.reloadData()
-    //
-    //    }
     
     private func searchBarTextDidEndEditing(searchBar: UISearchBar) {
         searchBar.resignFirstResponder()
@@ -279,10 +282,7 @@ class AllFriendsController: UITableViewController, UISearchBarDelegate {
         tableView.reloadData()
     }
     
-    //    public func searchBarShouldEndEditing(_ searchBar: UISearchBar) -> Bool {
-    //        searchBar.setShowsCancelButton(false, animated: true)
-    //        return true
-    //    }
+    
     func searchBarShouldBeginEditing(_ searchBar: UISearchBar) -> Bool {
         //        UIView.animate(withDuration: 0.55, delay: 0, usingSpringWithDamping: 500.0, initialSpringVelocity: 0, options: .overrideInheritedDuration, animations: {
         //            self.searchBar.frame = CGRect(x: 0, y: 0, width: 350, height: 50)
@@ -318,10 +318,6 @@ class AllFriendsController: UITableViewController, UISearchBarDelegate {
         searchBar.text = ""
         tableView.reloadData()
     }
-    
-    //    func searchBarIsEmpty() -> Bool {
-    //        return searchController.searchBar.text?.isEmpty ?? true
-    //    }
     
     private func searchBarSearchButtonClicked(searchBar: UISearchBar) {
         searchBar.resignFirstResponder()

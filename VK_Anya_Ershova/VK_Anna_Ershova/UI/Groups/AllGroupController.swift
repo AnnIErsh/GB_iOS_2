@@ -14,20 +14,21 @@ class AllGroupController: UITableViewController, UISearchBarDelegate {
     @IBOutlet weak var searchBarGroups: UISearchBar!
     
 
-    var groupsAll = ["Emo", "Goth", "Punk", "Peace", "Barbie", "Bratz", "Myscene", "Monsterhigh"]
+    //var groupsAll = ["Emo", "Goth", "Punk", "Peace", "Barbie", "Bratz", "Myscene", "Monsterhigh"]
     
-    var allgroupsVK = [GlobalGroup]()
+    var allgroupsVK = [Group]()
     var allgroupService = VKService()
     var groupname = [String]()
 
     
-    var filterGr: [String] = []
+    var filterGr = [Group]()
+    var nofilterGr = [Group]()
     var isSearch = false
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        filterGr = groupsAll
+        filterGr = allgroupsVK
         
         allgroupService.searchGlobalGroups(){ [weak self] allgroupsVK, error in
             if let error = error {
@@ -54,31 +55,38 @@ class AllGroupController: UITableViewController, UISearchBarDelegate {
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
       
-//        if isSearch {
-//            return filterGr.count
-//        } else {
-//            return groupsAll.count
-//        }
-        return allgroupsVK.count
+        if isSearch {
+            return filterGr.count
+        } else {
+            return allgroupsVK.count
+        }
+        //return allgroupsVK.count
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "AllGroupCell", for: indexPath) as! AllGroupCell
         
         // _ = (searchController.isActive) ? searchResult[indexPath.row] : groupsAll[indexPath.row]
+        //let groups: String
 
+        //let img = UIImageView()
+        //let groups: String
         if isSearch {
-//            let groups = filterGr[indexPath.row]
-//            let img = UIImage(named: groups)
-//            cell.configure(friend: groups, img: img!)
-            cell.configured(with: allgroupsVK[indexPath.row])
+           //let groups = filterGr[indexPath.row].name
+//           img.kf.setImage(with: URL(string: filterGr[indexPath.row].photo))
+           cell.configured(with: filterGr[indexPath.row])
         
         } else {
-//            let groups = groupsAll[indexPath.row]
-//            let img = UIImage(named: groups)
-//            cell.configure(friend: groups, img: img!)
+//            groups = allgroupsVK[indexPath.row].name
+//            img.kf.setImage(with: URL(string: allgroupsVK[indexPath.row].photo))
+
             cell.configured(with: allgroupsVK[indexPath.row])
         }
+//        groups = nofilterGr[indexPath.row].name
+//        img.kf.setImage(with: URL(string: nofilterGr[indexPath.row].photo))
+        //cell.configured(with: nofilterGr[indexPath.row])
+        //let groups: String
+        //cell.grdAllName.text = groups
  
     
 
@@ -95,9 +103,9 @@ class AllGroupController: UITableViewController, UISearchBarDelegate {
         
         if searchText != "" {
             isSearch = true
-            filterGr = groupsAll.filter({ (group) -> Bool in
-                group.lowercased().contains(searchText.lowercased())
-            })
+            filterGr = allgroupsVK.filter({( groups ) -> Bool in
+                return groups.name.lowercased().contains(searchText.lowercased())})
+            
             tableView.reloadData()
 
         } else {

@@ -142,12 +142,12 @@
                                     <rect key="frame" x="0.0" y="0.0" width="371" height="419"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="1ry-Fw-oHT" customClass="ImageAnimationView" customModule="VK_Anna_Ershova" customModuleProvider="target">
-                                            <rect key="frame" x="37" y="41" width="296" height="296"/>
+                                        <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="1ry-Fw-oHT" customClass="ImageAnimationView" customModule="VK_Anna_Ershova" customModuleProvider="target">
+                                            <rect key="frame" x="29" y="49" width="313" height="296"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                         </imageView>
                                         <stackView opaque="NO" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="DhN-2G-Lny" customClass="RatingControl" customModule="VK_Anna_Ershova" customModuleProvider="target">
-                                            <rect key="frame" x="39" y="358" width="223" height="44"/>
+                                            <rect key="frame" x="29" y="363" width="220" height="44"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         </stackView>
                                     </subviews>
@@ -800,6 +800,7 @@
         <image name="newsIcon" width="22.5" height="22.5"/>
     </resources>
     <inferredMetricsTieBreakers>
+        <segue reference="44g-x9-gRl"/>
         <segue reference="WmZ-gH-NZk"/>
     </inferredMetricsTieBreakers>
     <color key="tintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>

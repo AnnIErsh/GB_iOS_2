@@ -7,35 +7,37 @@
 //
 
 import UIKit
+import Kingfisher
+import Alamofire
 
 class GroupController: UITableViewController{
     
     
-    var groups = ["Barbie", "Bratz", "Myscene", "Monsterhigh"]
+    //var groups = ["Barbie", "Bratz", "Myscene", "Monsterhigh"]
     //private var imagesGr = ["Barbie", "Bratz", "Myscene", "Monsterhigh"]
     
     var groupsVK = [Group]()
     var groupService = VKService()
     var groupname = [String]()
     
-    @IBAction func add(segue: UIStoryboardSegue) {
-        if segue.identifier == "add" {
-            
-            let allGroupController = segue.source as! AllGroupController
-            if let indexPath = allGroupController.tableView.indexPathForSelectedRow {
-                
-                let gr = allGroupController.filterGr[indexPath.row]
-                //let grAll = allGroupController.groupsAll[indexPath.row]
-                if !groups.contains(gr) {
-                    groups.append(gr)
-                    tableView.reloadData()
-                }
-                
-            }
-            
-        }
-        
-    }
+//    @IBAction func add(segue: UIStoryboardSegue) {
+//        if segue.identifier == "add" {
+//
+//            let allGroupController = segue.source as! AllGroupController
+//            if let indexPath = allGroupController.tableView.indexPathForSelectedRow {
+//
+//                let gr = allGroupController.filterGr[indexPath.row]
+//                //let grAll = allGroupController.groupsAll[indexPath.row]
+//                if !groupsVK.contains(where: gr) {
+//                    groupsVK.append(gr)
+//                    tableView.reloadData()
+//                }
+//
+//            }
+//
+//        }
+//
+//    }
 
 
     
@@ -88,9 +90,7 @@ class GroupController: UITableViewController{
     // Override to support editing the table view.
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
-            // Delete the row from the data source
             groupsVK.remove(at: indexPath.row)
-            //imagesGr.remove(at: indexPath.row)
             tableView.deleteRows(at: [indexPath], with: .fade)
             tableView.reloadData()
         }
