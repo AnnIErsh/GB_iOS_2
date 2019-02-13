@@ -76,23 +76,30 @@ class VKService {
         }
     }
     
-    func searchGroups(isSearching: String) {
+    func searchGroups(completion: (([GlobalGroup]?, Error?) -> Void)? = nil) {
         
         
         //let isSearching = "A"
         let path = "/method/groups.search"
         let params: Parameters = [
-            "count": 5,
+            "count": 30,
             "access_token" : sessionToken,
             "extended" : 1,
-            "q": "\(isSearching)",
+            "q": "api",
             "v": "5.92"
         ]
         
-        Alamofire.request(url+path, method: .get, parameters: params).responseJSON { response in
-            guard let value = response.value else { return }
-            
-            print("____________ Search Groups ____________: \(value) -----------")
+        Alamofire.request(url+path, method: .get, parameters: params).responseJSON   { repsonse in
+            switch repsonse.result {
+            case .failure(let error):
+                print(error.localizedDescription)
+            case .success(let value):
+                let json = JSON(value)
+                let globalGroups = json["response"]["items"].arrayValue.map { GlobalGroup(json: $0) }
+                completion?(globalGroups, nil)
+                print("____________ Get Global Groups ____________: \(value) -----------")
+                globalGroups.forEach{print($0)}
+            }
         }
     }
     
@@ -103,7 +110,7 @@ class VKService {
             "access_token" : sessionToken,
             "owner_id" : ownerId,
             //"album_id" : "profile",
-            "count": 1,
+            "count": 10,
             "extended" : 1,
             "v": "5.92"
         ]

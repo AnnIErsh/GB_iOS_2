@@ -41,11 +41,15 @@ class AllFriendsCell: UITableViewCell {
     
     func configured(with friend: User) {
         
-        let userName = friend.name
-        friendName.text = userName
         
-        let img = friend.avatar
-        imageName.kf.setImage(with: URL(string: img))
+        friendName.text = String("\(String(friend.firstname)) \(String(friend.lastname))")
+        imageName.kf.setImage(with: URL(string: friend.avatar))
+        
+//        let userName = friend.name
+//        friendName.text = userName
+//
+//        let img = friend.avatar
+//        imageName.kf.setImage(with: URL(string: img))
     }
     
     

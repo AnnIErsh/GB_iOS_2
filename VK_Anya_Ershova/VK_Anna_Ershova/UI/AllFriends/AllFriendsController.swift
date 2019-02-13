@@ -87,7 +87,8 @@ class AllFriendsController: UITableViewController, UISearchBarDelegate {
         showSearchBar()
         
         
-        
+        self.tableView.delegate = self
+        self.tableView.dataSource = self
         
         
     }
@@ -105,8 +106,7 @@ class AllFriendsController: UITableViewController, UISearchBarDelegate {
         if isSearch {
             devider = filterFr
         } else {
-            devider = fullname.filter {$0[$0.startIndex] == Character(friendsIndexTitles[section])
-            }
+            devider = fullname.filter {$0[$0.startIndex] == Character(friendsIndexTitles[section])}
         }
         //return (dividedArray[section] as! NSMutableArray).count
         return devider.count
@@ -201,7 +201,7 @@ class AllFriendsController: UITableViewController, UISearchBarDelegate {
         if segue.identifier == "showPhoto" {
             if let indexPath = self.tableView.indexPathForSelectedRow {
                 let controller = segue.destination as! PhotoCollectionController
-                controller.ownerId = users[indexPath.row].id 
+                controller.ownerId = users[indexPath.row].id
             }
         }
     }

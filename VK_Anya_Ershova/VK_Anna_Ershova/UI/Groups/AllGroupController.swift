@@ -15,6 +15,10 @@ class AllGroupController: UITableViewController, UISearchBarDelegate {
     
 
     var groupsAll = ["Emo", "Goth", "Punk", "Peace", "Barbie", "Bratz", "Myscene", "Monsterhigh"]
+    
+    var allgroupsVK = [GlobalGroup]()
+    var allgroupService = VKService()
+    var groupname = [String]()
 
     
     var filterGr: [String] = []
@@ -24,6 +28,20 @@ class AllGroupController: UITableViewController, UISearchBarDelegate {
         super.viewDidLoad()
         
         filterGr = groupsAll
+        
+        allgroupService.searchGroups(){ [weak self] allgroupsVK, error in
+            if let error = error {
+                print(error.localizedDescription)
+                return
+            } else if let allgroupsVK = allgroupsVK, let self = self {
+                self.allgroupsVK = allgroupsVK
+                
+                DispatchQueue.main.async {
+                    self.tableView.reloadData()
+                }
+            }
+        }
+   
 
 
     }
@@ -36,11 +54,12 @@ class AllGroupController: UITableViewController, UISearchBarDelegate {
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
       
-        if isSearch {
-            return filterGr.count
-        } else {
-            return groupsAll.count
-        }
+//        if isSearch {
+//            return filterGr.count
+//        } else {
+//            return groupsAll.count
+//        }
+        return allgroupsVK.count
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -49,16 +68,16 @@ class AllGroupController: UITableViewController, UISearchBarDelegate {
         // _ = (searchController.isActive) ? searchResult[indexPath.row] : groupsAll[indexPath.row]
 
         if isSearch {
-            let groups = filterGr[indexPath.row]
-            let img = UIImage(named: groups)
-            //cell.grdAllName.text = filterGr[indexPath.row]
-            cell.configure(friend: groups, img: img!)
-            //groupsAll.removeAll()
+//            let groups = filterGr[indexPath.row]
+//            let img = UIImage(named: groups)
+//            cell.configure(friend: groups, img: img!)
+            cell.configured(with: allgroupsVK[indexPath.row])
         
         } else {
-            let groups = groupsAll[indexPath.row]
-            let img = UIImage(named: groups)
-            cell.configure(friend: groups, img: img!)
+//            let groups = groupsAll[indexPath.row]
+//            let img = UIImage(named: groups)
+//            cell.configure(friend: groups, img: img!)
+            cell.configured(with: allgroupsVK[indexPath.row])
         }
  
     
