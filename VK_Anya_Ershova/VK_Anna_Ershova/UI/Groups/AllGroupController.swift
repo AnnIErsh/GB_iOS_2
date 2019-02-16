@@ -30,18 +30,18 @@ class AllGroupController: UITableViewController, UISearchBarDelegate {
         
         filterGr = allgroupsVK
         
-        allgroupService.searchGroups(isSearching: "Api"){ [weak self] allgroupsVK, error in
-            if let error = error {
-                print(error.localizedDescription)
-                return
-            } else if let allgroupsVK = allgroupsVK, let self = self {
-                self.allgroupsVK = allgroupsVK
-
-                DispatchQueue.main.async {
-                    self.tableView.reloadData()
-                }
-            }
-        }
+//        allgroupService.searchGroups(isSearching: "Api"){ [weak self] allgroupsVK, error in
+//            if let error = error {
+//                print(error.localizedDescription)
+//                return
+//            } else if let allgroupsVK = allgroupsVK, let self = self {
+//                self.allgroupsVK = allgroupsVK
+//
+//                DispatchQueue.main.async {
+//                    self.tableView.reloadData()
+//                }
+//            }
+//        }
    
 
 
@@ -103,12 +103,25 @@ class AllGroupController: UITableViewController, UISearchBarDelegate {
         
         if searchText != "" {
             isSearch = true
+            allgroupService.searchGroups(isSearching: searchText){ [weak self] allgroupsVK, error in
+                if let error = error {
+                    print(error.localizedDescription)
+                    return
+                } else if let allgroupsVK = allgroupsVK, let self = self {
+                    self.allgroupsVK = allgroupsVK
+                    
+                    DispatchQueue.main.async {
+                        self.tableView.reloadData()
+                    }
+                    
+                }
+                
+            }
+            //            filterGr = allgroupsVK.filter({( groups ) -> Bool in
+            //                return groups.name.lowercased().contains(searchText.lowercased())})
             
-            filterGr = allgroupsVK.filter({( groups ) -> Bool in
-                return groups.name.lowercased().contains(searchText.lowercased())})
+            //tableView.reloadData()
             
-            tableView.reloadData()
-
         } else {
             isSearch = false
             tableView.reloadData()
@@ -128,14 +141,14 @@ class AllGroupController: UITableViewController, UISearchBarDelegate {
     func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
         searchBar.resignFirstResponder()
         isSearch = false
-        tableView.reloadData()
+        self.tableView.reloadData()
     }
     
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
         searchBar.resignFirstResponder()
         isSearch = false
         searchBar.text = ""
-        tableView.reloadData()
+        self.tableView.reloadData()
 
     }
     

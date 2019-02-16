@@ -28,10 +28,6 @@ class AllFriendsController: UITableViewController, UISearchBarDelegate {
     
     @IBOutlet weak var searchBar: UISearchBar!
     
-    // MARK: Private Properties
-    private var friends = ["Cameron", "Chloe", "Jade", "Sasha", "Yasmin", "Dipper", "Mabel", "Stanly", "Will", "Irma", "Taranee", "Cornelia", "Haylin"].sorted(by: {$0 < $1})
-    
-    
     
     private var friendsIndexTitles = [String]()
     //["C","D","H","I","J","M","S","T", "W", "Y"]
@@ -83,9 +79,9 @@ class AllFriendsController: UITableViewController, UISearchBarDelegate {
         //        view.addSubview(searchBar)
         showSearchBar()
         
-        
-        self.tableView.delegate = self
-        self.tableView.dataSource = self
+//
+//        self.tableView.delegate = self
+//        self.tableView.dataSource = self
         
         
     }
@@ -98,12 +94,13 @@ class AllFriendsController: UITableViewController, UISearchBarDelegate {
             return filteringText(in: users).count
             //return friendsIndexTitles.count
         }
+        
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if isSearch {
             //devider = filterFr
-            return filter(of: users, in: section).count
+            return filter(of: filterFr, in: section).count
         } else {
             
             return filter(of: users, in: section).count
@@ -255,20 +252,29 @@ class AllFriendsController: UITableViewController, UISearchBarDelegate {
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         if searchText != "" {
-            isSearch = true
-            filterFr = users.filter({( name ) -> Bool in
-                return name.name.lowercased().contains(searchText.lowercased()) || name.name.lowercased().contains(searchText.lowercased())})
-            
-            //            filterFr = fullname.filter({ (group) -> Bool in
-            //                group.lowercased().contains(searchText.lowercased())
-            //            })
-            
-            tableView.reloadData()
-            
+            userService.searchFriends(isSearching: searchText){ [weak self] users, error in
+                if let error = error {
+                    print(error.localizedDescription)
+                    return
+                } else if let users = users, let self = self {
+                    self.users = users
+                    
+                    DispatchQueue.main.async {
+                        self.tableView.reloadData()
+                    }
+                    
+                }
+                
+            }
+            filterFr = users.filter({( group ) -> Bool in
+                return group.name.lowercased().contains(searchText.lowercased())
+            })
         } else {
             isSearch = false
-            tableView.reloadData()
+            self.tableView.reloadData()
         }
+
+       
     }
     
     override func didReceiveMemoryWarning() {
@@ -278,8 +284,8 @@ class AllFriendsController: UITableViewController, UISearchBarDelegate {
     
     private func searchBarTextDidEndEditing(searchBar: UISearchBar) {
         searchBar.resignFirstResponder()
-        isSearch = false
-        tableView.reloadData()
+        //isSearch = false
+        self.tableView.reloadData()
     }
     
     
@@ -316,14 +322,15 @@ class AllFriendsController: UITableViewController, UISearchBarDelegate {
         searchBar.resignFirstResponder()
         isSearch = false
         searchBar.text = ""
-        tableView.reloadData()
+        
+        self.tableView.reloadData()
     }
     
     private func searchBarSearchButtonClicked(searchBar: UISearchBar) {
         searchBar.resignFirstResponder()
         
         isSearch = false
-        tableView.reloadData()
+        self.tableView.reloadData()
     }
     
     
@@ -402,9 +409,9 @@ class AllFriendsController: UITableViewController, UISearchBarDelegate {
 extension AllFriendsController {
     
     func filteringSearchingText(for text: String, _ : String = "All"){
-        filterFr = users.filter({( name ) -> Bool in
-            return name.name.lowercased().contains(text.lowercased()) || name.name.lowercased().contains(text.lowercased())})
-        tableView.reloadData()
+        filterFr = users.filter({( group ) -> Bool in
+            return group.name.lowercased().contains(text.lowercased()) || group.name.lowercased().contains(text.lowercased())})
+        self.tableView.reloadData()
     }
     
     func filter (of users: [User], in section: Int) -> [User] {
@@ -419,6 +426,8 @@ extension AllFriendsController {
         }
         return Array(Set(initText)).sorted()
     }
+    
+
     
 }
 
