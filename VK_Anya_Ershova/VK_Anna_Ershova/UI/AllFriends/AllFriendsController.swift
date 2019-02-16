@@ -30,11 +30,7 @@ class AllFriendsController: UITableViewController, UISearchBarDelegate {
     
     
     private var friendsIndexTitles = [String]()
-    //["C","D","H","I","J","M","S","T", "W", "Y"]
-    //let searchController = UISearchController(searchResultsController: nil)
-    
-    //var dividedArray: NSMutableArray = []
-    //var devider = [""]
+
     
     var isSearch = false
     var filterFr = [User]()
@@ -99,56 +95,30 @@ class AllFriendsController: UITableViewController, UISearchBarDelegate {
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if isSearch {
-            //devider = filterFr
             return filter(of: filterFr, in: section).count
         } else {
             
             return filter(of: users, in: section).count
-            // devider = fullname.filter {$0[$0.startIndex] == Character(friendsIndexTitles[section])}
         }
-        //return (dividedArray[section] as! NSMutableArray).count
-        //return users.count
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "FriendCell", for: indexPath) as! AllFriendsCell
-        //let friendUser = users[indexPath.row]
+
         var friendAfter = [User]()
         if isSearch {
-            //devider = filterFr
+            
             friendAfter = filter(of: filterFr, in: indexPath.section)
-            //cell.friendName.text = friendAfter[indexPath.row].name
+  
         } else {
             
             friendAfter = filter(of: users, in: indexPath.section)
-            //
-            //            let helpArray = dividedArray[indexPath.section] as! NSMutableArray
-            //            let friend = helpArray[indexPath.row] as? String
-            //            let img = UIImage(named: friend!)
-            //
-            //            cell.friendName.text = friend
-            //            cell.configure(friend: friend!, img: img!)
-            
-            //devider = fullname.filter {$0[$0.startIndex] == Character(friendsIndexTitles[indexPath.section]) }
-            //let friend = devider[indexPath.row]
-            //let img = UIImage(named: friend)
+
             cell.configured(with: users[indexPath.row])
         }
-        
-        //let friend = devider[indexPath.row]
-        //let img = UIImage(named: friend)
+
         cell.configured(with: friendAfter[indexPath.row])
-        
-        //        let helpArray = dividedArray[indexPath.section] as! NSMutableArray
-        //        let friend = helpArray[indexPath.row] as? String
-        //        let img = UIImage(named: friend!)
-        //
-        //        cell.friendName.text = friend
-        //        cell.configure(friend: friend!, img: img!)
-        //        let img = images[indexPath.row]
-        //        cell.imageName.image = UIImage(named: img)
-        
-        // container for image
+
         let myImage = UIImageView(frame: cell.imageName.bounds)
         myImage.clipsToBounds = true
         myImage.layer.cornerRadius = 10
@@ -165,7 +135,6 @@ class AllFriendsController: UITableViewController, UISearchBarDelegate {
             return nil
         } else {
             return filteringText(in: users)
-            //return self.friendsIndexTitles
             
         }
     }
@@ -178,32 +147,10 @@ class AllFriendsController: UITableViewController, UISearchBarDelegate {
             return nil
         } else {
             return filteringText(in: users)[section]
-            //return self.friendsIndexTitles
             
         }
     }
-    
-    
-    
-    
-    //    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-    //        if segue.identifier == "showPhoto" {
-    //            let destinationVC : PhotoCollectionController = segue.destination as! PhotoCollectionController
-    //            let sourceVC = segue.source as! AllFriendsController
-    //            if let indexPath = sourceVC.tableView.indexPathForSelectedRow {
-    //                if isSearch {
-    //                    devider = filterFr
-    //                } else {
-    //
-    //                    devider = fullname.filter {$0[$0.startIndex] == Character(friendsIndexTitles[indexPath.section]) }
-    //                }
-    //                let photoFriend = sourceVC.devider[indexPath.row]
-    //                destinationVC.photoFriend = photoFriend
-    //
-    //            }
-    //        }
-    //
-    //    }
+
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "showPhoto" {
             if let indexPath = self.tableView.indexPathForSelectedRow {
@@ -232,7 +179,6 @@ class AllFriendsController: UITableViewController, UISearchBarDelegate {
         
         
         let secText = UILabel()
-        //secText.text = friendsIndexTitles[section] as String
         secText.frame = CGRect(x: 5, y: 5, width: 80, height: 30)
         if isSearch {
             secText.text = "..."
@@ -252,6 +198,7 @@ class AllFriendsController: UITableViewController, UISearchBarDelegate {
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         if searchText != "" {
+            
             userService.searchFriends(isSearching: searchText){ [weak self] users, error in
                 if let error = error {
                     print(error.localizedDescription)
@@ -266,9 +213,9 @@ class AllFriendsController: UITableViewController, UISearchBarDelegate {
                 }
                 
             }
-            filterFr = users.filter({( group ) -> Bool in
-                return group.name.lowercased().contains(searchText.lowercased())
-            })
+//            filterFr = users.filter({( group ) -> Bool in
+//                return group.name.lowercased().contains(searchText.lowercased())
+//            })
         } else {
             isSearch = false
             self.tableView.reloadData()
@@ -285,27 +232,20 @@ class AllFriendsController: UITableViewController, UISearchBarDelegate {
     private func searchBarTextDidEndEditing(searchBar: UISearchBar) {
         searchBar.resignFirstResponder()
         //isSearch = false
+        //refreshControl?.removeFromSuperview()
         self.tableView.reloadData()
     }
     
     
     func searchBarShouldBeginEditing(_ searchBar: UISearchBar) -> Bool {
-        //        UIView.animate(withDuration: 0.55, delay: 0, usingSpringWithDamping: 500.0, initialSpringVelocity: 0, options: .overrideInheritedDuration, animations: {
-        //            self.searchBar.frame = CGRect(x: 0, y: 0, width: 350, height: 50)
-        //        })
-        //        let spinner = UIActivityIndicatorView(style: .gray)
-        //        spinner.center = CGPoint(x: 160, y: 0)
-        //        spinner.hidesWhenStopped = true
-        //        spinner.tag = 7
-        //        self.searchBar.addSubview(spinner)
         searchBar.frame = CGRect(x: 8, y: 0, width: 350, height: 50)
         animationBar()
         return true
     }
+    
+    
     func searchBarShouldEndEditing(_ searchBar: UISearchBar) -> Bool {
-        //        UIView.animate(withDuration: 0.6, delay: 0, usingSpringWithDamping: 500.0, initialSpringVelocity: 0.0, options: .curveLinear, animations: {
-        //            self.searchBar.frame = CGRect(x: 100, y: 0, width: 350, height: 50)
-        //        })
+
         searchBar.frame = CGRect(x: 8, y: 0, width: 350, height: 50)
         let searchBarTextField = searchBar.value(forKey: "searchField") as? UITextField
         searchBarTextField!.textAlignment = .center
@@ -337,10 +277,7 @@ class AllFriendsController: UITableViewController, UISearchBarDelegate {
     
     public func showSearchBar() {
         if let searchBarTextField = searchBar.value(forKey: "searchField") as? UITextField {
-            
-            //searchBarTextField.textAlignment = .center
-            //searchBar.frame = CGRect(x: 8, y: 0, width: 350, height: 50)
-            //Center placeholder
+
             let width = searchBar.frame.width / 2 - (searchBarTextField.attributedPlaceholder?.size().width)!
             let paddingView = UIView(frame: CGRect(x: 8, y: 0, width: width, height: searchBar.frame.height))
             searchBarTextField.leftView = paddingView
@@ -408,11 +345,11 @@ class AllFriendsController: UITableViewController, UISearchBarDelegate {
 
 extension AllFriendsController {
     
-    func filteringSearchingText(for text: String, _ : String = "All"){
-        filterFr = users.filter({( group ) -> Bool in
-            return group.name.lowercased().contains(text.lowercased()) || group.name.lowercased().contains(text.lowercased())})
-        self.tableView.reloadData()
-    }
+//    func filteringSearchingText(for text: String, _ : String = "All"){
+//        filterFr = users.filter({( group ) -> Bool in
+//            return group.name.lowercased().contains(text.lowercased()) || group.name.lowercased().contains(text.lowercased())})
+//        self.tableView.reloadData()
+//    }
     
     func filter (of users: [User], in section: Int) -> [User] {
         let key = filteringText(in: users)[section]

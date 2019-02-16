@@ -57,6 +57,7 @@ class VKService {
             "q" : isSearching,
             "v": "5.92",
             //"order" : "name"
+            "fields" : "photo_100"
         ]
         
         Alamofire.request(url+path, method: .get, parameters: params).responseJSON { repsonse in
@@ -218,7 +219,7 @@ class VKService {
                 print(error.localizedDescription)
             case .success(let value):
                 let json = JSON(value)
-                let photos = json["response"]["items"].arrayValue.map { Photo(json: $0) }
+                let photos = json["response"]["items"].arrayValue.map { Photo(json: $0) }.filter { !$0.photoURL.isEmpty }
                 completion?(photos, nil)
                 print("____________ Get Photos ____________: \(value) -----------")
                 photos.forEach{print($0)}
