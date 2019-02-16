@@ -8,15 +8,17 @@
 
 import Foundation
 import SwiftyJSON
+import RealmSwift
 
-class Photo : CustomStringConvertible {
-    var description: String {
+class Photo : Object {
+    override var description: String {
         return " The photos are \(photoURL) "
     }
-    var id = 0
-    var photoURL : String
+    @objc dynamic var id = 0
+    @objc dynamic var photoURL : String = ""
 
-    init(json: JSON)  {
+    required convenience init (json: JSON)  {
+        self.init()
         self.id = json["id"].intValue
         self.photoURL = json["sizes"][8]["url"].stringValue
     }

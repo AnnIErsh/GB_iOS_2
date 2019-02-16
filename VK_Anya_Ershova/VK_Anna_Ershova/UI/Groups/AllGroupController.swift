@@ -28,6 +28,7 @@ class AllGroupController: UITableViewController, UISearchBarDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        searchBarGroups.delegate = self
         filterGr = allgroupsVK
         
 //        allgroupService.searchGroups(isSearching: "Api"){ [weak self] allgroupsVK, error in
@@ -42,7 +43,19 @@ class AllGroupController: UITableViewController, UISearchBarDelegate {
 //                }
 //            }
 //        }
-   
+        allgroupService.loadGroups(){ [weak self] groupsVK, error in
+            if let error = error {
+                print(error.localizedDescription)
+                return
+            } else if let groupsVK = groupsVK, let self = self {
+                self.allgroupsVK = groupsVK
+                
+                DispatchQueue.main.async {
+                    self.tableView.reloadData()
+                }
+            }
+        }
+        
 
 
     }
@@ -124,6 +137,7 @@ class AllGroupController: UITableViewController, UISearchBarDelegate {
             
         } else {
             isSearch = false
+            //self.allgroupsVK.removeAll()
             tableView.reloadData()
         }
     }

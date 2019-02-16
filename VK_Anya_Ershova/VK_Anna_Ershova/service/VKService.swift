@@ -145,7 +145,7 @@ class VKService {
             }
         }
     }
-    func addGroups(_ groupId: Int, completion: (([Group]?, Error?) -> Void)? = nil) {
+    func addGroups(groupId: Int, completion: (([Group]?, Error?) -> Void)? = nil) {
         let path = "/method/groups.join"
         let params: Parameters = [
             //"count": 30,

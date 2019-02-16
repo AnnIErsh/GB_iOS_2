@@ -8,34 +8,36 @@
 
 import Foundation
 import SwiftyJSON
+import RealmSwift
 
-class User: Decodable, CustomStringConvertible {
-    var id: Int = 0
-    var name: String = ""
-    var avatar: String = ""
+class User: Object {
+    @objc dynamic var id: Int = 0
+    @objc dynamic var name: String = ""
+    @objc dynamic var avatar: String = ""
     //let lastname: String
-    var description: String {
+    override var description: String {
         return "My friend is \(id) \(name) \(avatar)"
     }
-    var firstname = ""
-    var lastname = ""
+    @objc dynamic var firstname = ""
+    @objc dynamic var lastname = ""
     
     
     
     
-    enum CodingKeys: String, CodingKey {
-        case id
-        case name
-        case avatar
-        
-        
-        case firstname
-        case lastname
-        
-       
-    }
+    //    enum CodingKeys: String, CodingKey {
+    //        case id
+    //        case name
+    //        case avatar
+    //
+    //
+    //        case firstname
+    //        case lastname
+    //
+    //
+    //    }
     
-    init(json: JSON) {
+    required convenience init(json: JSON) {
+        self.init()
         self.id = json["id"].intValue
         self.name = json["first_name"].stringValue + " " + json["last_name"].stringValue
         self.avatar = json["photo_100"].stringValue
@@ -45,6 +47,6 @@ class User: Decodable, CustomStringConvertible {
         self.lastname = json["last_name"].stringValue
         
         
-}
-
+    }
+    
 }
