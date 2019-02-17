@@ -20,24 +20,29 @@ class GroupController: UITableViewController {
     var groupService = VKService()
     var groupname = [String]()
     
-//    @IBAction func add(segue: UIStoryboardSegue) {
-//        if segue.identifier == "add" {
-//
-//            let allGroupController = segue.source as! AllGroupController
-//            if let indexPath = allGroupController.tableView.indexPathForSelectedRow {
-//
-//                let gr = allGroupController.filterGr[indexPath.row]
-//                if  groupsVK[indexPath.row].name.contains(gr.name) {
-//                    groupService.addGroups(groupId: gr.id)
-//                    groupsVK.append(allGroupController.filterGr[indexPath.row])
-//                    tableView.reloadData()
-//                }
-//
-//            }
-//
-//        }
-//
-//    }
+    @IBAction func add(segue: UIStoryboardSegue) {
+        if segue.identifier == "add" {
+
+            let allGroupController = segue.source as! AllGroupController
+            if let indexPath = allGroupController.tableView.indexPathForSelectedRow {
+                
+
+                let gr = allGroupController.allgroupsVK[indexPath.row]
+                if  groupsVK[indexPath.row].name.contains(gr.name) {
+                    groupService.addGroups(groupId: gr.id)
+                    print("there could be error if you are member")
+                    groupsVK.append(allGroupController.filterGr[indexPath.row]) 
+                
+                    tableView.reloadData()
+                } else {
+                    print("error")
+                }
+
+            }
+
+        }
+
+    }
 //
 //    @IBAction func add(segue: UIStoryboardSegue) {
 //        if segue.identifier == "add" {
