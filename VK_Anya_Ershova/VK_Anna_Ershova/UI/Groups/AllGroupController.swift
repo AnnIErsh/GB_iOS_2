@@ -28,7 +28,7 @@ class AllGroupController: UITableViewController, UISearchBarDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        searchBarGroups.delegate = self
+        //searchBarGroups.delegate = self
         filterGr = allgroupsVK
         
 //        allgroupService.searchGroups(isSearching: "Api"){ [weak self] allgroupsVK, error in
@@ -48,7 +48,7 @@ class AllGroupController: UITableViewController, UISearchBarDelegate {
                 print(error.localizedDescription)
                 return
             } else if let groupsVK = groupsVK, let self = self {
-                self.allgroupsVK = groupsVK
+                self.allgroupsVK = groupsVK.filter {$0.name != ""}
                 
                 DispatchQueue.main.async {
                     self.tableView.reloadData()
@@ -121,7 +121,7 @@ class AllGroupController: UITableViewController, UISearchBarDelegate {
                     print(error.localizedDescription)
                     return
                 } else if let allgroupsVK = allgroupsVK, let self = self {
-                    self.allgroupsVK = allgroupsVK
+                    self.filterGr = allgroupsVK
                     
                     DispatchQueue.main.async {
                         self.tableView.reloadData()
@@ -137,7 +137,8 @@ class AllGroupController: UITableViewController, UISearchBarDelegate {
             
         } else {
             isSearch = false
-            //self.allgroupsVK.removeAll()
+            filterGr = allgroupsVK.filter({( groups ) -> Bool in
+                return groups.name.lowercased().contains(searchText.lowercased())})
             tableView.reloadData()
         }
     }
@@ -162,6 +163,7 @@ class AllGroupController: UITableViewController, UISearchBarDelegate {
         searchBar.resignFirstResponder()
         isSearch = false
         searchBar.text = ""
+        
         self.tableView.reloadData()
 
     }
