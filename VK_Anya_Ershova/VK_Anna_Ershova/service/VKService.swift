@@ -83,7 +83,7 @@ class VKService {
         let path = "/method/groups.get"
         let params: Parameters = [
             "access_token" : sessionToken,
-            "count": 42,
+            "count": 10,
             "extended" : 1,
             "v": "5.92"
         ]

@@ -26,9 +26,9 @@ class GroupController: UITableViewController{
 //            let allGroupController = segue.source as! AllGroupController
 //            if let indexPath = allGroupController.tableView.indexPathForSelectedRow {
 //
-//                let gr = allGroupController.filterGr[indexPath.row].id
-//                //let grAll = allGroupController.groupsAll[indexPath.row]
-//                if  groupsVK[indexPath.row].id == gr {
+//                let gr = allGroupController.filterGr[indexPath.row]
+//                if  groupsVK[indexPath.row].name.contains(gr.name) {
+//                    groupService.addGroups(groupId: gr.id)
 //                    groupsVK.append(allGroupController.filterGr[indexPath.row])
 //                    tableView.reloadData()
 //                }
@@ -111,6 +111,7 @@ class GroupController: UITableViewController{
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
             groupsVK.remove(at: indexPath.row)
+            groupService.leftGroups(for: groupsVK[indexPath.row].id)
             tableView.deleteRows(at: [indexPath], with: .fade)
             tableView.reloadData()
         }

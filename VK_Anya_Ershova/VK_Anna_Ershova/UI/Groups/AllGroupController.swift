@@ -167,6 +167,21 @@ class AllGroupController: UITableViewController, UISearchBarDelegate {
         self.tableView.reloadData()
 
     }
+//    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+//        if editingStyle == .delete {
+//            allgroupsVK.remove(at: indexPath.row)
+//            allgroupService.leftGroups(for: allgroupsVK[indexPath.row].id)
+//            tableView.deleteRows(at: [indexPath], with: .fade)
+//            tableView.reloadData()
+//        }
+    
+//        if editingStyle == .insert {
+//            allgroupsVK.append(filterGr[indexPath.row])
+//            allgroupService.addGroups(groupId: filterGr[indexPath.row].id)
+//            tableView.insertRows(at: [indexPath], with: .automatic)
+//            tableView.reloadData()
+//        }
+//   }
     
 //    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
 //        _ = tableView.dataSource
