@@ -10,7 +10,7 @@ import UIKit
 import Kingfisher
 import Alamofire
 
-class GroupController: UITableViewController{
+class GroupController: UITableViewController {
     
     
     //var groups = ["Barbie", "Bratz", "Myscene", "Monsterhigh"]
