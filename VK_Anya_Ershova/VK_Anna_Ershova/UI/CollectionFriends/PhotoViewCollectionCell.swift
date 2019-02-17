@@ -13,9 +13,9 @@ class PhotoViewCollectionCell: UICollectionViewCell {
     @IBOutlet weak var likedView: LikeControl!
     
     
-//    func configured(img: UIImage) {
-//        
-//        photoFriendView.image = img
-//    }
+    func configured(with img: Photo) {
+        
+        photoFriendView.kf.setImage(with: URL(string: img.photoURL))
+    }
     
 }

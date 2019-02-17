@@ -7,31 +7,62 @@
 //
 
 import UIKit
+import Kingfisher
 
 
 
 class AllFriendsController: UITableViewController, UISearchBarDelegate {
+    
+    
+    private let userService = VKService()
+    var users = [User]()
+    var friendId = 0
+    //var fullname = [String]()
+    //    public var firstname = [String]()
+    //var fullImage = [String]()
+    
+    
+    
+    
+    
+    
     @IBOutlet weak var searchBar: UISearchBar!
     
-    // MARK: Private Properties
-    private var friends = ["Cameron", "Chloe", "Jade", "Sasha", "Yasmin", "Dipper", "Mabel", "Stanly", "Will", "Irma", "Taranee", "Cornelia", "Haylin"].sorted(by: {$0 < $1})
     
-    // private var images = ["Cameron", "Chloe", "Jade", "Sasha", "Yasmin", "Dipper", "Mabel", "Stanly", "Will", "Irma", "Taranee", "Cornelia", "Haylin"]
-    
-    
-    private var friendsIndexTitles = ["C","D","H","I","J","M","S","T", "W", "Y"]
-    
-    //let searchController = UISearchController(searchResultsController: nil)
-    
-    //var dividedArray: NSMutableArray = []
-    var devider = [""]
+    private var friendsIndexTitles = [String]()
+
     
     var isSearch = false
-    var filterFr = [String]()
+    var filterFr = [User]()
+    var nofilterFr = [User]()
+    
+    override func viewWillAppear(_ animated: Bool) {
+        tableView.reloadData()
+    }
     
     override func viewDidLoad() {
         
         super.viewDidLoad()
+        
+//        self.tableView.dataSource = self
+//        self.tableView.delegate = self
+//        self.searchBar.delegate = self
+        
+        
+        userService.loadFriends() { [weak self] users, error in
+            if let error = error {
+                print(error.localizedDescription)
+                return
+            } else if let users = users, let self = self {
+                self.users = users.filter {$0.name != ""}
+    
+                DispatchQueue.main.async {
+                    self.tableView.reloadData()
+                }
+                
+            }
+            
+        }
         
         //        for index in friendsIndexTitles{
         //            let helpArray: NSMutableArray = []
@@ -51,8 +82,9 @@ class AllFriendsController: UITableViewController, UISearchBarDelegate {
         //        view.addSubview(searchBar)
         showSearchBar()
         
-        
-        
+//
+//        self.tableView.delegate = self
+//        self.tableView.dataSource = self
         
         
     }
@@ -62,58 +94,38 @@ class AllFriendsController: UITableViewController, UISearchBarDelegate {
         if isSearch {
             return 1
         } else {
-            return friendsIndexTitles.count
+            return filteringText(in: users).count
+            //return friendsIndexTitles.count
         }
+        
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if isSearch {
-            devider = filterFr
+            return filter(of: filterFr, in: section).count
         } else {
-            devider = friends.filter {$0[$0.startIndex] == Character(friendsIndexTitles[section])
-            }
+            
+            return filter(of: users, in: section).count
         }
-        //return (dividedArray[section] as! NSMutableArray).count
-        return devider.count
     }
-    
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "FriendCell", for: indexPath) as! AllFriendsCell
-        
-        
+
+        var friendAfter = [User]()
         if isSearch {
-            devider = filterFr
-            cell.friendName.text = devider[indexPath.row]
-        } else {
-            //
-            //            let helpArray = dividedArray[indexPath.section] as! NSMutableArray
-            //            let friend = helpArray[indexPath.row] as? String
-            //            let img = UIImage(named: friend!)
-            //
-            //            cell.friendName.text = friend
-            //            cell.configure(friend: friend!, img: img!)
             
-            devider = friends.filter {$0[$0.startIndex] == Character(friendsIndexTitles[indexPath.section]) }
-            let friend = devider[indexPath.row]
-            let img = UIImage(named: friend)
-            cell.configure(friend: friend, img: img!)
+            friendAfter = filter(of: filterFr, in: indexPath.section)
+  
+        } else {
+            
+            friendAfter = filter(of: users, in: indexPath.section)
+
+            cell.configured(with: users[indexPath.row])
         }
-        
-        let friend = devider[indexPath.row]
-        let img = UIImage(named: friend)
-        cell.configure(friend: friend, img: img!)
-        
-        //        let helpArray = dividedArray[indexPath.section] as! NSMutableArray
-        //        let friend = helpArray[indexPath.row] as? String
-        //        let img = UIImage(named: friend!)
-        //
-        //        cell.friendName.text = friend
-        //        cell.configure(friend: friend!, img: img!)
-        //        let img = images[indexPath.row]
-        //        cell.imageName.image = UIImage(named: img)
-        
-        // container for image
+
+        cell.configured(with: friendAfter[indexPath.row])
+
         let myImage = UIImageView(frame: cell.imageName.bounds)
         myImage.clipsToBounds = true
         myImage.layer.cornerRadius = 10
@@ -129,7 +141,7 @@ class AllFriendsController: UITableViewController, UISearchBarDelegate {
         if isSearch {
             return nil
         } else {
-            return self.friendsIndexTitles
+            return filteringText(in: users)
             
         }
     }
@@ -138,31 +150,35 @@ class AllFriendsController: UITableViewController, UISearchBarDelegate {
     }
     
     internal override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        return self.friendsIndexTitles[section] as String
+        if isSearch {
+            return nil
+        } else {
+            return filteringText(in: users)[section]
+            
+        }
     }
-    
-    
-    
-    
+
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "showPhoto" {
-            let destinationVC : PhotoCollectionController = segue.destination as! PhotoCollectionController
-            let sourceVC = segue.source as! AllFriendsController
-            if let indexPath = sourceVC.tableView.indexPathForSelectedRow {
+            if let indexPath = self.tableView.indexPathForSelectedRow {
+                
+                let controller = segue.destination as! PhotoCollectionController
+                var friendAfter = [User]()
+                
                 if isSearch {
-                    devider = filterFr
+                    
+                    friendAfter = filter(of: filterFr, in: indexPath.section)
+                    
                 } else {
                     
-                    devider = friends.filter {$0[$0.startIndex] == Character(friendsIndexTitles[indexPath.section]) }
+                    friendAfter = filter(of: users, in: indexPath.section)
+                    
                 }
-                let photoFriend = sourceVC.devider[indexPath.row]
-                destinationVC.photoFriend = photoFriend
-                
+                controller.ownerId = friendAfter[indexPath.row].id
             }
         }
         
     }
-    
     
     internal override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let secView = UIView()
@@ -170,12 +186,11 @@ class AllFriendsController: UITableViewController, UISearchBarDelegate {
         
         
         let secText = UILabel()
-        secText.text = friendsIndexTitles[section] as String
         secText.frame = CGRect(x: 5, y: 5, width: 80, height: 30)
         if isSearch {
             secText.text = "..."
         } else {
-            secText.text = friendsIndexTitles[section]
+            secText.text = filteringText(in: users)[section]
         }
         
         secView.addSubview(secText)
@@ -190,58 +205,55 @@ class AllFriendsController: UITableViewController, UISearchBarDelegate {
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         if searchText != "" {
-            isSearch = true
-            filterFr = friends.filter({ (group) -> Bool in
-                group.lowercased().contains(searchText.lowercased())
-            })
             
-            tableView.reloadData()
-            
+            userService.searchFriends(isSearching: searchText){ [weak self] users, error in
+                if let error = error {
+                    print(error.localizedDescription)
+                    return
+                } else if let users = users, let self = self {
+                    self.users = users.filter {$0.name != ""}
+                    //self.filterFr = users
+                    
+                    DispatchQueue.main.async {
+                        self.tableView.reloadData()
+                    }
+                    
+                }
+                
+            }
+//            filterFr = users.filter({( group ) -> Bool in
+//                return group.name.lowercased().contains(searchText.lowercased())
+//            })
         } else {
-            isSearch = false
-            
-            
-            tableView.reloadData()
+            //isSearch = false
+            self.tableView.reloadData()
         }
+
+       
     }
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
     }
     
-    //    func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
-    //        isSearch = true
-    //        tableView.reloadData()
-    //
-    //    }
     
     private func searchBarTextDidEndEditing(searchBar: UISearchBar) {
         searchBar.resignFirstResponder()
-        isSearch = false
-        tableView.reloadData()
+        //isSearch = false
+        //refreshControl?.removeFromSuperview()
+        self.tableView.reloadData()
     }
     
-    //    public func searchBarShouldEndEditing(_ searchBar: UISearchBar) -> Bool {
-    //        searchBar.setShowsCancelButton(false, animated: true)
-    //        return true
-    //    }
+    
     func searchBarShouldBeginEditing(_ searchBar: UISearchBar) -> Bool {
-        //        UIView.animate(withDuration: 0.55, delay: 0, usingSpringWithDamping: 500.0, initialSpringVelocity: 0, options: .overrideInheritedDuration, animations: {
-        //            self.searchBar.frame = CGRect(x: 0, y: 0, width: 350, height: 50)
-        //        })
-        //        let spinner = UIActivityIndicatorView(style: .gray)
-        //        spinner.center = CGPoint(x: 160, y: 0)
-        //        spinner.hidesWhenStopped = true
-        //        spinner.tag = 7
-        //        self.searchBar.addSubview(spinner)
         searchBar.frame = CGRect(x: 8, y: 0, width: 350, height: 50)
         animationBar()
         return true
     }
+    
+    
     func searchBarShouldEndEditing(_ searchBar: UISearchBar) -> Bool {
-        //        UIView.animate(withDuration: 0.6, delay: 0, usingSpringWithDamping: 500.0, initialSpringVelocity: 0.0, options: .curveLinear, animations: {
-        //            self.searchBar.frame = CGRect(x: 100, y: 0, width: 350, height: 50)
-        //        })
+
         searchBar.frame = CGRect(x: 8, y: 0, width: 350, height: 50)
         let searchBarTextField = searchBar.value(forKey: "searchField") as? UITextField
         searchBarTextField!.textAlignment = .center
@@ -258,28 +270,40 @@ class AllFriendsController: UITableViewController, UISearchBarDelegate {
         searchBar.resignFirstResponder()
         isSearch = false
         searchBar.text = ""
-        tableView.reloadData()
+        userService.loadFriends() { [weak self] users, error in
+            if let error = error {
+                print(error.localizedDescription)
+                return
+            } else if let users = users, let self = self {
+                self.users = users.filter {$0.name != ""}
+                
+                DispatchQueue.main.async {
+                    self.tableView.reloadData()
+                }
+                
+            }
+            
+        }
+        
+//        self.tableView.dataSource = self
+//        self.tableView.delegate = self
+
+        
+        self.tableView.reloadData()
     }
-    
-    //    func searchBarIsEmpty() -> Bool {
-    //        return searchController.searchBar.text?.isEmpty ?? true
-    //    }
     
     private func searchBarSearchButtonClicked(searchBar: UISearchBar) {
         searchBar.resignFirstResponder()
         
         isSearch = false
-        tableView.reloadData()
+        self.tableView.reloadData()
     }
     
     
     
     public func showSearchBar() {
         if let searchBarTextField = searchBar.value(forKey: "searchField") as? UITextField {
-            
-            //searchBarTextField.textAlignment = .center
-            //searchBar.frame = CGRect(x: 8, y: 0, width: 350, height: 50)
-            //Center placeholder
+
             let width = searchBar.frame.width / 2 - (searchBarTextField.attributedPlaceholder?.size().width)!
             let paddingView = UIView(frame: CGRect(x: 8, y: 0, width: width, height: searchBar.frame.height))
             searchBarTextField.leftView = paddingView
@@ -314,14 +338,14 @@ class AllFriendsController: UITableViewController, UISearchBarDelegate {
         opacityUp.duration = 0.8
         opacityUp.timingFunction = CAMediaTimingFunction(name: CAMediaTimingFunctionName.easeOut)
         cell.layer.add(opacityUp, forKey: nil)
-//        
-//        let scaleUp = CABasicAnimation(keyPath: "transform.scale")
-//        scaleUp.beginTime = CACurrentMediaTime()
-//        scaleUp.fromValue = 0.5
-//        scaleUp.toValue = 1
-//        scaleUp.duration = 0.3
-//        scaleUp.timingFunction = CAMediaTimingFunction(name: CAMediaTimingFunctionName.easeOut)
-//        cell.layer.add(scaleUp, forKey: nil)
+        //
+        //        let scaleUp = CABasicAnimation(keyPath: "transform.scale")
+        //        scaleUp.beginTime = CACurrentMediaTime()
+        //        scaleUp.fromValue = 0.5
+        //        scaleUp.toValue = 1
+        //        scaleUp.duration = 0.3
+        //        scaleUp.timingFunction = CAMediaTimingFunction(name: CAMediaTimingFunctionName.easeOut)
+        //        cell.layer.add(scaleUp, forKey: nil)
     }
     
     
@@ -334,17 +358,43 @@ class AllFriendsController: UITableViewController, UISearchBarDelegate {
         opacityDown.timingFunction = CAMediaTimingFunction(name: CAMediaTimingFunctionName.easeOut)
         cell.layer.add(opacityDown, forKey: nil)
         
-//        let scaleDown = CABasicAnimation(keyPath: "transform.scale")
-//        scaleDown.beginTime = CACurrentMediaTime()
-//        scaleDown.fromValue = 1
-//        scaleDown.toValue = 0.5
-//        scaleDown.duration = 0.3
-//        scaleDown.timingFunction = CAMediaTimingFunction(name: CAMediaTimingFunctionName.easeOut)
-//        cell.layer.add(scaleDown, forKey: nil)
+        //        let scaleDown = CABasicAnimation(keyPath: "transform.scale")
+        //        scaleDown.beginTime = CACurrentMediaTime()
+        //        scaleDown.fromValue = 1
+        //        scaleDown.toValue = 0.5
+        //        scaleDown.duration = 0.3
+        //        scaleDown.timingFunction = CAMediaTimingFunction(name: CAMediaTimingFunctionName.easeOut)
+        //        cell.layer.add(scaleDown, forKey: nil)
     }
     
 }
 
+extension AllFriendsController {
+    
+//    func filteringSearchingText(for text: String, _ : String = "All"){
+//        filterFr = users.filter({( group ) -> Bool in
+//            return group.name.lowercased().contains(text.lowercased()) || group.name.lowercased().contains(text.lowercased())})
+//        self.tableView.reloadData()
+//    }
+    
+    func filter (of users: [User], in section: Int) -> [User] {
+        let key = filteringText(in: users)[section]
+        return users.filter { $0.name.first! == Character(key) }
+    }
+    
+    func filteringText (in users: [User]) -> [String] {
+        var initText = [String]()
+        for user in users {
+            initText.append(String(user.name.first!))
+        }
+        return Array(Set(initText)).sorted()
+    }
+    
+    
+    
+    
 
+    
+}
 
 

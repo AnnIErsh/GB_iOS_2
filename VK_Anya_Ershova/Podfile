@@ -7,5 +7,8 @@ target 'VK_Anna_Ershova' do
 
   # Pods for VK_Anna_Ershova
   pod 'Alamofire'
+  pod 'SwiftyJSON'
+  pod 'Kingfisher'
+  pod 'RealmSwift'
 
 end

@@ -27,6 +27,24 @@ class AllGroupCell: UITableViewCell {
         imageAllGr.image = img
     }
     
+    func configured(with group: Group) {
+        
+        let name = group.name
+        grdAllName.text = name
+        
+        let img = group.photo
+        imageAllGr.kf.setImage(with: URL(string: img))
+    }
+    
+//    func config(with group: GlobalGroup, with photo: GlobalGroup) {
+//        
+//        let name = group.name
+//        grdAllName.text = name
+//        
+//        let img = photo.photo
+//        imageAllGr.kf.setImage(with: URL(string: img))
+//    }
+    
     
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
