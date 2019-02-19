@@ -167,6 +167,21 @@ class AllGroupController: UITableViewController, UISearchBarDelegate {
         self.tableView.reloadData()
 
     }
+    
+    
+    override func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
+        let globalGroup = self.filterGr[indexPath.row]
+        let addAction = UITableViewRowAction(style: .destructive, title: "Add") { (action, indexpath) in
+            print("Add Action Tapped")
+            self.filterGr.remove(at: indexPath.row)
+            tableView.reloadData()
+            
+        }
+        addAction.backgroundColor = .red
+        self.allgroupService.addGroups(groupId: globalGroup.id)
+        return [addAction]
+    }
+
 //    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
 //        if editingStyle == .delete {
 //            allgroupsVK.remove(at: indexPath.row)

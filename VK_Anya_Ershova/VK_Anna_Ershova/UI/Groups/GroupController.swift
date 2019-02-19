@@ -20,29 +20,29 @@ class GroupController: UITableViewController {
     var groupService = VKService()
     var groupname = [String]()
     
-    @IBAction func add(segue: UIStoryboardSegue) {
-        if segue.identifier == "add" {
+//    @IBAction func add(segue: UIStoryboardSegue) {
+//        if segue.identifier == "add" {
+//
+//            let allGroupController = segue.source as! AllGroupController
+//            if let indexPath = allGroupController.tableView.indexPathForSelectedRow {
+//
+//
+//                let gr = allGroupController.allgroupsVK[indexPath.row]
+//                if  groupsVK[indexPath.row].name.contains(gr.name) {
+//                    //groupService.addGroups(groupId: gr.id)
+//                    print("there could be error if you are member")
+//                    groupsVK.append(allGroupController.filterGr[indexPath.row])
+//
+//                    tableView.reloadData()
+//                } else {
+//                    print("error")
+//                }
+//
+//            }
+//
+//        }
 
-            let allGroupController = segue.source as! AllGroupController
-            if let indexPath = allGroupController.tableView.indexPathForSelectedRow {
-                
-
-                let gr = allGroupController.allgroupsVK[indexPath.row]
-                if  groupsVK[indexPath.row].name.contains(gr.name) {
-                    groupService.addGroups(groupId: gr.id)
-                    print("there could be error if you are member")
-                    groupsVK.append(allGroupController.filterGr[indexPath.row]) 
-                
-                    tableView.reloadData()
-                } else {
-                    print("error")
-                }
-
-            }
-
-        }
-
-    }
+//    }
 //
 //    @IBAction func add(segue: UIStoryboardSegue) {
 //        if segue.identifier == "add" {
@@ -113,15 +113,26 @@ class GroupController: UITableViewController {
 
     
     // Override to support editing the table view.
-    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-        if editingStyle == .delete {
-            groupsVK.remove(at: indexPath.row)
-            groupService.leftGroups(for: groupsVK[indexPath.row].id)
-            tableView.deleteRows(at: [indexPath], with: .fade)
+//    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+//        if editingStyle == .delete {
+//            groupsVK.remove(at: indexPath.row)
+//            //groupService.leftGroups(for: groupsVK[indexPath.row].id)
+//            tableView.deleteRows(at: [indexPath], with: .fade)
+//            tableView.reloadData()
+//        }
+//    }
+    override func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
+        let ownerGroup = self.groupsVK[indexPath.row]
+        let delAction = UITableViewRowAction(style: .destructive, title: "Delete") { (action, indexpath) in
+            print("Del Action Tapped")
+            self.groupsVK.remove(at: indexPath.row)
             tableView.reloadData()
+            
         }
+        delAction.backgroundColor = .red
+        self.groupService.leftGroups(for: ownerGroup.id)
+        return [delAction]
     }
-
 
 
 }
