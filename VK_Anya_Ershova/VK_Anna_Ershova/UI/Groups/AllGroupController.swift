@@ -78,35 +78,17 @@ class AllGroupController: UITableViewController, UISearchBarDelegate {
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "AllGroupCell", for: indexPath) as! AllGroupCell
-        
-        // _ = (searchController.isActive) ? searchResult[indexPath.row] : groupsAll[indexPath.row]
-        //let groups: String
-        
-        //let img = UIImageView()
-        //let groups: String
+
         if isSearch {
-            //let groups = filterGr[indexPath.row].name
-            //           img.kf.setImage(with: URL(string: filterGr[indexPath.row].photo))
+  
             cell.configured(with: filterGr[indexPath.row])
             
         } else {
-            //            groups = allgroupsVK[indexPath.row].name
-            //            img.kf.setImage(with: URL(string: allgroupsVK[indexPath.row].photo))
+     
             
             cell.configured(with: allgroupsVK[indexPath.row])
         }
-        //        groups = nofilterGr[indexPath.row].name
-        //        img.kf.setImage(with: URL(string: nofilterGr[indexPath.row].photo))
-        //cell.configured(with: nofilterGr[indexPath.row])
-        //let groups: String
-        //cell.grdAllName.text = groups
-        
-        
-        
-        
-        //        cell.grdAllName.text = groupsAll[indexPath.row]
-        //        let groups = groupsAll[indexPath.row]
-        //        cell.configure(friend: groups, img: UIImage(named: groups)!)
+ 
         
         return cell
     }
@@ -147,12 +129,7 @@ class AllGroupController: UITableViewController, UISearchBarDelegate {
         super.didReceiveMemoryWarning()
     }
     
-    //    func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
-    //        isSearch = true
-    //        tableView.reloadData()
-    //
-    //    }
-    
+
     func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
         searchBar.resignFirstResponder()
         isSearch = false
@@ -167,10 +144,7 @@ class AllGroupController: UITableViewController, UISearchBarDelegate {
         self.tableView.reloadData()
         
     }
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        self.performSegue(withIdentifier: "add", sender: indexPath)
-        self.tableView.reloadData()
-    }
+
     
     override func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
         
@@ -188,7 +162,7 @@ class AllGroupController: UITableViewController, UISearchBarDelegate {
         
         addAction.backgroundColor = .green
         self.allgroupService.addGroups(groupId: globalGroup.id)
-        //self.performSegue(withIdentifier: "add", sender: indexPath)
+        self.performSegue(withIdentifier: "add", sender: indexPath)
         //tableView.reloadData()
         return [addAction]
         
