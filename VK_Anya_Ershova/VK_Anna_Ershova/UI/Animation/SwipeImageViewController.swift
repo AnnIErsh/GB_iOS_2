@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import Kingfisher
+import SwiftyJSON
 
 class SwipeImageViewController: UIViewController {
     
@@ -14,21 +16,66 @@ class SwipeImageViewController: UIViewController {
     @IBOutlet weak var swipeImgView: UIImageView!
     
     
-    var imageNames = ["Chloe", "Jade", "Sasha", "Yasmin", "Cameron", "Dipper", "Mabel", "Stanly"]
+    var photosFriends = [Photo]()
+    let photoService = VKService()
     var index = 0
-    //var interactiveAnimator: UIViewPropertyAnimator!
+    var ownerId: Int = 0
     
     var swImg = UIImageView()
     
+    
+//    override func viewWillAppear(_ animated: Bool) {
+//        photoService.loadPhoto(ownerId: ownerId) { [weak self] photosFriends, error in
+//            if let error = error {
+//                print(error.localizedDescription)
+//                return
+//            } else if let photosFriends = photosFriends, let self = self {
+//                self.photosFriends = photosFriends
+//
+//
+//
+//                DispatchQueue.main.async {
+//                    //self.view.reloadInputViews()
+//                    self.swImg.kf.setImage(with: URL(string: photosFriends[self.index].photoURL))
+//                    self.swImg.frame = UIScreen.main.bounds
+//                    self.swImg.contentMode = .scaleAspectFit
+//                    //self.view.addSubview(self.swImg)
+//                    self.view.backgroundColor = UIColor.darkGray
+//                    self.swipeImgView.contentMode = .scaleAspectFit
+//                    self.swipeImgView.backgroundColor = UIColor.darkGray
+//                }
+//
+//            }
+//
+//        }
+//
+//    }
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        swImg.frame = UIScreen.main.bounds
-        swImg.contentMode = .scaleAspectFit
-        swImg.image = UIImage()
-        view.backgroundColor = UIColor.darkGray
-        swipeImgView.contentMode = .scaleAspectFit
-        swipeImgView.backgroundColor = UIColor.darkGray
+        photoService.loadPhoto(ownerId: Session.shared.userId) { [weak self] photosFriends, error in
+            if let error = error {
+                print(error.localizedDescription)
+                return
+            } else if let photosFriends = photosFriends, let self = self {
+                self.photosFriends = photosFriends
+                
+                
+                
+                DispatchQueue.main.async {
+                    //self.view.reloadInputViews()
+                    self.swImg.kf.setImage(with: URL(string: photosFriends[self.index].photoURL))
+                    self.swImg.frame = UIScreen.main.bounds
+                    self.swImg.contentMode = .scaleAspectFit
+                    //self.view.addSubview(self.swImg)
+                    self.view.backgroundColor = UIColor.darkGray
+                    self.swipeImgView.contentMode = .scaleAspectFit
+                    self.swipeImgView.backgroundColor = UIColor.darkGray
+                }
+                
+            }
+            
+        }
         
         
         let swipeRight = UISwipeGestureRecognizer(target: self, action: #selector(respondToSwipeGesture))
@@ -47,26 +94,6 @@ class SwipeImageViewController: UIViewController {
         
         
         
-        
-        //        let recognizerBegan = UIPanGestureRecognizer(target: self, action: #selector(respondToSwipeGesture))
-        //        recognizerBegan.state = UIPanGestureRecognizer.State.began
-        //        self.view.addGestureRecognizer(recognizerBegan)
-        //
-        //        let recognizerChanged = UIPanGestureRecognizer(target: self, action: #selector(respondToSwipeGesture))
-        //        recognizerBegan.state = UIPanGestureRecognizer.State.changed
-        //        self.view.addGestureRecognizer(recognizerChanged)
-        //
-        //        let recognizerEnded = UIPanGestureRecognizer(target: self, action: #selector(respondToSwipeGesture))
-        //        recognizerEnded.state = UIPanGestureRecognizer.State.ended
-        //        self.view.addGestureRecognizer(recognizerEnded)
-        
-        
-        
-        //
-        //        let recognizer = UIPanGestureRecognizer(target: self, action: #selector(respondToSwipeGesture))
-        //        self.view.addGestureRecognizer(recognizer)
-        
-        
     }
     
     
@@ -79,24 +106,24 @@ class SwipeImageViewController: UIViewController {
             
             switch swipeGesture.direction {
             case UISwipeGestureRecognizer.Direction.left:
-                if index == imageNames.count - 1 {
+                if index == photosFriends.count - 1 {
                     index = 0
                     
                 }else{
                     index += 1
                 }
-                swipeImgView.image = UIImage(named: imageNames[index])
+                swipeImgView.kf.setImage(with: URL(string: photosFriends[self.index].photoURL))
                 swipeLeft()
                 view.addSubview(swImg)
                 
             case UISwipeGestureRecognizer.Direction.right:
                 if index == 0 {
-                    index = imageNames.count - 1
+                    index = photosFriends.count - 1
                 }else{
                     index -= 1
                 }
                 
-                swipeImgView.image = UIImage(named: imageNames[index])
+                swipeImgView.kf.setImage(with: URL(string: photosFriends[self.index].photoURL))
                 swipeRight()
                 
                 
@@ -113,49 +140,6 @@ class SwipeImageViewController: UIViewController {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-    
-    
-    
-    
-    //    @objc func onPan(_ recognizer: UIPanGestureRecognizer) {
-    //        switch recognizer.state {
-    //        case .began:
-    //            interactiveAnimator?.startAnimation()
-    //
-    //            interactiveAnimator = UIViewPropertyAnimator(duration: 0.5,
-    //                                                         dampingRatio: 0.5,
-    //                                                         animations: {
-    //                                                            self.swipeImgView.transform = CGAffineTransform(scaleX: 0.5, y: 0.5)
-    //            })
-    //            interactiveAnimator.pauseAnimation()
-    //
-    //        case .changed:
-    //
-    //            let translation = recognizer.translation(in: self.view)
-    //
-    //            interactiveAnimator.fractionComplete = translation.x / 100
-    //            if index == imageNames.count - 1 {
-    //                index = 0
-    //                }else{
-    //                index += 1
-    //
-    //            }
-    //
-    //
-    //
-    //        case .ended:
-    //            interactiveAnimator.stopAnimation(true)
-    //
-    //            interactiveAnimator.addAnimations {
-    //                self.swipeImgView.transform = .identity
-    //            }
-    //            interactiveAnimator.startAnimation()
-    //
-    //            swipeImgView.image = UIImage(named: imageNames[index])
-    //
-    //        default: return
-    //        }
-    //    }
     
     
     private func swipeLeft() {
@@ -186,7 +170,7 @@ class SwipeImageViewController: UIViewController {
                                     
                                     
         }, completion: {[weak self] finished in
-            self!.swImg.image = UIImage(named: self!.imageNames[self!.index])
+            self!.swImg.kf.setImage(with: URL(string: self!.photosFriends[self!.index].photoURL))
             self!.swImg.transform = .identity})
     }
     
@@ -228,10 +212,10 @@ class SwipeImageViewController: UIViewController {
                                     
         }, completion: {[weak self] finished in
             var counter: Int {
-                if self!.index == self!.imageNames.count - 1 {return 0}
+                if self!.index == self!.photosFriends.count - 1 {return 0}
                 else {return self!.index + 1}
             }
-            self!.swImg.image = UIImage(named: self!.imageNames[counter])
+            self!.swImg.kf.setImage(with: URL(string: self!.photosFriends[counter].photoURL))
             self!.swImg.transform = .identity})
     }
     

@@ -21,6 +21,17 @@ class GroupController: UITableViewController {
     var groupname = [String]()
     
     
+    override func viewDidAppear(_ animated: Bool) {
+        self.tableView.reloadData()
+    }
+    override func viewWillAppear(_ animated: Bool) {
+        self.tableView.reloadData()
+    }
+    override func canPerformUnwindSegueAction(_ action: Selector, from fromViewController: UIViewController, withSender sender: Any) -> Bool {
+        self.tableView.reloadData()
+        return true
+    }
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -88,21 +99,21 @@ class GroupController: UITableViewController {
         return [delAction]
     }
     
-    //    @IBAction func add(segue: UIStoryboardSegue) {
-    //        if segue.identifier == "add" {
-    //
-    //            let allGroupController = segue.source as! AllGroupController
-    //            if let indexPath = allGroupController.tableView.indexPathForSelectedRow {
-    //                let gr = allGroupController.allgroupsVK[indexPath.row]
-    //                if  groupsVK[indexPath.row].name.contains(gr.name) {
-    //                    groupsVK.append(allGroupController.filterGr[indexPath.row])
-    //                    tableView.reloadData()
-    //                } else {
-    //                    print("error")
-    //                }
-    //            }
-    //        }
-    //    }
+//        @IBAction func add(segue: UIStoryboardSegue) {
+//            if segue.identifier == "add" {
+//    
+//                let allGroupController = segue.source as! AllGroupController
+//                if let indexPath = allGroupController.tableView.indexPathForSelectedRow {
+//                    let gr = allGroupController.allgroupsVK[indexPath.row]
+//                    if  groupsVK[indexPath.row].name.contains(gr.name) {
+//                        groupsVK.append(allGroupController.filterGr[indexPath.row])
+//                        tableView.reloadData()
+//                    } else {
+//                        print("error")
+//                    }
+//                }
+//            }
+//        }
     
     
     

@@ -43,18 +43,18 @@ class AllGroupController: UITableViewController, UISearchBarDelegate {
         //                }
         //            }
         //        }
-        allgroupService.loadGroups(){ [weak self] groupsVK, error in
-            if let error = error {
-                print(error.localizedDescription)
-                return
-            } else if let groupsVK = groupsVK, let self = self {
-                self.allgroupsVK = groupsVK.filter {$0.name != ""}
-                
-                DispatchQueue.main.async {
-                    self.tableView.reloadData()
-                }
-            }
-        }
+//        allgroupService.loadGroups(){ [weak self] groupsVK, error in
+//            if let error = error {
+//                print(error.localizedDescription)
+//                return
+//            } else if let groupsVK = groupsVK, let self = self {
+//                self.allgroupsVK = groupsVK.filter {$0.name != ""}
+//                
+//                DispatchQueue.main.async {
+//                    self.tableView.reloadData()
+//                }
+//            }
+//        }
         
         
         
@@ -167,7 +167,10 @@ class AllGroupController: UITableViewController, UISearchBarDelegate {
         self.tableView.reloadData()
         
     }
-    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        self.performSegue(withIdentifier: "add", sender: indexPath)
+        self.tableView.reloadData()
+    }
     
     override func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
         
@@ -175,14 +178,17 @@ class AllGroupController: UITableViewController, UISearchBarDelegate {
         let globalGroup = self.filterGr[indexPath.row]
         let addAction = UITableViewRowAction(style: .destructive, title: "Add") { (action, indexpath) in
             print("Add Action Tapped")
+            //self.allgroupsVK.append(globalGroup)
             self.filterGr.remove(at: indexPath.row)
             //self.performSegue(withIdentifier: "add", sender: indexPath)
-            tableView.reloadData()
+            self.tableView.reloadData()
             
         }
+        
+        
         addAction.backgroundColor = .green
         self.allgroupService.addGroups(groupId: globalGroup.id)
-        self.performSegue(withIdentifier: "add", sender: indexPath)
+        //self.performSegue(withIdentifier: "add", sender: indexPath)
         //tableView.reloadData()
         return [addAction]
         

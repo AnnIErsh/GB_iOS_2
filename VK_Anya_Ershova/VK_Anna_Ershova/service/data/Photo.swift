@@ -9,6 +9,7 @@
 import Foundation
 import SwiftyJSON
 import RealmSwift
+import Kingfisher
 
 class Photo : Object {
     override var description: String {
@@ -16,10 +17,12 @@ class Photo : Object {
     }
     @objc dynamic var id = 0
     @objc dynamic var photoURL : String = ""
+    @objc dynamic var stringId: String = ""
 
     required convenience init (json: JSON)  {
         self.init()
         self.id = json["id"].intValue
         self.photoURL = json["sizes"][8]["url"].stringValue
+        self.stringId = json["owner_id"].stringValue
     }
 }
