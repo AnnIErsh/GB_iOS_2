@@ -25,16 +25,6 @@ class GroupController: UITableViewController {
 //        self.tableView.reloadData()
 //    }
     override func viewWillAppear(_ animated: Bool) {
-        self.tableView.reloadData()
-    }
-//    override func canPerformUnwindSegueAction(_ action: Selector, from fromViewController: UIViewController, withSender sender: Any) -> Bool {
-//        self.tableView.reloadData()
-//        return true
-//    }
-//
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
         groupService.loadGroups(){ [weak self] groupsVK, error in
             if let error = error {
                 print(error.localizedDescription)
@@ -47,8 +37,17 @@ class GroupController: UITableViewController {
                 }
             }
         }
+        self.tableView.reloadData()
         
-        //self.tableView.reloadData()
+    }
+//    override func canPerformUnwindSegueAction(_ action: Selector, from fromViewController: UIViewController, withSender sender: Any) -> Bool {
+//        self.tableView.reloadData()
+//        return true
+//    }
+//
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
         
     }
     
