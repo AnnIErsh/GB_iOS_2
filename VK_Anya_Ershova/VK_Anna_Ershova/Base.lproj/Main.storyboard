@@ -176,7 +176,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Chloe" translatesAutoresizingMaskIntoConstraints="NO" id="YZt-6D-a2R">
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="YZt-6D-a2R">
                                 <rect key="frame" x="12" y="32" width="351" height="351"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="YZt-6D-a2R" secondAttribute="height" multiplier="1:1" id="79M-Vd-U1s"/>
@@ -794,13 +794,11 @@
     </scenes>
     <resources>
         <image name="Bratz" width="1080" height="1080"/>
-        <image name="Chloe" width="652.5" height="652.5"/>
         <image name="friends" width="40" height="40"/>
         <image name="groups" width="40" height="40"/>
         <image name="newsIcon" width="22.5" height="22.5"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="44g-x9-gRl"/>
         <segue reference="WmZ-gH-NZk"/>
     </inferredMetricsTieBreakers>
     <color key="tintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
