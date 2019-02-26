@@ -7,13 +7,14 @@
 //
 
 import UIKit
+import RealmSwift
 
 
 
 class PhotoCollectionController: UICollectionViewController {
     var photoFriend: String = ""
     
-    var photosFriends = [Photo]()
+    var photosFriends = Array<Photo>()
     var photoService = VKService()
     var ownerId: Int = 0
     
@@ -28,6 +29,7 @@ class PhotoCollectionController: UICollectionViewController {
             } else if let photosFriends = photosFriends, let self = self {
                 self.photosFriends = photosFriends
                 
+                //RealmProvider.save(items: photosFriends)
                 
                 
                 DispatchQueue.main.async {
@@ -37,6 +39,12 @@ class PhotoCollectionController: UICollectionViewController {
             }
             
         }
+        
+        title = photoFriend
+        let config = Realm.Configuration(deleteRealmIfMigrationNeeded: true)
+        let realm = try! Realm(configuration: config)
+        photosFriends = Array(realm.objects(Photo.self)).filter {$0.photoId == ownerId}
+        
         
     }
     

@@ -8,6 +8,7 @@
 
 import UIKit
 import Kingfisher
+import RealmSwift
 
 
 
@@ -15,7 +16,7 @@ class AllFriendsController: UITableViewController, UISearchBarDelegate {
     
     
     private let userService = VKService()
-    var users = [User]()
+    var users = Array<User>()
     var friendId = 0
     
     
@@ -26,8 +27,8 @@ class AllFriendsController: UITableViewController, UISearchBarDelegate {
     
     
     var isSearch = false
-    var filterFr = [User]()
-    var nofilterFr = [User]()
+    var filterFr = Array<User>()
+    var nofilterFr = Array<User>()
     
     override func viewWillAppear(_ animated: Bool) {
         tableView.reloadData()
@@ -49,16 +50,19 @@ class AllFriendsController: UITableViewController, UISearchBarDelegate {
             } else if let users = users, let self = self {
                 self.users = users.filter {$0.name != ""}
                 
+                //RealmProvider.save(items: users.filter {$0.name != ""})
+               
                 DispatchQueue.main.async {
                     self.tableView.reloadData()
                 }
-                
             }
-            
         }
         
         
         showSearchBar()
+        let config = Realm.Configuration(deleteRealmIfMigrationNeeded: true)
+        let realm = try! Realm(configuration: config)
+        users = Array(realm.objects(User.self))
         
         //
         //        self.tableView.delegate = self
@@ -350,12 +354,12 @@ class AllFriendsController: UITableViewController, UISearchBarDelegate {
 extension AllFriendsController {
     
     
-    func filter (of users: [User], in section: Int) -> [User] {
+    func filter (of users: Array<User>, in section: Int) ->  Array<User> {
         let key = filteringText(in: users)[section]
         return users.filter { $0.name.first! == Character(key) }
     }
     
-    func filteringText (in users: [User]) -> [String] {
+    func filteringText (in users: Array<User>) -> [String] {
         var initText = [String]()
         for user in users {
             initText.append(String(user.name.first!))

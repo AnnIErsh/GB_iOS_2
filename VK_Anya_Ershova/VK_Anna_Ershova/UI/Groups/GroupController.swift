@@ -9,6 +9,7 @@
 import UIKit
 import Kingfisher
 import Alamofire
+import RealmSwift
 
 class GroupController: UITableViewController {
     
@@ -16,7 +17,7 @@ class GroupController: UITableViewController {
     //var groups = ["Barbie", "Bratz", "Myscene", "Monsterhigh"]
     //private var imagesGr = ["Barbie", "Bratz", "Myscene", "Monsterhigh"]
     
-    var groupsVK = [Group]()
+    var groupsVK = Array<Group>()
     var groupService = VKService()
     var groupname = [String]()
     
@@ -32,6 +33,8 @@ class GroupController: UITableViewController {
             } else if let groupsVK = groupsVK, let self = self {
                 self.groupsVK = groupsVK
                 
+                //RealmProvider.save(items: groupsVK)
+                
                 DispatchQueue.main.async {
                     self.tableView.reloadData()
                 }
@@ -39,6 +42,9 @@ class GroupController: UITableViewController {
         }
         self.tableView.reloadData()
         
+        let config = Realm.Configuration(deleteRealmIfMigrationNeeded: true)
+        let realm = try! Realm(configuration: config)
+        groupsVK = Array(realm.objects(Group.self))
     }
 //    override func canPerformUnwindSegueAction(_ action: Selector, from fromViewController: UIViewController, withSender sender: Any) -> Bool {
 //        self.tableView.reloadData()
@@ -48,6 +54,7 @@ class GroupController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         
     }
     

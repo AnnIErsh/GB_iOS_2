@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import RealmSwift
 //import CoreData
 
 class AllGroupController: UITableViewController, UISearchBarDelegate {

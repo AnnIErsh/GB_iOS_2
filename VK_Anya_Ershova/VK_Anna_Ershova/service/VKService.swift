@@ -9,6 +9,7 @@
 import Foundation
 import Alamofire
 import SwiftyJSON
+import RealmSwift
 
 class VKService {
     static let sessionManager: SessionManager = {
@@ -21,7 +22,7 @@ class VKService {
     
     var sessionToken = Session.shared.token
     let url = "https://api.vk.com"
-    
+    let realmProvider = RealmProvider()
     
     func loadFriends(completion: (([User]?, Error?) -> Void)? = nil) {
         
@@ -41,8 +42,11 @@ class VKService {
             case .success(let value):
                 let json = JSON(value)
                 let users = json["response"]["items"].arrayValue.map { User(json: $0) }
+                
+                self.realmProvider.save(items: users)
+                
                 completion?(users, nil)
-                print("____________ Get Friends ____________: \(value) -----------")
+                //print("____________ Get Friends ____________: \(value) -----------")
                 users.forEach{print($0)}
             }
         }
@@ -68,7 +72,7 @@ class VKService {
                 let json = JSON(value)
                 let users = json["response"]["items"].arrayValue.map { User(json: $0) }
                 completion?(users, nil)
-                print("____________ Search Friends ____________: \(value) -----------")
+                //print("____________ Search Friends ____________: \(value) -----------")
                 users.forEach{print($0)}
             }
         }
@@ -95,8 +99,11 @@ class VKService {
             case .success(let value):
                 let json = JSON(value)
                 let groups = json["response"]["items"].arrayValue.map { Group(json: $0) }
+                
+                self.realmProvider.save(items: groups)
+                
                 completion?(groups, nil)
-                print("____________ Get Groups ____________: \(value) -----------")
+                //print("____________ Get Groups ____________: \(value) -----------")
                 groups.forEach{print($0)}
             }
         }
@@ -119,7 +126,7 @@ class VKService {
                 let json = JSON(value)
                 let groups = json["response"]["items"].arrayValue.map { Group(json: $0) }
                 completion?(groups, nil)
-                print("____________ Search Groups ____________: \(value) -----------")
+                //print("____________ Search Groups ____________: \(value) -----------")
                 groups.forEach{print($0)}
             }
         }
@@ -141,7 +148,7 @@ class VKService {
                 let json = JSON(value)
                 let groups = json["response"]["items"].arrayValue.map { Group(json: $0) }
                 completion?(groups, nil)
-                print("____________ Left Groups ____________: \(value) -----------")
+                //print("____________ Left Groups ____________: \(value) -----------")
                 groups.forEach{print($0)}
             }
         }
@@ -162,7 +169,7 @@ class VKService {
                 let json = JSON(value)
                 let groups = json["response"]["items"].arrayValue.map { Group(json: $0) }
                 completion?(groups, nil)
-                print("____________ Join Groups ____________: \(value) -----------")
+                //print("____________ Join Groups ____________: \(value) -----------")
                 groups.forEach{print($0)}
             }
         }
@@ -220,8 +227,15 @@ class VKService {
             case .success(let value):
                 let json = JSON(value)
                 let photos = json["response"]["items"].arrayValue.map { Photo(json: $0) }.filter { !$0.photoURL.isEmpty }
+                for photo in photos {
+                    photo.photoId = ownerId
+                }
+                
+                self.realmProvider.save(items: photos)
+                
+                
                 completion?(photos, nil)
-                print("____________ Get Photos ____________: \(value) -----------")
+                //print("____________ Get Photos ____________: \(value) -----------")
                 photos.forEach{print($0)}
             }
         }

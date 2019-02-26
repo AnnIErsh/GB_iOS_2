@@ -10,24 +10,17 @@ import Foundation
 import SwiftyJSON
 import RealmSwift
 
+@objcMembers
 class Group : Object {
     override var description: String {
         return " The group name is \(name)"
     }
     
-    @objc dynamic var id = 0
-    @objc dynamic var name = ""
-    @objc dynamic var photo = ""
-    @objc dynamic var isMember = 0
+    dynamic var id = 0
+    dynamic var name = ""
+    dynamic var photo = ""
+    dynamic var isMember = 0
     
-    //    enum CodingKeys: String, CodingKey {
-    //
-    //        case id
-    //        case name
-    //        case photo
-    //        case isMember
-    //
-    //    }
     
     required convenience init (json: JSON)  {
         self.init()
@@ -36,6 +29,9 @@ class Group : Object {
         self.photo = json["photo_100"].stringValue
         self.isMember = json["is_member"].intValue
         
+    }
+    override static func primaryKey() -> String {
+        return "id"
     }
 }
 
