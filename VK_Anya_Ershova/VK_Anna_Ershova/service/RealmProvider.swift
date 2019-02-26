@@ -18,11 +18,11 @@ class RealmProvider {
         
         do {
             let realm = try Realm(configuration: config)
-            //let oldItems = realm.objects(T.self)
+            let oldItems = realm.objects(T.self)
             
             try realm.write {
                 
-                //realm.delete(oldItems)
+                realm.delete(oldItems)
                 realm.add(items, update: update)
             }
             
