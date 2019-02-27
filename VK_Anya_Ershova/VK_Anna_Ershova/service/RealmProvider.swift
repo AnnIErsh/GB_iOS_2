@@ -11,10 +11,10 @@ import RealmSwift
 
 class RealmProvider {
     
-        func save<T: Object>(items: [T],
-                                config: Realm.Configuration = Realm.Configuration.defaultConfiguration,
-                                update: Bool = true) {
-        print("Realm data file: ", config.fileURL!)
+    func save<T: Object>(items: [T],
+                         config: Realm.Configuration = Realm.Configuration.defaultConfiguration,
+                         update: Bool = true) {
+        print("--------------Realm data file--------------: ", config.fileURL!)
         
         do {
             let realm = try Realm(configuration: config)
@@ -29,6 +29,27 @@ class RealmProvider {
             
         } catch {
             print(error.localizedDescription)
+        }
+    }
+    
+    static func saveItems<T: Object>(items: [T],
+                                     config: Realm.Configuration = Realm.Configuration.defaultConfiguration,
+                                     update: Bool = true) {
+        print("Realm data file: ", config.fileURL!)
+        
+        do {
+            let realm = try Realm(configuration: config)
+            
+            
+            try realm.write {
+                
+                
+                realm.add(items, update: update)
+            }
+            
+            
+        } catch {
+            print(error)
         }
     }
     

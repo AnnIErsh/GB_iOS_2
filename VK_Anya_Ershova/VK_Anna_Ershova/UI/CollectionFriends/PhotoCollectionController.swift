@@ -29,7 +29,7 @@ class PhotoCollectionController: UICollectionViewController {
             } else if let photosFriends = photosFriends, let self = self {
                 self.photosFriends = photosFriends
                 
-                //RealmProvider.save(items: photosFriends)
+                RealmProvider.saveItems(items: photosFriends)
                 
                 
                 DispatchQueue.main.async {
@@ -40,7 +40,7 @@ class PhotoCollectionController: UICollectionViewController {
             
         }
         
-        title = photoFriend
+        
         let config = Realm.Configuration(deleteRealmIfMigrationNeeded: true)
         let realm = try! Realm(configuration: config)
         photosFriends = Array(realm.objects(Photo.self)).filter {$0.photoId == ownerId}

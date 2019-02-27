@@ -10,7 +10,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "VK_Anna_Ershova/UI/AllFriends/AllFriendsController.swift"
-            timestampString = "572926342.091066"
+            timestampString = "572938612.777506"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "120"
@@ -26,11 +26,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "VK_Anna_Ershova/UI/AllFriends/AllFriendsController.swift"
-            timestampString = "572926342.0913711"
+            timestampString = "572938612.781146"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "367"
-            endingLineNumber = "367"
+            startingLineNumber = "366"
+            endingLineNumber = "366"
             landmarkName = "filteringText(in:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -42,11 +42,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "VK_Anna_Ershova/UI/AllFriends/AllFriendsController.swift"
-            timestampString = "572926342.091565"
+            timestampString = "572938612.781842"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "361"
-            endingLineNumber = "361"
+            startingLineNumber = "360"
+            endingLineNumber = "360"
             landmarkName = "AllFriendsController"
             landmarkType = "21">
          </BreakpointContent>

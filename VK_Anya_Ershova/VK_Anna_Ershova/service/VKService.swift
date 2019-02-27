@@ -43,7 +43,7 @@ class VKService {
                 let json = JSON(value)
                 let users = json["response"]["items"].arrayValue.map { User(json: $0) }
                 
-                self.realmProvider.save(items: users)
+                //self.realmProvider.save(items: users)
                 
                 completion?(users, nil)
                 //print("____________ Get Friends ____________: \(value) -----------")
@@ -231,7 +231,7 @@ class VKService {
                     photo.photoId = ownerId
                 }
                 
-                self.realmProvider.save(items: photos)
+                //self.realmProvider.save(items: photos)
                 
                 
                 completion?(photos, nil)

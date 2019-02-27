@@ -48,9 +48,9 @@ class AllFriendsController: UITableViewController, UISearchBarDelegate {
                 print(error.localizedDescription)
                 return
             } else if let users = users, let self = self {
-                self.users = users.filter {$0.name != ""}
+                //self.users = users.filter {$0.name != ""}
                 
-                //RealmProvider.save(items: users.filter {$0.name != ""})
+                RealmProvider.saveItems(items: users.filter {$0.name != ""})
                
                 DispatchQueue.main.async {
                     self.tableView.reloadData()
@@ -183,8 +183,7 @@ class AllFriendsController: UITableViewController, UISearchBarDelegate {
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return 40
     }
-    
-    
+
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         if searchText != "" {
             
@@ -367,7 +366,35 @@ extension AllFriendsController {
         return Array(Set(initText)).sorted()
     }
     
-    
+    func queryUsers(){
+        let realm = try! Realm()
+        let allUsers = realm.objects(User.self)
+        for each in allUsers{
+            self.users.append(each)
+        }
+    }
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        
+        self.users.removeAll()
+        
+        DispatchQueue.main.async() {
+            if (textField.text?.count)! > 0{
+                let realm = try! Realm()
+                let predicate = NSPredicate(format: "name CONTAINS [c] %@", textField.text!)
+                let filteredUsers = realm.objects(User.self).filter(predicate)
+                for each in filteredUsers{
+                    self.users.append(each)
+                    //self.tableview.reloadData()
+                }
+            }else{
+                self.queryUsers()
+                self.tableView.reloadData()
+            }
+        }
+        self.tableView.reloadData()
+        
+        return true
+    }
     
     
     
