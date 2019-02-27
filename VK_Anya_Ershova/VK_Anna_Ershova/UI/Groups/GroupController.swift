@@ -96,6 +96,14 @@ class GroupController: UITableViewController {
         let delAction = UITableViewRowAction(style: .destructive, title: "Delete") { (action, indexpath) in
             print("Del Action Tapped")
             self.groupsVK.remove(at: indexPath.row)
+            do {
+                let realm = try Realm()
+                realm.beginWrite()
+                realm.delete(ownerGroup)
+                try realm.commitWrite()
+            } catch {
+                print(error)
+            }
             tableView.reloadData()
             
         }
