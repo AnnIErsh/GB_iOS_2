@@ -31,43 +31,43 @@ class AllFriendsController: UITableViewController, UISearchBarDelegate {
     var nofilterFr = Array<User>()
     
     override func viewWillAppear(_ animated: Bool) {
-        tableView.reloadData()
-    }
-    
-    override func viewDidLoad() {
-        
-        super.viewDidLoad()
-        
-        //        self.tableView.dataSource = self
-        //        self.tableView.delegate = self
-        //        self.searchBar.delegate = self
-        
         
         userService.loadFriends() { [weak self] users, error in
             if let error = error {
                 print(error.localizedDescription)
                 return
             } else if let users = users, let self = self {
-                //self.users = users.filter {$0.name != ""}
+                self.users = users.filter {$0.name != ""}
                 
                 RealmProvider.saveItems(items: users.filter {$0.name != ""})
-               
+                
                 DispatchQueue.main.async {
                     self.tableView.reloadData()
                 }
             }
         }
         
-        
-        showSearchBar()
+       
         let config = Realm.Configuration(deleteRealmIfMigrationNeeded: true)
         let realm = try! Realm(configuration: config)
         users = Array(realm.objects(User.self))
         
+        self.tableView.reloadData()
+        
+    }
+    
+    override func viewDidLoad() {
+       // tableView.reloadData()
+        super.viewDidLoad()
+        
+        //        self.tableView.dataSource = self
+        //        self.tableView.delegate = self
+        //        self.searchBar.delegate = self
+        
         //
         //        self.tableView.delegate = self
         //        self.tableView.dataSource = self
-        
+         showSearchBar()
         
     }
     
