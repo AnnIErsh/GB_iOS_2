@@ -34,7 +34,6 @@ class AllFriendsController: UITableViewController, UISearchBarDelegate {
     @IBOutlet weak var searchBar: UISearchBar!
     
     
-    //private var friendsIndexTitles = [String]()
     
     
     var isSearch = false
@@ -79,7 +78,7 @@ class AllFriendsController: UITableViewController, UISearchBarDelegate {
     
     override func numberOfSections(in tableView: UITableView) -> Int {
         if isSearch {
-            return 1
+            return filteringText(in: filterFr).count
         } else {
             return filteringText(in: users).count
             //return friendsIndexTitles.count
@@ -191,10 +190,15 @@ class AllFriendsController: UITableViewController, UISearchBarDelegate {
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         
         if searchText != "" {
-            filterFr = users.filter("firstname CONTAINS[cd] %@ OR lasttName CONTAINS[cd] %@", searchText, searchText)
+            isSearch = true
+            filterFr = users.filter("firstname CONTAINS[cd] %@ OR lastname CONTAINS[cd] %@", searchText, searchText)
+            tableView.reloadData()
+        } else {
+            isSearch = false
+            tableView.reloadData()
         }
         
-            tableView.reloadData()
+        
             
         
 //        if searchText != "" {
@@ -232,7 +236,7 @@ class AllFriendsController: UITableViewController, UISearchBarDelegate {
     
     private func searchBarTextDidEndEditing(searchBar: UISearchBar) {
         searchBar.resignFirstResponder()
-        //isSearch = false
+        isSearch = false
         //refreshControl?.removeFromSuperview()
         self.tableView.reloadData()
     }
@@ -263,25 +267,6 @@ class AllFriendsController: UITableViewController, UISearchBarDelegate {
         searchBar.resignFirstResponder()
         isSearch = false
         searchBar.text = ""
-//        userService.loadFriends() { [weak self] users, error in
-//            if let error = error {
-//                print(error.localizedDescription)
-//                return
-//            } else if let users = users, let self = self {
-//                self.users = users.filter {$0.name != ""}
-//
-//                DispatchQueue.main.async {
-//                    self.tableView.reloadData()
-//                }
-//
-//            }
-//
-//        }
-        
-        //        self.tableView.dataSource = self
-        //        self.tableView.delegate = self
-        
-        
         self.tableView.reloadData()
     }
     

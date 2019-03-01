@@ -799,6 +799,7 @@
         <image name="newsIcon" width="22.5" height="22.5"/>
     </resources>
     <inferredMetricsTieBreakers>
+        <segue reference="U5K-oR-Hvz"/>
         <segue reference="WmZ-gH-NZk"/>
     </inferredMetricsTieBreakers>
     <color key="tintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
