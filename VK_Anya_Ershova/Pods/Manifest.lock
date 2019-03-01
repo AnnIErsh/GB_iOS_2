@@ -1,6 +1,7 @@
 PODS:
   - Alamofire (4.8.1)
-  - Kingfisher (5.1.1)
+  - KeyPathKit (1.5.1)
+  - Kingfisher (5.2.0)
   - Realm (3.13.1):
     - Realm/Headers (= 3.13.1)
   - Realm/Headers (3.13.1)
@@ -10,6 +11,7 @@ PODS:
 
 DEPENDENCIES:
   - Alamofire
+  - KeyPathKit
   - Kingfisher
   - RealmSwift
   - SwiftyJSON
@@ -17,6 +19,7 @@ DEPENDENCIES:
 SPEC REPOS:
   https://github.com/cocoapods/specs.git:
     - Alamofire
+    - KeyPathKit
     - Kingfisher
     - Realm
     - RealmSwift
@@ -24,11 +27,12 @@ SPEC REPOS:
 
 SPEC CHECKSUMS:
   Alamofire: 16ce2c353fb72865124ddae8a57c5942388f4f11
-  Kingfisher: 2558186963e5be42d98c5b110ccb3130148b77e4
+  KeyPathKit: 08dd7e6a8b64f760e89e05b3830762c9b9ab54c8
+  Kingfisher: 07067cfacf371117330dceb4b4b8f5c4b691ab42
   Realm: 50071da38fe079e0735e47c9f2eae738c68c5996
   RealmSwift: 8a1e6a02b7a08cd17a31e3115143fb69fe5f3fb9
   SwiftyJSON: c4bcba26dd9ec7a027fc8eade48e2c911f229e96
 
-PODFILE CHECKSUM: e11360b2c559db86ba3279e1ae68296048917722
+PODFILE CHECKSUM: 95180cd2716bf30979f2994fdb52097b9d6b1ffa
 
 COCOAPODS: 1.6.0

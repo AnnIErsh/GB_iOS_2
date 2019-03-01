@@ -9,6 +9,7 @@
 import UIKit
 import Kingfisher
 import RealmSwift
+import KeyPathKit
 
 
 
@@ -16,19 +17,30 @@ class AllFriendsController: UITableViewController, UISearchBarDelegate {
     
     
     private let userService = VKService()
-    var users = Array<User>()
+    private static let realm = try! Realm(configuration: Realm.Configuration(deleteRealmIfMigrationNeeded: true))
+    var users: Results<User> = {
+        let userObject = realm.objects(User.self).sorted(byKeyPath: "lastname", ascending: true)
+        return userObject
+    }()
+    var filterFr: Results<User> = {
+        let userObject = realm.objects(User.self).sorted(byKeyPath: "lastname", ascending: true)
+        return userObject
+    }()
+        
+    
     var friendId = 0
     
     
     @IBOutlet weak var searchBar: UISearchBar!
     
     
-    private var friendsIndexTitles = [String]()
+    //private var friendsIndexTitles = [String]()
     
     
     var isSearch = false
-    var filterFr = Array<User>()
-    var nofilterFr = Array<User>()
+
+
+
     
     override func viewWillAppear(_ animated: Bool) {
         
@@ -37,7 +49,7 @@ class AllFriendsController: UITableViewController, UISearchBarDelegate {
                 print(error.localizedDescription)
                 return
             } else if let users = users, let self = self {
-                self.users = users.filter {$0.name != ""}
+//                self.users = users.filter("lastname BEGINSWITH %@").sorted(byProperty: "lastname")
                 
                 RealmProvider.saveItems(items: users.filter {$0.name != ""})
                 
@@ -48,9 +60,9 @@ class AllFriendsController: UITableViewController, UISearchBarDelegate {
         }
         
        
-        let config = Realm.Configuration(deleteRealmIfMigrationNeeded: true)
-        let realm = try! Realm(configuration: config)
-        users = Array(realm.objects(User.self))
+//        let config = Realm.Configuration(deleteRealmIfMigrationNeeded: true)
+//        let realm = try! Realm(configuration: config)
+//        users = realm.objects(User.self)
         
         self.tableView.reloadData()
         
@@ -59,18 +71,11 @@ class AllFriendsController: UITableViewController, UISearchBarDelegate {
     override func viewDidLoad() {
        // tableView.reloadData()
         super.viewDidLoad()
-        
-        //        self.tableView.dataSource = self
-        //        self.tableView.delegate = self
-        //        self.searchBar.delegate = self
-        
-        //
-        //        self.tableView.delegate = self
-        //        self.tableView.dataSource = self
          showSearchBar()
         
     }
     
+
     
     override func numberOfSections(in tableView: UITableView) -> Int {
         if isSearch {
@@ -84,24 +89,24 @@ class AllFriendsController: UITableViewController, UISearchBarDelegate {
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if isSearch {
-            return filter(of: filterFr, in: section).count
+            return filterFriends(of: filterFr, in: section).count
         } else {
             
-            return filter(of: users, in: section).count
+            return filterFriends(of: users, in: section).count
         }
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "FriendCell", for: indexPath) as! AllFriendsCell
         
-        var friendAfter = [User]()
+        var friendAfter: Results<User>
         if isSearch {
             
-            friendAfter = filter(of: filterFr, in: indexPath.section)
+            friendAfter = filterFriends(of: filterFr, in: indexPath.section)
             
         } else {
             
-            friendAfter = filter(of: users, in: indexPath.section)
+            friendAfter = filterFriends(of: users, in: indexPath.section)
             
             cell.configured(with: users[indexPath.row])
         }
@@ -145,15 +150,14 @@ class AllFriendsController: UITableViewController, UISearchBarDelegate {
             if let indexPath = self.tableView.indexPathForSelectedRow {
                 
                 let controller = segue.destination as! PhotoCollectionController
-                var friendAfter = [User]()
-                
+                var friendAfter: Results<User>
                 if isSearch {
                     
-                    friendAfter = filter(of: filterFr, in: indexPath.section)
+                    friendAfter = filterFriends(of: filterFr, in: indexPath.section)
                     
                 } else {
                     
-                    friendAfter = filter(of: users, in: indexPath.section)
+                    friendAfter = filterFriends(of: users, in: indexPath.section)
                     
                 }
                 controller.ownerId = friendAfter[indexPath.row].id
@@ -185,30 +189,38 @@ class AllFriendsController: UITableViewController, UISearchBarDelegate {
     }
 
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        
         if searchText != "" {
+            filterFr = users.filter("firstname CONTAINS[cd] %@ OR lasttName CONTAINS[cd] %@", searchText, searchText)
+        }
+        
+            tableView.reloadData()
             
-            userService.searchFriends(isSearching: searchText){ [weak self] users, error in
-                if let error = error {
-                    print(error.localizedDescription)
-                    return
-                } else if let users = users, let self = self {
-                    self.users = users.filter {$0.name != ""}
-                    //self.filterFr = users
-                    
-                    DispatchQueue.main.async {
-                        self.tableView.reloadData()
-                    }
-                    
-                }
-                
-            }
+        
+//        if searchText != "" {
+            
+//            userService.searchFriends(isSearching: searchText){ [weak self] users, error in
+//                if let error = error {
+//                    print(error.localizedDescription)
+//                    return
+//                } else if let users = users, let self = self {
+//                    self.users = users.filter {$0.name != ""}
+//                    //self.filterFr = users
+//
+//                    DispatchQueue.main.async {
+//                        self.tableView.reloadData()
+//                    }
+//
+//                }
+//
+//            }
             //            filterFr = users.filter({( group ) -> Bool in
             //                return group.name.lowercased().contains(searchText.lowercased())
             //            })
-        } else {
+ //       } else {
             //isSearch = false
-            self.tableView.reloadData()
-        }
+        //          self.tableView.reloadData()
+ //       }
         
         
     }
@@ -251,20 +263,20 @@ class AllFriendsController: UITableViewController, UISearchBarDelegate {
         searchBar.resignFirstResponder()
         isSearch = false
         searchBar.text = ""
-        userService.loadFriends() { [weak self] users, error in
-            if let error = error {
-                print(error.localizedDescription)
-                return
-            } else if let users = users, let self = self {
-                self.users = users.filter {$0.name != ""}
-                
-                DispatchQueue.main.async {
-                    self.tableView.reloadData()
-                }
-                
-            }
-            
-        }
+//        userService.loadFriends() { [weak self] users, error in
+//            if let error = error {
+//                print(error.localizedDescription)
+//                return
+//            } else if let users = users, let self = self {
+//                self.users = users.filter {$0.name != ""}
+//
+//                DispatchQueue.main.async {
+//                    self.tableView.reloadData()
+//                }
+//
+//            }
+//
+//        }
         
         //        self.tableView.dataSource = self
         //        self.tableView.delegate = self
@@ -352,49 +364,61 @@ class AllFriendsController: UITableViewController, UISearchBarDelegate {
 
 extension AllFriendsController {
     
-    
-    func filter (of users: Array<User>, in section: Int) ->  Array<User> {
-        let key = filteringText(in: users)[section]
-        return users.filter { $0.name.first! == Character(key) }
-    }
-    
-    func filteringText (in users: Array<User>) -> [String] {
-        var initText = [String]()
+    func filteringText (in users: Results<User>) -> [String] {
+        var friendsIndexTitles = [String]()
         for user in users {
-            initText.append(String(user.name.first!))
+            friendsIndexTitles.append(String(user.lastname.first!))
         }
-        return Array(Set(initText)).sorted()
+        return Array(Set(friendsIndexTitles)).sorted()
     }
     
-    func queryUsers(){
-        let realm = try! Realm()
-        let allUsers = realm.objects(User.self)
-        for each in allUsers{
-            self.users.append(each)
-        }
+    func filterFriends (of users: Results<User>, in section: Int) -> Results<User> {
+        let key = filteringText (in: users)[section]
+        return users.filter("lastname BEGINSWITH %@", key)
     }
-    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-        
-        self.users.removeAll()
-        
-        DispatchQueue.main.async() {
-            if (textField.text?.count)! > 0{
-                let realm = try! Realm()
-                let predicate = NSPredicate(format: "name CONTAINS [c] %@", textField.text!)
-                let filteredUsers = realm.objects(User.self).filter(predicate)
-                for each in filteredUsers{
-                    self.users.append(each)
-                    //self.tableview.reloadData()
-                }
-            }else{
-                self.queryUsers()
-                self.tableView.reloadData()
-            }
-        }
-        self.tableView.reloadData()
-        
-        return true
-    }
+    
+//    func filter (of users: Array<User>, in section: Int) ->  Array<User> {
+//        let key = filteringText(in: users)[section]
+//        return users.filter { $0.name.first! == Character(key) }
+//    }
+//
+//    func filteringText (in users: Array<User>) -> [String] {
+//        var initText = [String]()
+//        for user in users {
+//            initText.append(String(user.name.first!))
+//        }
+//        return Array(Set(initText)).sorted()
+//    }
+    
+//    func queryUsers(){
+//        let realm = try! Realm()
+//        let allUsers = realm.objects(User.self)
+//        for each in allUsers{
+//            self.users.append(each)
+//        }
+//    }
+//    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+//
+//        self.users.removeAll()
+//
+//        DispatchQueue.main.async() {
+//            if (textField.text?.count)! > 0{
+//                let realm = try! Realm()
+//                let predicate = NSPredicate(format: "name CONTAINS [c] %@", textField.text!)
+//                let filteredUsers = realm.objects(User.self).filter(predicate)
+//                for each in filteredUsers{
+//                    self.users.append(each)
+//                    //self.tableview.reloadData()
+//                }
+//            }else{
+//                self.queryUsers()
+//                self.tableView.reloadData()
+//            }
+//        }
+//        self.tableView.reloadData()
+//
+//        return true
+//    }
     
     
     

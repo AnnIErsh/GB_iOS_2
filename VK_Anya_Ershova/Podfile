@@ -10,5 +10,6 @@ target 'VK_Anna_Ershova' do
   pod 'SwiftyJSON'
   pod 'Kingfisher'
   pod 'RealmSwift'
+  pod 'KeyPathKit'
 
 end
