@@ -12,6 +12,9 @@ import RealmSwift
 
 @objcMembers
 class User: Object {
+    
+    var userPhotos = List<Photo>()
+    
     dynamic var id: Int = 0
     dynamic var name: String = ""
     dynamic var avatar: String = ""

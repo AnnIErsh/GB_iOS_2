@@ -54,6 +54,7 @@ class RealmProvider {
     }
     
     static let deleteIfMigration = Realm.Configuration(deleteRealmIfMigrationNeeded: true)
+    
     static func get<T: Object>(_ type: T.Type,
                                config: Realm.Configuration = Realm.Configuration.defaultConfiguration)
         throws -> Results<T> {

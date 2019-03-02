@@ -14,22 +14,46 @@ import RealmSwift
 class PhotoCollectionController: UICollectionViewController {
     var photoFriend: String = ""
     
-    var photosFriends = Array<Photo>()
-    var photoService = VKService()
-    var ownerId: Int = 0
+    //var photosFriends = Array<Photo>()
+
     
+    var photoService = VKService()
+    var photoId: Int = 0
+    
+    var notificationToken: NotificationToken?
+    
+    static var realm = try! Realm(configuration: Realm.Configuration(deleteRealmIfMigrationNeeded: true))
+    
+    var photosFriends: Results<Photo> = {
+        let photoObject = realm.objects(Photo.self)
+        return photoObject
+    }()
+
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        photoService.loadPhoto(ownerId: ownerId) { [weak self] photosFriends, error in
+        
+        
+        photoService.loadPhoto(photoOwnerId: photoId) { [weak self] photosFriends, error in
             if let error = error {
                 print(error.localizedDescription)
                 return
             } else if let photosFriends = photosFriends, let self = self {
-                self.photosFriends = photosFriends
-                
-                RealmProvider.saveItems(items: photosFriends)
+                //self.photosFriends = photosFriends
+                //RealmProvider.saveItems(items: photosFriends)
+                do {
+                    let realm = try Realm(configuration: Realm.Configuration(deleteRealmIfMigrationNeeded: true))
+                    
+                    guard let friend = realm.object(ofType: User.self, forPrimaryKey: self.photoId) else { return }
+                    
+                    try realm.write {
+                        friend.userPhotos.append(objectsIn: photosFriends)
+                    }
+                } catch {
+                    print(error.localizedDescription)
+                }
+
                 
                 
                 DispatchQueue.main.async {
@@ -39,11 +63,7 @@ class PhotoCollectionController: UICollectionViewController {
             }
             
         }
-        
-        
-        let config = Realm.Configuration(deleteRealmIfMigrationNeeded: true)
-        let realm = try! Realm(configuration: config)
-        photosFriends = Array(realm.objects(Photo.self)).filter {$0.photoId == ownerId}
+        pairCollectionAndRealm()
         
         
     }
@@ -92,5 +112,20 @@ class PhotoCollectionController: UICollectionViewController {
         return cell
     }
     
-    
+    func pairCollectionAndRealm() {
+        
+        photosFriends = try! Realm().objects(Photo.self).filter("photoOwnerId == %@", photoId)
+        
+        notificationToken = photosFriends.observe { [weak self] (changes: RealmCollectionChange) in
+            guard let collectionView = self?.collectionView else { return }
+            switch changes {
+            case .initial:
+                collectionView.reloadData()
+            case .update:
+                collectionView.reloadData()
+            case .error(let error):
+                fatalError("\(error)")
+            }
+        }
+    }
 }

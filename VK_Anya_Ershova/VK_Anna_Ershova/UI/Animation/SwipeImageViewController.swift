@@ -54,7 +54,7 @@ class SwipeImageViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        photoService.loadPhoto(ownerId: Session.shared.userId) { [weak self] photosFriends, error in
+        photoService.loadPhoto(photoOwnerId: Session.shared.userId) { [weak self] photosFriends, error in
             if let error = error {
                 print(error.localizedDescription)
                 return

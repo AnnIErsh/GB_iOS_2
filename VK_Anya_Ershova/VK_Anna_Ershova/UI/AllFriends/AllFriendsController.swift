@@ -161,7 +161,7 @@ class AllFriendsController: UITableViewController, UISearchBarDelegate {
                     friendAfter = filterFriends(of: users, in: indexPath.section)
                     
                 }
-                controller.ownerId = friendAfter[indexPath.row].id
+                controller.photoId = friendAfter[indexPath.row].id
             }
         }
         

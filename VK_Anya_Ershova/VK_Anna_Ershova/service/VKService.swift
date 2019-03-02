@@ -208,12 +208,12 @@ class VKService {
 //        }
 //    }
     
-    func loadPhoto(ownerId: Int, completion: (([Photo]?, Error?) -> Void)? = nil) {
+    func loadPhoto(photoOwnerId: Int, completion: (([Photo]?, Error?) -> Void)? = nil) {
         
         let path = "/method/photos.getAll"
         let params: Parameters = [
             "access_token" : sessionToken,
-            "owner_id" : ownerId,
+            "owner_id" : photoOwnerId,
             //"album_id" : "profile",
             "count": 10,
             "extended" : 1,
@@ -228,7 +228,7 @@ class VKService {
                 let json = JSON(value)
                 let photos = json["response"]["items"].arrayValue.map { Photo(json: $0) }.filter { !$0.photoURL.isEmpty }
                 for photo in photos {
-                    photo.photoId = ownerId
+                    photo.photoId = photoOwnerId
                 }
                 
                 //self.realmProvider.save(items: photos)
