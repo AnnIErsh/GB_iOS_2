@@ -15,6 +15,7 @@ import KeyPathKit
 
 class AllFriendsController: UITableViewController, UISearchBarDelegate {
     
+    var notificationToken: NotificationToken?
     
     private let userService = VKService()
     private static let realm = try! Realm(configuration: Realm.Configuration(deleteRealmIfMigrationNeeded: true))
@@ -68,9 +69,10 @@ class AllFriendsController: UITableViewController, UISearchBarDelegate {
     }
     
     override func viewDidLoad() {
-       // tableView.reloadData()
+        // tableView.reloadData()
         super.viewDidLoad()
-         showSearchBar()
+        showSearchBar()
+        pairTableAndRealm()
         
     }
     
@@ -361,6 +363,24 @@ extension AllFriendsController {
         let key = filteringText (in: users)[section]
         return users.filter("lastname BEGINSWITH %@", key)
     }
+    
+    func pairTableAndRealm() {
+        
+        guard let realm = try? Realm() else { return }
+        users = realm.objects(User.self)
+        notificationToken = users.observe ({ [weak self] (changes: RealmCollectionChange) in
+            guard let tableView = self?.tableView else { return }
+            switch changes {
+            case .initial:
+                tableView.reloadData()
+            case .update:
+                tableView.reloadData()
+            case .error(let error):
+                fatalError("\(error)")
+            }
+        })
+    }
+
     
 //    func filter (of users: Array<User>, in section: Int) ->  Array<User> {
 //        let key = filteringText(in: users)[section]

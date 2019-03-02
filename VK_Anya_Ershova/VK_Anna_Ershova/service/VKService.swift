@@ -47,7 +47,7 @@ class VKService {
                 
                 completion?(users, nil)
                 //print("____________ Get Friends ____________: \(value) -----------")
-                users.forEach{print($0)}
+                //users.forEach{print($0)}
             }
         }
         
@@ -73,7 +73,7 @@ class VKService {
                 let users = json["response"]["items"].arrayValue.map { User(json: $0) }
                 completion?(users, nil)
                 //print("____________ Search Friends ____________: \(value) -----------")
-                users.forEach{print($0)}
+                //users.forEach{print($0)}
             }
         }
         
@@ -104,7 +104,7 @@ class VKService {
                 
                 completion?(groups, nil)
                 //print("____________ Get Groups ____________: \(value) -----------")
-                groups.forEach{print($0)}
+                //groups.forEach{print($0)}
             }
         }
     }
@@ -127,7 +127,7 @@ class VKService {
                 let groups = json["response"]["items"].arrayValue.map { Group(json: $0) }
                 completion?(groups, nil)
                 //print("____________ Search Groups ____________: \(value) -----------")
-                groups.forEach{print($0)}
+                //groups.forEach{print($0)}
             }
         }
     }
@@ -149,7 +149,7 @@ class VKService {
                 let groups = json["response"]["items"].arrayValue.map { Group(json: $0) }
                 completion?(groups, nil)
                 //print("____________ Left Groups ____________: \(value) -----------")
-                groups.forEach{print($0)}
+                //groups.forEach{print($0)}
             }
         }
     }
@@ -170,7 +170,7 @@ class VKService {
                 let groups = json["response"]["items"].arrayValue.map { Group(json: $0) }
                 completion?(groups, nil)
                 //print("____________ Join Groups ____________: \(value) -----------")
-                groups.forEach{print($0)}
+                //groups.forEach{print($0)}
             }
         }
     }
@@ -236,7 +236,7 @@ class VKService {
                 
                 completion?(photos, nil)
                 //print("____________ Get Photos ____________: \(value) -----------")
-                photos.forEach{print($0)}
+                //photos.forEach{print($0)}
             }
         }
     }
