@@ -30,7 +30,7 @@ class Group : Object {
         self.isMember = json["is_member"].intValue
         
     }
-    override static func primaryKey() -> String {
+    override static func primaryKey() -> String? {
         return "id"
     }
 }

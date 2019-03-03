@@ -172,17 +172,17 @@ class AllGroupController: UITableViewController, UISearchBarDelegate {
     
     
     
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "add" {
-            let destinationVC : GroupController = segue.destination as! GroupController
-            let sourceVC = segue.source as! AllGroupController
-            if let indexPath = sourceVC.tableView.indexPathForSelectedRow {
-                let addNewGroup = sourceVC.allgroupsVK[indexPath.row]
-                destinationVC.groupsVK[indexPath.row] = addNewGroup
-                self.tableView.reloadData()
-            }
-        }
-    }
+//    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+//        if segue.identifier == "add" {
+//            let destinationVC : GroupController = segue.destination as! GroupController
+//            let sourceVC = segue.source as! AllGroupController
+//            if let indexPath = sourceVC.tableView.indexPathForSelectedRow {
+//                let addNewGroup = sourceVC.allgroupsVK[indexPath.row]
+//                destinationVC.groupsVK[indexPath.row] = addNewGroup
+//                self.tableView.reloadData()
+//            }
+//        }
+//    }
     
     
     //    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
