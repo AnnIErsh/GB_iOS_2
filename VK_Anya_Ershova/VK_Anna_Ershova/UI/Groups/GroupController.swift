@@ -15,7 +15,7 @@ class GroupController: UITableViewController {
     
     var notificationToken: NotificationToken?
     let realmProvider = RealmProvider()
-    private let userService = VKService()
+    
 //    private static let realm = try! Realm(configuration: Realm.Configuration(deleteRealmIfMigrationNeeded: true))
     
     var groupsVK: Results<Group>?
@@ -31,17 +31,8 @@ class GroupController: UITableViewController {
 //        self.tableView.reloadData()
 //    }
     override func viewWillAppear(_ animated: Bool) {
-//        pairTableAndRealm()
-//        groupService.loadGroups(){ [weak self] groupsVK, error in
-//            if let error = error {
-//                print(error.localizedDescription)
-//                return
-//            } else if let _ = groupsVK, let self = self {
-//                DispatchQueue.main.async {
-//                    self.tableView.reloadData()
-//                }
-//            }
-//        }
+        pairTableAndRealm()
+        groupService.loadGroups()
         
         //pairTableAndRealm()
         self.tableView.reloadData()
@@ -86,7 +77,11 @@ class GroupController: UITableViewController {
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
             guard let mygroup = groupsVK?[indexPath.row] else { return }
+            let ownerGroup = self.groupsVK![indexPath.row]
+            self.groupService.leftGroups(for: ownerGroup.id)
+            
             RealmProvider.delete([mygroup])
+            
         }
     }
 //    override func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {

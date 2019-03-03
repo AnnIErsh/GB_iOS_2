@@ -35,7 +35,7 @@ class PhotoCollectionController: UICollectionViewController {
         
         
         
-        photoService.loadPhoto(photoOwnerId: photoId) { [weak self] photosFriends, error in
+        self.photoService.loadPhoto(photoOwnerId: photoId) { [weak self] photosFriends, error in
             if let error = error {
                 print(error.localizedDescription)
                 return
