@@ -16,7 +16,7 @@ class PhotoCollectionController: UICollectionViewController {
     
     //var photosFriends = Array<Photo>()
 
-    
+    let realmProvider = RealmProvider()
     var photoService = VKService()
     var photoId: Int = 0
     
@@ -41,18 +41,19 @@ class PhotoCollectionController: UICollectionViewController {
                 return
             } else if let photosFriends = photosFriends, let self = self {
                 //self.photosFriends = photosFriends
-                //RealmProvider.saveItems(items: photosFriends)
-                do {
-                    let realm = try Realm(configuration: Realm.Configuration(deleteRealmIfMigrationNeeded: true))
-                    
-                    guard let friend = realm.object(ofType: User.self, forPrimaryKey: self.photoId) else { return }
-                    
-                    try realm.write {
-                        friend.userPhotos.append(objectsIn: photosFriends)
-                    }
-                } catch {
-                    print(error.localizedDescription)
-                }
+                self.realmProvider.save(items: photosFriends)
+                
+//                do {
+//                    let realm = try Realm(configuration: Realm.Configuration(deleteRealmIfMigrationNeeded: true))
+//
+//                    guard let friend = realm.object(ofType: User.self, forPrimaryKey: self.photoId) else { return }
+//
+//                    try realm.write {
+//                        friend.userPhotos.append(objectsIn: photosFriends)
+//                    }
+//                } catch {
+//                    print(error.localizedDescription)
+//                }
 
                 
                 

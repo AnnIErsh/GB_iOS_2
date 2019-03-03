@@ -209,7 +209,7 @@ class VKService {
 //    }
     
     func loadPhoto(photoOwnerId: Int, completion: (([Photo]?, Error?) -> Void)? = nil) {
-        
+        var photos = [Photo]()
         let path = "/method/photos.getAll"
         let params: Parameters = [
             "access_token" : sessionToken,
@@ -226,7 +226,7 @@ class VKService {
                 print(error.localizedDescription)
             case .success(let value):
                 let json = JSON(value)
-                let photos = json["response"]["items"].arrayValue.map { Photo(json: $0) }.filter { !$0.photoURL.isEmpty }
+                photos = json["response"]["items"].arrayValue.map { Photo(json: $0) }.filter { !$0.photoURL.isEmpty }
                 for photo in photos {
                     photo.photoId = photoOwnerId
                 }

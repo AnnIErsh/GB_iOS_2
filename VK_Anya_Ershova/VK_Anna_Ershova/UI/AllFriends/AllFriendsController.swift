@@ -16,7 +16,7 @@ import KeyPathKit
 class AllFriendsController: UITableViewController, UISearchBarDelegate {
     
     var notificationToken: NotificationToken?
-    
+    let realmProvider = RealmProvider()
     private let userService = VKService()
     private static let realm = try! Realm(configuration: Realm.Configuration(deleteRealmIfMigrationNeeded: true))
     var users: Results<User> = {
@@ -51,7 +51,7 @@ class AllFriendsController: UITableViewController, UISearchBarDelegate {
             } else if let users = users, let self = self {
 //                self.users = users.filter("lastname BEGINSWITH %@").sorted(byProperty: "lastname")
                 
-                RealmProvider.saveItems(items: users.filter {$0.name != ""})
+                self.realmProvider.save(items: users.filter {$0.name != ""})
                 
                 DispatchQueue.main.async {
                     self.tableView.reloadData()

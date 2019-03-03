@@ -26,7 +26,7 @@ class User: Object {
     dynamic var lastname = ""
     
     
-    convenience init(json: JSON) {
+    convenience init(json: JSON, userPhotos: [Photo] = []) {
         self.init()
         self.id = json["id"].intValue
         self.name = json["first_name"].stringValue + " " + json["last_name"].stringValue
@@ -36,6 +36,8 @@ class User: Object {
         self.firstname = json["first_name"].stringValue
         self.lastname = json["last_name"].stringValue
         
+        
+        self.userPhotos.append(objectsIn: userPhotos)
         
     }
     override static func primaryKey() -> String {
