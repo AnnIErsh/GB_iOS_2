@@ -29,7 +29,9 @@ class PhotoCollectionController: UICollectionViewController {
         return photoObject
     }()
 
-    
+    override func viewWillDisappear(_ animated: Bool) {
+        notificationToken?.invalidate()
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
         

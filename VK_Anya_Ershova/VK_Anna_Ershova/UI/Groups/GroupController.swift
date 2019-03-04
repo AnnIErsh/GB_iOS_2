@@ -29,6 +29,9 @@ class GroupController: UITableViewController {
     
 //    override func viewDidAppear(_ animated: Bool) {
 //        self.tableView.reloadData()
+    override func viewWillDisappear(_ animated: Bool) {
+        notificationToken?.invalidate()
+    }
 //    }
     override func viewWillAppear(_ animated: Bool) {
         pairTableAndRealm()

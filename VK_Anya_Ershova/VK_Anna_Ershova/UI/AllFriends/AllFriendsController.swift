@@ -20,11 +20,11 @@ class AllFriendsController: UITableViewController, UISearchBarDelegate {
     private let userService = VKService()
     private static let realm = try! Realm(configuration: Realm.Configuration(deleteRealmIfMigrationNeeded: true))
     var users: Results<User> = {
-        let userObject = realm.objects(User.self).sorted(byKeyPath: "lastname", ascending: true)
+        let userObject = realm.objects(User.self)
         return userObject
     }()
     var filterFr: Results<User> = {
-        let userObject = realm.objects(User.self).sorted(byKeyPath: "lastname", ascending: true)
+        let userObject = realm.objects(User.self)
         return userObject
     }()
         
@@ -64,8 +64,12 @@ class AllFriendsController: UITableViewController, UISearchBarDelegate {
 //        let realm = try! Realm(configuration: config)
 //        users = realm.objects(User.self)
         
+        
         self.tableView.reloadData()
         
+    }
+    override func viewWillDisappear(_ animated: Bool) {
+        notificationToken?.invalidate()
     }
     
     override func viewDidLoad() {
@@ -175,7 +179,7 @@ class AllFriendsController: UITableViewController, UISearchBarDelegate {
         let secText = UILabel()
         secText.frame = CGRect(x: 5, y: 5, width: 80, height: 30)
         if isSearch {
-            secText.text = "..."
+            secText.text = filteringText(in: filterFr)[section]
         } else {
             secText.text = filteringText(in: users)[section]
         }
@@ -354,7 +358,13 @@ extension AllFriendsController {
     func filteringText (in users: Results<User>) -> [String] {
         var friendsIndexTitles = [String]()
         for user in users {
-            friendsIndexTitles.append(String(user.lastname.first!))
+            //friendsIndexTitles.append(String(user.lastname.first!))
+            if let letter = user.lastname.first {
+                friendsIndexTitles.append(String(letter))
+            } else {
+                let letter = user.firstname.first
+                friendsIndexTitles.append(String(letter!))
+            }
         }
         return Array(Set(friendsIndexTitles)).sorted()
     }
