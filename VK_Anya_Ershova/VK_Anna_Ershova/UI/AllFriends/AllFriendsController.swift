@@ -197,7 +197,7 @@ class AllFriendsController: UITableViewController, UISearchBarDelegate {
         
         if searchText != "" {
             isSearch = true
-            filterFr = users.filter("firstname CONTAINS[cd] %@ OR lastname CONTAINS[cd] %@", searchText, searchText)
+            filterFr = users.filter("name CONTAINS[cd] %@", searchText)
             tableView.reloadData()
         } else {
             isSearch = false

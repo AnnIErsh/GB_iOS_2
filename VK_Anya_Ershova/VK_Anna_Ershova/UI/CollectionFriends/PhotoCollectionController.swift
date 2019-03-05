@@ -44,6 +44,9 @@ class PhotoCollectionController: UICollectionViewController {
             } else if let photosFriends = photosFriends, let self = self {
                 //self.photosFriends = photosFriends
                 self.realmProvider.save(items: photosFriends)
+                //RealmProvider.saveItems(items: photosFriends)
+                //photosFriends try? RealmProvider.get(Photo.self)
+                RealmProvider.savePhotoForUser(photosFriends, id: self.photoId)
                 
 //                do {
 //                    let realm = try Realm(configuration: Realm.Configuration(deleteRealmIfMigrationNeeded: true))
@@ -132,3 +135,4 @@ class PhotoCollectionController: UICollectionViewController {
         }
     }
 }
+//"ANY photosForUser.id == %@"

@@ -34,7 +34,7 @@ class GroupController: UITableViewController {
     }
 //    }
     override func viewWillAppear(_ animated: Bool) {
-        pairTableAndRealm()
+        //pairTableAndRealm()
         groupService.loadGroups()
         
         //pairTableAndRealm()

@@ -49,7 +49,7 @@ class RealmProvider {
             
             
         } catch {
-            print(error)
+            print(error.localizedDescription)
         }
     }
     
@@ -67,6 +67,21 @@ class RealmProvider {
         let realm = try? Realm(configuration: self.deleteIfMigration)
         try? realm?.write {
             realm?.delete(items)
+        }
+    }
+    
+    
+    static func savePhotoForUser(_ photos: [Photo],
+                          id: Int,
+                          config: Realm.Configuration = Realm.Configuration(deleteRealmIfMigrationNeeded: true)) {
+        do {
+            let realm = try Realm(configuration: config)
+            guard let user = realm.object(ofType: User.self, forPrimaryKey: id) else { return }
+            try realm.write {
+                user.userPhotos.append(objectsIn: photos)
+            }
+        } catch {
+            print(error.localizedDescription)
         }
     }
     
