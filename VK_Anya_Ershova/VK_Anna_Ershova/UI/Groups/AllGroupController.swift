@@ -169,8 +169,23 @@ class AllGroupController: UITableViewController, UISearchBarDelegate {
         
     }
     
-    
-    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        guard segue.identifier == "add",
+            let destinationVC = segue.destination as? GroupController,
+            let row = tableView.indexPathForSelectedRow?.row  else { return }
+        
+        let gr = filterGr[row]
+        
+        destinationVC.groupsVK = (gr.toAnyObject as! Results<Group>)
+        //destinationVC = gr[row]
+    }
+//    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+//        guard let destinationVC = segue.destination as? GroupController else {
+//            return
+//        }
+//
+//        destinationVC.groupsVK = Results<allgroupsVK>
+//    }
     
 //    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
 //        if segue.identifier == "add" {

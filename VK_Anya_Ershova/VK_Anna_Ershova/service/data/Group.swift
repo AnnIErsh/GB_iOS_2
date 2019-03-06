@@ -30,6 +30,16 @@ class Group : Object {
         self.isMember = json["is_member"].intValue
         
     }
+    
+    
+    var toAnyObject: Any {
+        return [
+            "name": name,
+            "cover": photo,
+            "member": isMember
+        ]
+    }
+
     override static func primaryKey() -> String? {
         return "id"
     }

@@ -43,5 +43,12 @@ class User: Object {
     override static func primaryKey() -> String {
         return "id"
     }
+    // for firebase
+    var toAnyObject: Any {
+        return [
+            "name": name,
+            "avatarUser": avatar
+        ]
+    }
     
 }

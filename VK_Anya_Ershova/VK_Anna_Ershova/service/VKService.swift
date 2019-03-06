@@ -12,6 +12,7 @@ import SwiftyJSON
 import RealmSwift
 
 class VKService {
+    public static let vk = VKService()
     static let sessionManager: SessionManager = {
         let config = URLSessionConfiguration.default
         config.timeoutIntervalForRequest = 40
@@ -19,10 +20,37 @@ class VKService {
         
         return sessionManager
     }()
-    
+    var sessionUserId = Session.shared.userId
     var sessionToken = Session.shared.token
     let url = "https://api.vk.com"
     let realmProvider = RealmProvider()
+    
+//    func setup(token: String, uid: Int) {
+//        self.sessionToken = token
+//        self.sessionUserId = uid
+//    }
+    
+    
+//    static func userGet(completion: @escaping (User) -> Void) {
+//        let url = "https://api.vk.com/method/users.get"
+//        let parameters: Parameters = [
+//            "user_ids": Session.shared.userId,
+//            "fields": "photo_100",
+//            "access_token": Session.shared.token,
+//            "v": "5.92"
+//        ]
+//        
+//        Alamofire.request(url, parameters: parameters).responseJSON(
+//            queue: DispatchQueue.global(qos: .userInitiated),
+//            options: JSONSerialization.ReadingOptions.allowFragments) { response in
+//                guard let value = response.value else {
+//                    fatalError("VkService userGet(): \(String(describing: response.error))")
+//                }
+//                let json = JSON(value)
+//                let user = User(json: json["response"].arrayValue.first!)
+//                completion(user)
+//        }
+//    }
     
     func loadFriends(completion: (([User]?, Error?) -> Void)? = nil) {
         

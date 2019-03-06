@@ -48,6 +48,8 @@
 		0BE9EE09220C6E5400E2F347 /* LoginVkViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BE9EE08220C6E5400E2F347 /* LoginVkViewController.swift */; };
 		0BF2A51321E42E0900DA5E5C /* CircleShadowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BF2A51221E42E0900DA5E5C /* CircleShadowView.swift */; };
 		0BF2A51521E4367900DA5E5C /* ShadowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BF2A51421E4367900DA5E5C /* ShadowView.swift */; };
+		0BFA3125222F26CF00B0CB61 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0BFA3124222F26CE00B0CB61 /* GoogleService-Info.plist */; };
+		0BFA312B222F4F0800B0CB61 /* FirebaseVK.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BFA312A222F4F0800B0CB61 /* FirebaseVK.swift */; };
 		1A54F963DB2CC656DCD41C1B /* Pods_VK_Anna_Ershova.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7947CD19143D5BC5013AB47B /* Pods_VK_Anna_Ershova.framework */; };
 /* End PBXBuildFile section */
 
@@ -95,6 +97,8 @@
 		0BE9EE08220C6E5400E2F347 /* LoginVkViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginVkViewController.swift; sourceTree = "<group>"; };
 		0BF2A51221E42E0900DA5E5C /* CircleShadowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircleShadowView.swift; sourceTree = "<group>"; };
 		0BF2A51421E4367900DA5E5C /* ShadowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShadowView.swift; sourceTree = "<group>"; };
+		0BFA3124222F26CE00B0CB61 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		0BFA312A222F4F0800B0CB61 /* FirebaseVK.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseVK.swift; sourceTree = "<group>"; };
 		7947CD19143D5BC5013AB47B /* Pods_VK_Anna_Ershova.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_VK_Anna_Ershova.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B1EC73295F1CAE851E50A32A /* Pods-VK_Anna_Ershova.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VK_Anna_Ershova.debug.xcconfig"; path = "Target Support Files/Pods-VK_Anna_Ershova/Pods-VK_Anna_Ershova.debug.xcconfig"; sourceTree = "<group>"; };
 		B233EBF59DC906C2C8A7EE9B /* Pods-VK_Anna_Ershova.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VK_Anna_Ershova.release.xcconfig"; path = "Target Support Files/Pods-VK_Anna_Ershova/Pods-VK_Anna_Ershova.release.xcconfig"; sourceTree = "<group>"; };
@@ -144,6 +148,7 @@
 		0B1BB40721C861A600B3F9AB /* VK_Anna_Ershova */ = {
 			isa = PBXGroup;
 			children = (
+				0BFA3126222F349700B0CB61 /* Firebase */,
 				0B54A3C3220D2523004E7ECD /* service */,
 				0B1BB40A21C861A600B3F9AB /* LoginFormController.swift */,
 				0B1BB40821C861A600B3F9AB /* AppDelegate.swift */,
@@ -259,6 +264,15 @@
 			path = Animation;
 			sourceTree = "<group>";
 		};
+		0BFA3126222F349700B0CB61 /* Firebase */ = {
+			isa = PBXGroup;
+			children = (
+				0BFA3124222F26CE00B0CB61 /* GoogleService-Info.plist */,
+				0BFA312A222F4F0800B0CB61 /* FirebaseVK.swift */,
+			);
+			path = Firebase;
+			sourceTree = "<group>";
+		};
 		D4593C5DB88BFBC108CC2A5D /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -337,6 +351,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				0B1BB41321C861A800B3F9AB /* LaunchScreen.storyboard in Resources */,
+				0BFA3125222F26CF00B0CB61 /* GoogleService-Info.plist in Resources */,
 				0B1BB41021C861A800B3F9AB /* Assets.xcassets in Resources */,
 				0B1BB40E21C861A600B3F9AB /* Main.storyboard in Resources */,
 			);
@@ -355,22 +370,38 @@
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-VK_Anna_Ershova/Pods-VK_Anna_Ershova-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
+				"${BUILT_PRODUCTS_DIR}/BoringSSL-GRPC/openssl_grpc.framework",
+				"${BUILT_PRODUCTS_DIR}/GTMSessionFetcher/GTMSessionFetcher.framework",
+				"${BUILT_PRODUCTS_DIR}/GoogleUtilities/GoogleUtilities.framework",
 				"${BUILT_PRODUCTS_DIR}/KeyPathKit/KeyPathKit.framework",
 				"${BUILT_PRODUCTS_DIR}/Kingfisher/Kingfisher.framework",
+				"${BUILT_PRODUCTS_DIR}/Protobuf/Protobuf.framework",
 				"${BUILT_PRODUCTS_DIR}/Realm/Realm.framework",
 				"${BUILT_PRODUCTS_DIR}/RealmSwift/RealmSwift.framework",
 				"${BUILT_PRODUCTS_DIR}/SwiftyJSON/SwiftyJSON.framework",
+				"${BUILT_PRODUCTS_DIR}/gRPC-C++/grpcpp.framework",
+				"${BUILT_PRODUCTS_DIR}/gRPC-Core/grpc.framework",
+				"${BUILT_PRODUCTS_DIR}/leveldb-library/leveldb.framework",
+				"${BUILT_PRODUCTS_DIR}/nanopb/nanopb.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 			);
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Alamofire.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/openssl_grpc.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GTMSessionFetcher.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GoogleUtilities.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/KeyPathKit.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Kingfisher.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Protobuf.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Realm.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RealmSwift.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftyJSON.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/grpcpp.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/grpc.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/leveldb.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/nanopb.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -423,6 +454,7 @@
 				0B2FA39F22122F090046C8DE /* User.swift in Sources */,
 				0B1BB40B21C861A600B3F9AB /* LoginFormController.swift in Sources */,
 				0B05EE3B2203269700517964 /* CustomNavigationController.swift in Sources */,
+				0BFA312B222F4F0800B0CB61 /* FirebaseVK.swift in Sources */,
 				0B16762D22064C2F00BB7CEF /* RefreshView.swift in Sources */,
 				0B2B00A621D5084E001E67A2 /* PhotoViewCollectionCell.swift in Sources */,
 				0B6BA47021F6DECC00AF2042 /* NewsCollectionViewController.swift in Sources */,

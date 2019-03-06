@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import FirebaseAuth
+import Firebase
 
 
 class LoginFormController: UIViewController {
@@ -239,6 +241,15 @@ class LoginFormController: UIViewController {
         
         if let exit = navigationController {
             exit.popViewController(animated: true)
+            do {
+                // 1
+                try Auth.auth().signOut()
+                self.dismiss(animated: true, completion: nil)
+            } catch (let error) {
+                // 2
+                print("Auth sign out failed: \(error)")
+            }
+
         } else {
             dismiss(animated: true, completion: nil)
         }

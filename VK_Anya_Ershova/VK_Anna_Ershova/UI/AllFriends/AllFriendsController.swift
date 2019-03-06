@@ -10,6 +10,8 @@ import UIKit
 import Kingfisher
 import RealmSwift
 import KeyPathKit
+import FirebaseDatabase
+import FirebaseAuth
 
 
 
@@ -28,6 +30,8 @@ class AllFriendsController: UITableViewController, UISearchBarDelegate {
         return userObject
     }()
         
+    private var firebaseVK = [FirebaseVK]()
+    private let ref = Database.database().reference(withPath: "users")
     
     var friendId = 0
     
@@ -77,6 +81,40 @@ class AllFriendsController: UITableViewController, UISearchBarDelegate {
         super.viewDidLoad()
         showSearchBar()
         pairTableAndRealm()
+        
+        
+        
+        
+        
+        Auth.auth().signInAnonymously() { (authResult, error) in
+            //            let user = authResult.user
+            //            let isAnonymous = user.isAnonymous  // true
+            //            let uid = user.uid
+            let user = authResult?.user
+            guard let uid = user?.uid else { return }
+            let firebaseVK = FirebaseVK(uid: uid, uidInt: Session.shared.userId)
+            let firebaseRef = self.ref.child(Session.shared.token)
+            firebaseRef.updateChildValues(firebaseVK.toAnyObject())
+        }
+        
+        
+        
+        
+        
+        
+    
+        
+        
+        ref.observe(.value, with: { snapshot in
+            var firebaseVK = [FirebaseVK]()
+            for child in snapshot.children {
+                if let snapshot = child as? DataSnapshot,
+                    let firebase = FirebaseVK(snapshot: snapshot) {
+                    firebaseVK.append(firebase)
+                }
+            }
+            self.firebaseVK = firebaseVK
+        })
         
     }
     

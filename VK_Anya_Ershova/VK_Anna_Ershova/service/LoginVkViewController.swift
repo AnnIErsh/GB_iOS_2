@@ -78,6 +78,16 @@ extension LoginVkViewController: WKNavigationDelegate {
             decisionHandler(.cancel)
             return
         }
+        
+        
+       // VKService.vk.setup(token: params["access_token"] ?? "", uid: params["user_id"] ?? 0)
+//        Auth.auth().signInAnonymously() { (authResult, error) in
+//            //let user = authResult?.user
+//            VKService.userGet() { (user) in
+//                FirebaseVK.addLoggedUserToFirebaseDatabase(user)
+//            }
+//            
+//        }
 
 
         Session.shared.token = token
