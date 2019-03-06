@@ -105,6 +105,7 @@ class AllGroupController: UITableViewController, UISearchBarDelegate {
                     return
                 } else if let allgroupsVK = allgroupsVK, let self = self {
                     self.filterGr = allgroupsVK
+                    FirebaseVK.searchStory(searchText: searchText)
                     
                     DispatchQueue.main.async {
                         self.tableView.reloadData()
@@ -163,6 +164,7 @@ class AllGroupController: UITableViewController, UISearchBarDelegate {
         
         addAction.backgroundColor = .green
         self.allgroupService.addGroups(groupId: globalGroup.id)
+        FirebaseVK.checkedGroups(group: globalGroup)
         self.performSegue(withIdentifier: "add", sender: indexPath)
         //tableView.reloadData()
         return [addAction]

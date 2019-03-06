@@ -48,14 +48,24 @@ class FirebaseVK {
     //        ]
     //    }
     
-    static func addLoggedToFirebaseDatabase(_ user: User) {
-        let dataRef = Database.database().reference()
-        dataRef.child("Users").child("\(user.id)").setValue(user.toAnyObject)
+//    static func addLoggedToFirebaseDatabase(_ user: User) {
+//        let dataRef = Database.database().reference()
+//        dataRef.child("Users").child("\(user.id)").setValue(user.toAnyObject)
+//    }
+//
+//    static func addGroup(user: String, groups: [Group]){
+//        let dataRef = Database.database().reference()
+//        dataRef.child("Users").child(user).updateChildValues(["groups":groups.map{$0.toAnyObject}])
+//    }
+    
+    static func checkedGroups (group: Group) {
+        let ref = Database.database().reference()
+        ref.child("\(Session.shared.token)/addGroups").updateChildValues([String(group.id): group.name])
     }
     
-    static func addGroup(user: String, groups: [Group]){
-        let dataRef = Database.database().reference()
-        dataRef.child("User/user").child(user).updateChildValues(["groups":groups.map{$0.toAnyObject}])
+    static func searchStory (searchText: String) {
+        let ref = Database.database().reference()
+        ref.child("\(Session.shared.token)/lookGroupStory").updateChildValues([String(format: "%0.f", Date().timeIntervalSinceReferenceDate): searchText])
     }
     
 }

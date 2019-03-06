@@ -10,6 +10,8 @@ import UIKit
 import Kingfisher
 import Alamofire
 import RealmSwift
+import Firebase
+import FirebaseDatabase
 
 class GroupController: UITableViewController {
     
@@ -26,6 +28,8 @@ class GroupController: UITableViewController {
     var groupService = VKService()
     var groupname = [String]()
     
+    private var firebaseVK = [FirebaseVK]()
+    private let ref = Database.database().reference(withPath: "users")
     
 //    override func viewDidAppear(_ animated: Bool) {
 //        self.tableView.reloadData()
@@ -159,3 +163,5 @@ class GroupController: UITableViewController {
     
     
 }
+
+
