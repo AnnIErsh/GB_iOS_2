@@ -176,7 +176,7 @@ class AllGroupController: UITableViewController, UISearchBarDelegate {
             let destinationVC = segue.destination as? GroupController,
             let row = tableView.indexPathForSelectedRow?.row  else { return }
         
-        let gr = filterGr[row]
+        let gr = allgroupsVK[row]
         
         destinationVC.groupsVK = (gr.toAnyObject as! Results<Group>)
         //destinationVC = gr[row]

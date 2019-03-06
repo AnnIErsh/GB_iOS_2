@@ -62,12 +62,7 @@ class AllFriendsController: UITableViewController, UISearchBarDelegate {
                 }
             }
         }
-        
-       
-//        let config = Realm.Configuration(deleteRealmIfMigrationNeeded: true)
-//        let realm = try! Realm(configuration: config)
-//        users = realm.objects(User.self)
-        
+
         
         self.tableView.reloadData()
         
@@ -242,33 +237,7 @@ class AllFriendsController: UITableViewController, UISearchBarDelegate {
             tableView.reloadData()
         }
         
-        
-            
-        
-//        if searchText != "" {
-            
-//            userService.searchFriends(isSearching: searchText){ [weak self] users, error in
-//                if let error = error {
-//                    print(error.localizedDescription)
-//                    return
-//                } else if let users = users, let self = self {
-//                    self.users = users.filter {$0.name != ""}
-//                    //self.filterFr = users
-//
-//                    DispatchQueue.main.async {
-//                        self.tableView.reloadData()
-//                    }
-//
-//                }
-//
-//            }
-            //            filterFr = users.filter({( group ) -> Bool in
-            //                return group.name.lowercased().contains(searchText.lowercased())
-            //            })
- //       } else {
-            //isSearch = false
-        //          self.tableView.reloadData()
- //       }
+
         
         
     }
@@ -428,50 +397,6 @@ extension AllFriendsController {
             }
         })
     }
-
-    
-//    func filter (of users: Array<User>, in section: Int) ->  Array<User> {
-//        let key = filteringText(in: users)[section]
-//        return users.filter { $0.name.first! == Character(key) }
-//    }
-//
-//    func filteringText (in users: Array<User>) -> [String] {
-//        var initText = [String]()
-//        for user in users {
-//            initText.append(String(user.name.first!))
-//        }
-//        return Array(Set(initText)).sorted()
-//    }
-    
-//    func queryUsers(){
-//        let realm = try! Realm()
-//        let allUsers = realm.objects(User.self)
-//        for each in allUsers{
-//            self.users.append(each)
-//        }
-//    }
-//    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-//
-//        self.users.removeAll()
-//
-//        DispatchQueue.main.async() {
-//            if (textField.text?.count)! > 0{
-//                let realm = try! Realm()
-//                let predicate = NSPredicate(format: "name CONTAINS [c] %@", textField.text!)
-//                let filteredUsers = realm.objects(User.self).filter(predicate)
-//                for each in filteredUsers{
-//                    self.users.append(each)
-//                    //self.tableview.reloadData()
-//                }
-//            }else{
-//                self.queryUsers()
-//                self.tableView.reloadData()
-//            }
-//        }
-//        self.tableView.reloadData()
-//
-//        return true
-//    }
     
     
     

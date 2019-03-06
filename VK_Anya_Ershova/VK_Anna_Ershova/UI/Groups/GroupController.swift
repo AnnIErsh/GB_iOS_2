@@ -18,13 +18,13 @@ class GroupController: UITableViewController {
     var notificationToken: NotificationToken?
     let realmProvider = RealmProvider()
     
-//    private static let realm = try! Realm(configuration: Realm.Configuration(deleteRealmIfMigrationNeeded: true))
+    private static let realm = try! Realm(configuration: Realm.Configuration(deleteRealmIfMigrationNeeded: true))
     
-    var groupsVK: Results<Group>?
-//    var groupsVK: Results<Group> = {
-//        let groupObject = realm.objects(Group.self)
-//        return groupObject
-//    }()
+    //var groupsVK: Results<Group>?
+    var groupsVK: Results<Group> = {
+        let groupObject = realm.objects(Group.self)
+        return groupObject
+    }()
     var groupService = VKService()
     var groupname = [String]()
     
@@ -60,59 +60,66 @@ class GroupController: UITableViewController {
     
     // MARK: - Table view data source
     
-//    override func numberOfSections(in tableView: UITableView) -> Int {
-//        // #warning Incomplete implementation, return the number of sections
-//        return 1
-//    }
+    override func numberOfSections(in tableView: UITableView) -> Int {
+        // #warning Incomplete implementation, return the number of sections
+        return 1
+    }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        return groupsVK?.count ?? 0
+        return groupsVK.count
     }
     
     
+//    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+//        guard let cell = tableView.dequeueReusableCell(withIdentifier: "GroupCell", for: indexPath) as? GroupCell,
+//            let mygroup = groupsVK?[indexPath.row] else { return UITableViewCell() }
+//        cell.configured(with: mygroup)
+//
+//        return cell
+//    }
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: "GroupCell", for: indexPath) as? GroupCell,
-            let mygroup = groupsVK?[indexPath.row] else { return UITableViewCell() }
-        cell.configured(with: mygroup)
+        let cell = tableView.dequeueReusableCell(withIdentifier: "GroupCell", for: indexPath) as! GroupCell
+        cell.configured(with: groupsVK[indexPath.row])
         
         return cell
     }
     
+    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
+
     
+            // Delete the row from the data source
+            let gr = groupsVK[indexPath.row]
+            self.groupService.leftGroups(for: gr.id)
+            RealmProvider.delete([gr])
+            tableView.reloadData()
+        }
+    }
+
     
-//    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-//        if editingStyle == .delete {
-//            guard let mygroup = groupsVK?[indexPath.row] else { return }
-//            let ownerGroup = self.groupsVK![indexPath.row]
-//            self.groupService.leftGroups(for: ownerGroup.id)
-//
-//            RealmProvider.delete([mygroup])
+//    override func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
+//        let ownerGroup = self.groupsVK[indexPath.row]
+//        let delAction = UITableViewRowAction(style: .destructive, title: "Delete") { (action, indexpath) in
+//            print("Del Action Tapped")
+//            self.tableView.deleteRows(at: [indexPath], with: .fade)
+//            //            do {
+//            //                let realm = try Realm()
+//            //                realm.beginWrite()
+//            //                realm.delete(ownerGroup!)
+//            //                try realm.commitWrite()
+//            //            } catch {
+//            //                print(error)
+//            //            }
+//            RealmProvider.delete([ownerGroup])
+//            tableView.reloadData()
 //
 //        }
+//        delAction.backgroundColor = .red
+//        self.groupService.leftGroups(for: ownerGroup.id)
+//        self.tableView.reloadData()
+//        return [delAction]
 //    }
-    override func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
-        let ownerGroup = self.groupsVK?[indexPath.row]
-        let delAction = UITableViewRowAction(style: .destructive, title: "Delete") { (action, indexpath) in
-            print("Del Action Tapped")
-            //self.tableView.deleteRows(at: [indexPath], with: .fade)
-//            do {
-//                let realm = try Realm()
-//                realm.beginWrite()
-//                realm.delete(ownerGroup!)
-//                try realm.commitWrite()
-//            } catch {
-//                print(error)
-//            }
-            RealmProvider.delete([ownerGroup!])
-            tableView.reloadData()
-
-        }
-        delAction.backgroundColor = .red
-        //self.groupService.leftGroups(for: ownerGroup.id)
-        self.tableView.reloadData()
-        return [delAction]
-    }
     
 //        @IBAction func add(segue: UIStoryboardSegue) {
 //            if segue.identifier == "add" {
@@ -132,8 +139,8 @@ class GroupController: UITableViewController {
     
     private func pairTableAndRealm() {
         
-        groupsVK = try? RealmProvider.get(Group.self)
-        notificationToken = groupsVK?.observe { [weak self] changes in
+        groupsVK = try! RealmProvider.get(Group.self)
+        notificationToken = groupsVK.observe { [weak self] changes in
             guard let self = self else { return }
             switch changes {
             case .initial(_):
