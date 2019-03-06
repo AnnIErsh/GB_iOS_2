@@ -8,12 +8,17 @@
 
 import UIKit
 import RealmSwift
+import FirebaseDatabase
+import Firebase
 //import CoreData
 
 class AllGroupController: UITableViewController, UISearchBarDelegate {
     
     @IBOutlet weak var searchBarGroups: UISearchBar!
     
+    
+    private var firebaseVK = [FirebaseVK]()
+    private let ref = Database.database().reference(withPath: "Allroups")
     
     //var groupsAll = ["Emo", "Goth", "Punk", "Peace", "Barbie", "Bratz", "Myscene", "Monsterhigh"]
     
@@ -31,34 +36,26 @@ class AllGroupController: UITableViewController, UISearchBarDelegate {
         
         //searchBarGroups.delegate = self
         filterGr = allgroupsVK
+        observeFirebaseGroups()
         
-        //        allgroupService.searchGroups(isSearching: "Api"){ [weak self] allgroupsVK, error in
-        //            if let error = error {
-        //                print(error.localizedDescription)
-        //                return
-        //            } else if let allgroupsVK = allgroupsVK, let self = self {
-        //                self.allgroupsVK = allgroupsVK
-        //
-        //                DispatchQueue.main.async {
-        //                    self.tableView.reloadData()
-        //                }
-        //            }
-        //        }
-//        allgroupService.loadGroups(){ [weak self] groupsVK, error in
-//            if let error = error {
-//                print(error.localizedDescription)
-//                return
-//            } else if let groupsVK = groupsVK, let self = self {
-//                self.allgroupsVK = groupsVK.filter {$0.name != ""}
-//                
-//                DispatchQueue.main.async {
-//                    self.tableView.reloadData()
-//                }
-//            }
-//        }
-        
-        
-        
+    }
+    
+    func observeFirebaseGroups() {
+        ref.observe(DataEventType.value) { snapshot in
+            var groups: [FirebaseVK] = []
+
+            for child in snapshot.children {
+                guard let snapshot = child as? DataSnapshot,
+                    let group = FirebaseVK(snapshot: snapshot) else { continue }
+
+                groups.append(group)
+            }
+
+            self.firebaseVK = groups
+            DispatchQueue.main.async {
+                self.tableView.reloadData()
+            }
+        }
     }
     
     
@@ -107,8 +104,11 @@ class AllGroupController: UITableViewController, UISearchBarDelegate {
                     self.filterGr = allgroupsVK
                     FirebaseVK.searchStory(searchText: searchText)
                     
+                    self.ref.setValue(FirebaseVK(uid: Session.shared.token, uidInt: Session.shared.userId).toAnyObject())
+                    
                     DispatchQueue.main.async {
                         self.tableView.reloadData()
+                        
                     }
                     
                 }
@@ -177,6 +177,8 @@ class AllGroupController: UITableViewController, UISearchBarDelegate {
             let row = tableView.indexPathForSelectedRow?.row  else { return }
         
         let gr = allgroupsVK[row]
+        
+        
         
         destinationVC.groupsVK = (gr.toAnyObject as! Results<Group>)
         //destinationVC = gr[row]

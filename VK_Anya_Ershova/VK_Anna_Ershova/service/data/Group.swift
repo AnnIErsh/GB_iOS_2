@@ -35,8 +35,9 @@ class Group : Object {
     var toAnyObject: Any {
         return [
             "name": name,
-            "cover": photo,
-            "member": isMember
+            "photo": photo,
+            "id": id
+            //"member": isMember
         ]
     }
 

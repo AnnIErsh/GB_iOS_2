@@ -29,7 +29,7 @@ class GroupController: UITableViewController {
     var groupname = [String]()
     
     private var firebaseVK = [FirebaseVK]()
-    private let ref = Database.database().reference(withPath: "users")
+    private let ref = Database.database().reference(withPath: "groups")
     
 //    override func viewDidAppear(_ animated: Bool) {
 //        self.tableView.reloadData()

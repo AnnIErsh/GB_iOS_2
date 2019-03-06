@@ -47,7 +47,7 @@ class User: Object {
     var toAnyObject: Any {
         return [
             "name": name,
-            "avatarUser": avatar
+            "avatar": avatar
         ]
     }
     

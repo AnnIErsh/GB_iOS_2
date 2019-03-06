@@ -44,7 +44,9 @@ class AllGroupCell: UITableViewCell {
 //        let img = photo.photo
 //        imageAllGr.kf.setImage(with: URL(string: img))
 //    }
-    
+    func grname(friend: String) {
+        grdAllName.text = friend
+    }
     
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
