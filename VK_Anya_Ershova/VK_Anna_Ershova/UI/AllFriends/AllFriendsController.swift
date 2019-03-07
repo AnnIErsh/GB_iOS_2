@@ -29,22 +29,15 @@ class AllFriendsController: UITableViewController, UISearchBarDelegate {
         let userObject = realm.objects(User.self)
         return userObject
     }()
-        
+    
     private var firebaseVK = [FirebaseVK]()
     private let ref = Database.database().reference(withPath: "users")
-    
     var friendId = 0
-    
-    
     @IBOutlet weak var searchBar: UISearchBar!
-    
-    
-    
-    
     var isSearch = false
-
-
-
+    
+    
+    
     
     override func viewWillAppear(_ animated: Bool) {
         
@@ -53,7 +46,7 @@ class AllFriendsController: UITableViewController, UISearchBarDelegate {
                 print(error.localizedDescription)
                 return
             } else if let users = users, let self = self {
-//                self.users = users.filter("lastname BEGINSWITH %@").sorted(byProperty: "lastname")
+                //                self.users = users.filter("lastname BEGINSWITH %@").sorted(byProperty: "lastname")
                 
                 self.realmProvider.save(items: users.filter {$0.name != ""})
                 
@@ -62,7 +55,7 @@ class AllFriendsController: UITableViewController, UISearchBarDelegate {
                 }
             }
         }
-
+        
         
         self.tableView.reloadData()
         
@@ -92,14 +85,6 @@ class AllFriendsController: UITableViewController, UISearchBarDelegate {
             firebaseRef.updateChildValues(firebaseVK.toAnyObject())
         }
         
-        
-        
-        
-        
-        
-    
-        
-        
         ref.observe(.value, with: { snapshot in
             var firebaseVK = [FirebaseVK]()
             for child in snapshot.children {
@@ -113,7 +98,7 @@ class AllFriendsController: UITableViewController, UISearchBarDelegate {
         
     }
     
-
+    
     
     override func numberOfSections(in tableView: UITableView) -> Int {
         if isSearch {
@@ -225,7 +210,7 @@ class AllFriendsController: UITableViewController, UISearchBarDelegate {
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return 40
     }
-
+    
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         
         if searchText != "" {
@@ -237,7 +222,7 @@ class AllFriendsController: UITableViewController, UISearchBarDelegate {
             tableView.reloadData()
         }
         
-
+        
         
         
     }
@@ -329,14 +314,6 @@ class AllFriendsController: UITableViewController, UISearchBarDelegate {
         opacityUp.duration = 0.8
         opacityUp.timingFunction = CAMediaTimingFunction(name: CAMediaTimingFunctionName.easeOut)
         cell.layer.add(opacityUp, forKey: nil)
-        //
-        //        let scaleUp = CABasicAnimation(keyPath: "transform.scale")
-        //        scaleUp.beginTime = CACurrentMediaTime()
-        //        scaleUp.fromValue = 0.5
-        //        scaleUp.toValue = 1
-        //        scaleUp.duration = 0.3
-        //        scaleUp.timingFunction = CAMediaTimingFunction(name: CAMediaTimingFunctionName.easeOut)
-        //        cell.layer.add(scaleUp, forKey: nil)
     }
     
     
@@ -348,14 +325,6 @@ class AllFriendsController: UITableViewController, UISearchBarDelegate {
         opacityDown.duration = 0.8
         opacityDown.timingFunction = CAMediaTimingFunction(name: CAMediaTimingFunctionName.easeOut)
         cell.layer.add(opacityDown, forKey: nil)
-        
-        //        let scaleDown = CABasicAnimation(keyPath: "transform.scale")
-        //        scaleDown.beginTime = CACurrentMediaTime()
-        //        scaleDown.fromValue = 1
-        //        scaleDown.toValue = 0.5
-        //        scaleDown.duration = 0.3
-        //        scaleDown.timingFunction = CAMediaTimingFunction(name: CAMediaTimingFunctionName.easeOut)
-        //        cell.layer.add(scaleDown, forKey: nil)
     }
     
 }

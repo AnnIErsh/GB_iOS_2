@@ -45,29 +45,14 @@ class AllFriendsCell: UITableViewCell {
         friendName.text = String("\(String(friend.firstname)) \(String(friend.lastname))")
         imageName.kf.setImage(with: URL(string: friend.avatar))
         
-//        let userName = friend.name
-//        friendName.text = userName
-//
-//        let img = friend.avatar
-//        imageName.kf.setImage(with: URL(string: img))
     }
-    
-    
-    // MARK: LifeCycle
+
     override func awakeFromNib() {
         super.awakeFromNib()
-        // Initialization code
+    
     }
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
     }
     
 }
-//    func configure(with friend: User) {
-//
-//        let userName = friend.firstname + " " + friend.lastname
-//        friendName.text = userName
-//
-//        let img = friend.avatar
-//        imageName.kf.setImage(with: URL(string: img))
-//    }

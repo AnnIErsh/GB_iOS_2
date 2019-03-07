@@ -11,6 +11,7 @@ import Firebase
 import FirebaseDatabase
 import FirebaseAuth
 
+
 class FirebaseVK {
     let ref: DatabaseReference?
     let uid: String
@@ -41,18 +42,11 @@ class FirebaseVK {
     }
     
     
-    //    func toAnyObject() -> [String: Any] {
-    //        return [
-    //            "userId": uid,
-    //            "vkUserId": vkUserId
-    //        ]
-    //    }
-    
     static func addLoginDatabase(_ user: User) {
         let dataRef = Database.database().reference()
         dataRef.child(String(Session.shared.userId)).child("\(user.id)").setValue(user.toAnyObject)
     }
-
+    
     static func addGroup(user: String, groups: [Group]){
         let dataRef = Database.database().reference()
         dataRef.child(String(Session.shared.userId)).child(user).updateChildValues(["groups":groups.map{$0.toAnyObject}])
@@ -62,51 +56,11 @@ class FirebaseVK {
         let ref = Database.database().reference()
         ref.child("\(String(Session.shared.userId))/addGroup").updateChildValues([String(group.id): group.name])
     }
-
+    
     static func searchStory (searchText: String) {
         let ref = Database.database().reference()
         ref.child("\(String(Session.shared.userId))/story").updateChildValues([String(format: "%0.f", Date().timeIntervalSinceReferenceDate): searchText])
     }
-//    static func addedGroup(groups: [Group]){
-//        let dbLink = Database.database().reference()
-//
-//        dbLink.child("Group").child(user).updateChildValues(["groups":groups.map{$0.toAnyObject}])
-//    }
     
 }
-
-//    static func addedGroup(user:String, groups: [Group]){
-//        let dbLink = Database.database().reference()
-//        dbLink.child("UsersData").updateChildValues(["user":user,"groups":groups.map{$0.toAnyObject}])
-//        dbLink.child("UsersData").child(user).updateChildValues(["groups":groups.map{$0.toAnyObject}])
-//    }
-//class FirebaseGroup {
-//    let name: String
-//    let id: Int
-//    let ref: DatabaseReference?
-//
-//    init(name: String, id: Int) {
-//        self.name = name
-//        self.id = id
-//        self.ref = nil
-//    }
-//
-//    init?(snaphot: DataSnapshot) {
-//        guard let value = snaphot.value as? [String: Any],
-//            let name = value["name"] as? String,
-//            let id = value["id"] as? Int else { return nil }
-//
-//        self.name = name
-//        self.id = id
-//        self.ref = snaphot.ref
-//    }
-//
-//    func toAnyObjectGroup() -> [String: Any] {
-//        return [
-//            "name": name,
-//            "id": id
-//        ]
-//    }
-//}
-
 

@@ -10,7 +10,7 @@ import UIKit
 import RealmSwift
 import FirebaseDatabase
 import Firebase
-//import CoreData
+
 
 class AllGroupController: UITableViewController, UISearchBarDelegate {
     
@@ -20,7 +20,6 @@ class AllGroupController: UITableViewController, UISearchBarDelegate {
     private var firebaseVK = [FirebaseVK]()
     private let ref = Database.database().reference(withPath: "Allroups")
     
-    //var groupsAll = ["Emo", "Goth", "Punk", "Peace", "Barbie", "Bratz", "Myscene", "Monsterhigh"]
     
     var allgroupsVK = [Group]()
     var allgroupService = VKService()
@@ -34,7 +33,6 @@ class AllGroupController: UITableViewController, UISearchBarDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        //searchBarGroups.delegate = self
         filterGr = allgroupsVK
         observeFirebaseGroups()
         
@@ -43,14 +41,14 @@ class AllGroupController: UITableViewController, UISearchBarDelegate {
     func observeFirebaseGroups() {
         ref.observe(DataEventType.value) { snapshot in
             var groups: [FirebaseVK] = []
-
+            
             for child in snapshot.children {
                 guard let snapshot = child as? DataSnapshot,
                     let group = FirebaseVK(snapshot: snapshot) else { continue }
-
+                
                 groups.append(group)
             }
-
+            
             self.firebaseVK = groups
             DispatchQueue.main.async {
                 self.tableView.reloadData()
@@ -71,22 +69,21 @@ class AllGroupController: UITableViewController, UISearchBarDelegate {
         } else {
             return allgroupsVK.count
         }
-        //return allgroupsVK.count
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "AllGroupCell", for: indexPath) as! AllGroupCell
-
+        
         if isSearch {
-  
+            
             cell.configured(with: filterGr[indexPath.row])
             
         } else {
-     
+            
             
             cell.configured(with: allgroupsVK[indexPath.row])
         }
- 
+        
         
         return cell
     }
@@ -114,10 +111,6 @@ class AllGroupController: UITableViewController, UISearchBarDelegate {
                 }
                 
             }
-            //            filterGr = allgroupsVK.filter({( groups ) -> Bool in
-            //                return groups.name.lowercased().contains(searchText.lowercased())})
-            
-            //tableView.reloadData()
             
         } else {
             isSearch = false
@@ -131,7 +124,7 @@ class AllGroupController: UITableViewController, UISearchBarDelegate {
         super.didReceiveMemoryWarning()
     }
     
-
+    
     func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
         searchBar.resignFirstResponder()
         isSearch = false
@@ -146,7 +139,7 @@ class AllGroupController: UITableViewController, UISearchBarDelegate {
         self.tableView.reloadData()
         
     }
-
+    
     
     override func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
         
@@ -156,7 +149,6 @@ class AllGroupController: UITableViewController, UISearchBarDelegate {
             print("Add Action Tapped")
             //self.allgroupsVK.append(globalGroup)
             self.filterGr.remove(at: indexPath.row)
-            //self.performSegue(withIdentifier: "add", sender: indexPath)
             self.tableView.reloadData()
             
         }
@@ -166,7 +158,6 @@ class AllGroupController: UITableViewController, UISearchBarDelegate {
         self.allgroupService.addGroups(groupId: globalGroup.id)
         FirebaseVK.checkedGroups(group: globalGroup)
         self.performSegue(withIdentifier: "add", sender: indexPath)
-        //tableView.reloadData()
         return [addAction]
         
     }
@@ -177,52 +168,9 @@ class AllGroupController: UITableViewController, UISearchBarDelegate {
             let row = tableView.indexPathForSelectedRow?.row  else { return }
         
         let gr = allgroupsVK[row]
-        
-        
-        
         destinationVC.groupsVK = (gr.toAnyObject as! Results<Group>)
-        //destinationVC = gr[row]
+        
     }
-//    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-//        guard let destinationVC = segue.destination as? GroupController else {
-//            return
-//        }
-//
-//        destinationVC.groupsVK = Results<allgroupsVK>
-//    }
     
-//    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-//        if segue.identifier == "add" {
-//            let destinationVC : GroupController = segue.destination as! GroupController
-//            let sourceVC = segue.source as! AllGroupController
-//            if let indexPath = sourceVC.tableView.indexPathForSelectedRow {
-//                let addNewGroup = sourceVC.allgroupsVK[indexPath.row]
-//                destinationVC.groupsVK[indexPath.row] = addNewGroup
-//                self.tableView.reloadData()
-//            }
-//        }
-//    }
-    
-    
-    //    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-    //        if editingStyle == .delete {
-    //            allgroupsVK.remove(at: indexPath.row)
-    //            allgroupService.leftGroups(for: allgroupsVK[indexPath.row].id)
-    //            tableView.deleteRows(at: [indexPath], with: .fade)
-    //            tableView.reloadData()
-    //        }
-    
-    //        if editingStyle == .insert {
-    //            allgroupsVK.append(filterGr[indexPath.row])
-    //            allgroupService.addGroups(groupId: filterGr[indexPath.row].id)
-    //            tableView.insertRows(at: [indexPath], with: .automatic)
-    //            tableView.reloadData()
-    //        }
-    //   }
-    
-    //    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-    //        _ = tableView.dataSource
-    //        tableView.deselectRow(at: indexPath, animated: true)
-    //    }
 }
 

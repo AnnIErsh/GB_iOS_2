@@ -13,7 +13,7 @@ import Firebase
 
 class LoginFormController: UIViewController {
     @IBOutlet weak var cloudUIView: UIView!
-
+    
     @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var loginTextField: UITextField!
     @IBOutlet weak var passwordTextField: UITextField!
@@ -25,19 +25,16 @@ class LoginFormController: UIViewController {
     
     let shapeLayer = CAShapeLayer()
     let shapeLayerTwo = CAShapeLayer()
-    
-//    //cloud
     let cloudView = CloudIndicatorAnimation()
-
-
+    
+    
     lazy var refreshView: RefreshView = {
         let view = RefreshView()
-
+        
         //view.translatesAutoresizingMaskIntoConstraints = false
-
+        
         return view
     }()
-//    endCloud
     
     
     
@@ -82,19 +79,9 @@ class LoginFormController: UIViewController {
             }
         }
         
-        
-        
-
-       
-        // loadingLogin.startAnimating()
-        
-
     }
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(true)
-        
-        
-        //loadingLogin.stopAnimating()
         
         let animation = CABasicAnimation(keyPath: "strokeEnd")
         
@@ -110,23 +97,6 @@ class LoginFormController: UIViewController {
         
         
         shapeLayer.add(animation, forKey: "drawLineAnimation")
-        
-
-        
-//        let animated = CABasicAnimation(keyPath: "strokeEnd")
-//
-//        animated.fromValue = 1
-//        animated.byValue = 0
-//        animated.duration = 2
-//        animated.repeatCount = Float.infinity
-//
-//        animated.fillMode = CAMediaTimingFillMode.forwards
-//        animated.isRemovedOnCompletion = false
-//        shapeLayerTwo.add(animation, forKey: nil)
-
-
-
-
         
     }
     
@@ -168,17 +138,17 @@ class LoginFormController: UIViewController {
         
         newIndicatorLoad.layer.addSublayer(shapeLayerTwo)
         
-
+        
         
         
         //cloudSubview
-
+        
         
         
         view.addSubview(cloudView)
         view.addSubview(refreshView)
         
-
+        
         
     }
     
@@ -209,33 +179,6 @@ class LoginFormController: UIViewController {
         scrollView?.contentInset = contentInsets
         scrollView?.scrollIndicatorInsets = contentInsets
     }
-    //
-    //    @objc func editingChanged(){
-    //        guard let login = loginTextField.text, let password = passwordTextField.text else {
-    //            return
-    //        }
-    //        if login.isEmpty || password.isEmpty {
-    //        }
-    //
-    //    }
-    
-    
-    
-    //    @IBAction func loginButtonPressed(_ sender: Any) {
-    //        // Получаем текст логина
-    //        let login = loginTextField.text!
-    //        
-    //        
-    //        // Проверяем, верны ли они
-    //        if login == "admin" {
-    //            print("верный логин")
-    //        } else {
-    //            print("ошибка")
-    //        }
-    //    }
-    
-    
-    
     
     @IBAction func exit(_ sender: AnyObject) {
         
@@ -249,7 +192,7 @@ class LoginFormController: UIViewController {
                 // 2
                 print("Auth sign out failed: \(error)")
             }
-
+            
         } else {
             dismiss(animated: true, completion: nil)
         }

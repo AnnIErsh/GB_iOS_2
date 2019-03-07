@@ -25,32 +25,7 @@ class VKService {
     let url = "https://api.vk.com"
     let realmProvider = RealmProvider()
     
-//    func setup(token: String, uid: Int) {
-//        self.sessionToken = token
-//        self.sessionUserId = uid
-//    }
     
-    
-//    static func userGet(completion: @escaping (User) -> Void) {
-//        let url = "https://api.vk.com/method/users.get"
-//        let parameters: Parameters = [
-//            "user_ids": Session.shared.userId,
-//            "fields": "photo_100",
-//            "access_token": Session.shared.token,
-//            "v": "5.92"
-//        ]
-//        
-//        Alamofire.request(url, parameters: parameters).responseJSON(
-//            queue: DispatchQueue.global(qos: .userInitiated),
-//            options: JSONSerialization.ReadingOptions.allowFragments) { response in
-//                guard let value = response.value else {
-//                    fatalError("VkService userGet(): \(String(describing: response.error))")
-//                }
-//                let json = JSON(value)
-//                let user = User(json: json["response"].arrayValue.first!)
-//                completion(user)
-//        }
-//    }
     
     func loadFriends(completion: (([User]?, Error?) -> Void)? = nil) {
         
@@ -204,38 +179,6 @@ class VKService {
     }
     
     
-    
-    
-    
-    
-    
-//    func searchGlobalGroups(completion: (([Group]?, Error?) -> Void)? = nil) {
-//
-//
-//        //let isSearching = "A"
-//        let path = "/method/groups.search"
-//        let params: Parameters = [
-//            "count": 30,
-//            "access_token" : sessionToken,
-//            "extended" : 1,
-//            "q": "Api",
-//            "v": "5.92"
-//        ]
-//
-//        Alamofire.request(url+path, method: .get, parameters: params).responseJSON   { repsonse in
-//            switch repsonse.result {
-//            case .failure(let error):
-//                print(error.localizedDescription)
-//            case .success(let value):
-//                let json = JSON(value)
-//                let groups = json["response"]["items"].arrayValue.map { Group(json: $0) }
-//                completion?(groups, nil)
-//                print("____________ Get Global Groups ____________: \(value) -----------")
-//                groups.forEach{print($0)}
-//            }
-//        }
-//    }
-    
     func loadPhoto(photoOwnerId: Int, completion: (([Photo]?, Error?) -> Void)? = nil) {
         var photos = [Photo]()
         let path = "/method/photos.getAll"
@@ -268,25 +211,6 @@ class VKService {
             }
         }
     }
-    
-    
-    //    func loadPhotoById(_ ownerId: Int) {
-    //        let path = "/method/photos.get"
-    //        let params: Parameters = [
-    //            "access_token" : sessionToken,
-    //            "owner_id" : "\(ownerId)",
-    //            "album_id" : "profile",
-    //            "count": 5,
-    //            "extended" : 1,
-    //            "v": "5.92"
-    //        ]
-    //
-    //        Alamofire.request(url+path, method: .get, parameters: params).responseJSON { response in
-    //            guard let value = response.value else { return }
-    //
-    //            print("____________ Loading Photos by ID ____________: \(value) -----------")
-    //        }
-    //    }
     
     
     

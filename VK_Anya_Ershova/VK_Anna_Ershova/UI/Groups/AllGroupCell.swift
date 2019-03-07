@@ -13,7 +13,7 @@ class AllGroupCell: UITableViewCell {
     @IBOutlet weak var grdAllName: UILabel!
     override func awakeFromNib() {
         super.awakeFromNib()
-        // Initialization code
+        
     }
     override func prepareForReuse() {
         super.prepareForReuse()
@@ -36,22 +36,14 @@ class AllGroupCell: UITableViewCell {
         imageAllGr.kf.setImage(with: URL(string: img))
     }
     
-//    func config(with group: GlobalGroup, with photo: GlobalGroup) {
-//        
-//        let name = group.name
-//        grdAllName.text = name
-//        
-//        let img = photo.photo
-//        imageAllGr.kf.setImage(with: URL(string: img))
-//    }
+    
     func grname(friend: String) {
         grdAllName.text = friend
     }
     
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
-
-        // Configure the view for the selected state
+        
     }
-
+    
 }

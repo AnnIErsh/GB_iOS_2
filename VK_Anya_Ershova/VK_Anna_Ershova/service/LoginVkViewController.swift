@@ -20,7 +20,7 @@ class LoginVkViewController: UIViewController {
     }
     
     //var sessionToken = Session.shared.token
-        
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         var urlComponents = URLComponents()
@@ -42,22 +42,20 @@ class LoginVkViewController: UIViewController {
         
         //var sessionToken = Session.shared.token
         
-
-
     }
     
     
 }
 extension LoginVkViewController: WKNavigationDelegate {
     func webView(_ webView: WKWebView, decidePolicyFor navigationResponse: WKNavigationResponse, decisionHandler: @escaping (WKNavigationResponsePolicy) -> Void) {
-
+        
         guard let url = navigationResponse.response.url,
             url.path == "/blank.html",
             let fragment = url.fragment  else {
                 decisionHandler(.allow)
                 return
         }
-
+        
         let params = fragment
             .components(separatedBy: "&")
             .map { $0.components(separatedBy: "=") }
@@ -69,8 +67,8 @@ extension LoginVkViewController: WKNavigationDelegate {
                 return dict
         }
         
-
-
+        
+        
         print(params)
         
         
@@ -80,16 +78,7 @@ extension LoginVkViewController: WKNavigationDelegate {
         }
         
         
-       // VKService.vk.setup(token: params["access_token"] ?? "", uid: params["user_id"] ?? 0)
-//        Auth.auth().signInAnonymously() { (authResult, error) in
-//            //let user = authResult?.user
-//            VKService.userGet() { (user) in
-//                FirebaseVK.addLoggedUserToFirebaseDatabase(user)
-//            }
-//            
-//        }
-
-
+        
         Session.shared.token = token
         Session.shared.userId = userId
         print(token, userId)
@@ -99,11 +88,11 @@ extension LoginVkViewController: WKNavigationDelegate {
         //print("my token after: ", sessionToken)
         //Session.shared.printTokenSession()
         
-
+        
     }
     
     
     
-
+    
     
 }

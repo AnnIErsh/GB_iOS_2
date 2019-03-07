@@ -15,7 +15,7 @@ class PhotoCollectionController: UICollectionViewController {
     var photoFriend: String = ""
     
     //var photosFriends = Array<Photo>()
-
+    
     let realmProvider = RealmProvider()
     var photoService = VKService()
     var photoId: Int = 0
@@ -28,7 +28,7 @@ class PhotoCollectionController: UICollectionViewController {
         let photoObject = realm.objects(Photo.self)
         return photoObject
     }()
-
+    
     override func viewWillDisappear(_ animated: Bool) {
         notificationToken?.invalidate()
     }
@@ -42,25 +42,8 @@ class PhotoCollectionController: UICollectionViewController {
                 print(error.localizedDescription)
                 return
             } else if let photosFriends = photosFriends, let self = self {
-                //self.photosFriends = photosFriends
                 self.realmProvider.save(items: photosFriends)
-                //RealmProvider.saveItems(items: photosFriends)
-                //photosFriends try? RealmProvider.get(Photo.self)
                 RealmProvider.savePhotoForUser(photosFriends, id: self.photoId)
-                
-//                do {
-//                    let realm = try Realm(configuration: Realm.Configuration(deleteRealmIfMigrationNeeded: true))
-//
-//                    guard let friend = realm.object(ofType: User.self, forPrimaryKey: self.photoId) else { return }
-//
-//                    try realm.write {
-//                        friend.userPhotos.append(objectsIn: photosFriends)
-//                    }
-//                } catch {
-//                    print(error.localizedDescription)
-//                }
-
-                
                 
                 DispatchQueue.main.async {
                     self.collectionView.reloadData()
@@ -99,17 +82,6 @@ class PhotoCollectionController: UICollectionViewController {
         cell.photoFriendView.layer.shadowOpacity = 0.8
         cell.photoFriendView.layer.shadowRadius = 5
         cell.photoFriendView.layer.shadowOffset = CGSize(width: 10, height: 8)
-        
-        
-        //        let animationIn = CASpringAnimation(keyPath: "transform.scale")
-        //        animationIn.fromValue = 1
-        //        animationIn.toValue = 0.8
-        //        animationIn.stiffness = 100
-        //        animationIn.mass = 0.5
-        //        animationIn.duration = 0.5
-        //        animationIn.beginTime = CACurrentMediaTime()
-        //        animationIn.fillMode = CAMediaTimingFillMode.backwards
-        //        cell.photoFriendView.layer.add(animationIn, forKey: nil)
         cell.configured(with: photosFriends[indexPath.row])
         
         

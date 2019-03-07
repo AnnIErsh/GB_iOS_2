@@ -24,33 +24,6 @@ class SwipeImageViewController: UIViewController {
     
     var swImg = UIImageView()
     
-    
-//    override func viewWillAppear(_ animated: Bool) {
-//        photoService.loadPhoto(ownerId: ownerId) { [weak self] photosFriends, error in
-//            if let error = error {
-//                print(error.localizedDescription)
-//                return
-//            } else if let photosFriends = photosFriends, let self = self {
-//                self.photosFriends = photosFriends
-//
-//
-//
-//                DispatchQueue.main.async {
-//                    //self.view.reloadInputViews()
-//                    self.swImg.kf.setImage(with: URL(string: photosFriends[self.index].photoURL))
-//                    self.swImg.frame = UIScreen.main.bounds
-//                    self.swImg.contentMode = .scaleAspectFit
-//                    //self.view.addSubview(self.swImg)
-//                    self.view.backgroundColor = UIColor.darkGray
-//                    self.swipeImgView.contentMode = .scaleAspectFit
-//                    self.swipeImgView.backgroundColor = UIColor.darkGray
-//                }
-//
-//            }
-//
-//        }
-//
-//    }
     override func viewDidLoad() {
         super.viewDidLoad()
         
