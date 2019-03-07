@@ -215,23 +215,3 @@ extension Int {
 
 
 
-//    func drawHeart() -> UIImage? {
-//        let rect = CGRect(x: 0, y: 0, width: 20.0, height: 20.0)
-//        let context = UIGraphicsGetCurrentContext()
-//        if let context = context {
-//            UIGraphicsPushContext(context)
-//        }
-//        UIGraphicsBeginImageContext(rect.size)
-//
-//        let bezier = UIBezierPath(heartIn: self.bounds)
-//
-//        bezier.lineWidth = 3.0
-//        bezier.lineJoinStyle = .bevel
-//        bezier.stroke()
-//        context?.addPath(bezier.cgPath)
-//        let image: UIImage? = UIGraphicsGetImageFromCurrentImageContext()
-//        UIGraphicsPopContext()
-//        UIGraphicsEndImageContext()
-//        return image
-//    }
-

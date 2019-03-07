@@ -10,33 +10,23 @@ import Foundation
 import SwiftyJSON
 import RealmSwift
 
+@objcMembers
 class User: Object {
-    @objc dynamic var id: Int = 0
-    @objc dynamic var name: String = ""
-    @objc dynamic var avatar: String = ""
+    
+    var userPhotos = List<Photo>()
+    
+    dynamic var id: Int = 0
+    dynamic var name: String = ""
+    dynamic var avatar: String = ""
     //let lastname: String
     override var description: String {
         return "My friend is \(id) \(name) \(avatar)"
     }
-    @objc dynamic var firstname = ""
-    @objc dynamic var lastname = ""
+    dynamic var firstname = ""
+    dynamic var lastname = ""
     
     
-    
-    
-    //    enum CodingKeys: String, CodingKey {
-    //        case id
-    //        case name
-    //        case avatar
-    //
-    //
-    //        case firstname
-    //        case lastname
-    //
-    //
-    //    }
-    
-    required convenience init(json: JSON) {
+    convenience init(json: JSON, userPhotos: [Photo] = []) {
         self.init()
         self.id = json["id"].intValue
         self.name = json["first_name"].stringValue + " " + json["last_name"].stringValue
@@ -47,6 +37,18 @@ class User: Object {
         self.lastname = json["last_name"].stringValue
         
         
+        self.userPhotos.append(objectsIn: userPhotos)
+        
+    }
+    override static func primaryKey() -> String {
+        return "id"
+    }
+    // for firebase
+    var toAnyObject: Any {
+        return [
+            "name": name,
+            "avatar": avatar
+        ]
     }
     
 }

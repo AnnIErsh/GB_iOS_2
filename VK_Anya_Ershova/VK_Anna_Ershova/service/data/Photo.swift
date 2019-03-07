@@ -11,18 +11,27 @@ import SwiftyJSON
 import RealmSwift
 import Kingfisher
 
+@objcMembers
 class Photo : Object {
     override var description: String {
         return " The photos are \(photoURL) "
     }
-    @objc dynamic var id = 0
-    @objc dynamic var photoURL : String = ""
-    @objc dynamic var stringId: String = ""
-
+    let photosForUser = LinkingObjects(fromType: User.self, property: "userPhotos")
+    
+    dynamic var id = 0
+    dynamic var photoId = 0
+    dynamic var photoURL : String = ""
+    dynamic var stringId: String = ""
+    dynamic var photoOwnerId: Int = 0
+    
     required convenience init (json: JSON)  {
         self.init()
         self.id = json["id"].intValue
         self.photoURL = json["sizes"][8]["url"].stringValue
-        self.stringId = json["owner_id"].stringValue
+        self.stringId = json["id"].stringValue
+        self.photoOwnerId = json["owner_id"].intValue
+    }
+    override static func primaryKey() -> String {
+        return "stringId"
     }
 }

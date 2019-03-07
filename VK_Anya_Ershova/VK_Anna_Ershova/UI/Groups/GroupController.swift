@@ -9,50 +9,48 @@
 import UIKit
 import Kingfisher
 import Alamofire
+import RealmSwift
+import Firebase
+import FirebaseDatabase
 
 class GroupController: UITableViewController {
     
+    var notificationToken: NotificationToken?
+    let realmProvider = RealmProvider()
     
-    //var groups = ["Barbie", "Bratz", "Myscene", "Monsterhigh"]
-    //private var imagesGr = ["Barbie", "Bratz", "Myscene", "Monsterhigh"]
+    private static let realm = try! Realm(configuration: Realm.Configuration(deleteRealmIfMigrationNeeded: true))
     
-    var groupsVK = [Group]()
+    var groupsVK: Results<Group> = {
+        let groupObject = realm.objects(Group.self)
+        return groupObject
+    }()
     var groupService = VKService()
     var groupname = [String]()
     
+    private var firebaseVK = [FirebaseVK]()
+    private let ref = Database.database().reference(withPath: "groups")
     
-//    override func viewDidAppear(_ animated: Bool) {
-//        self.tableView.reloadData()
-//    }
-    override func viewWillAppear(_ animated: Bool) {
-        self.tableView.reloadData()
+    
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        notificationToken?.invalidate()
     }
-//    override func canPerformUnwindSegueAction(_ action: Selector, from fromViewController: UIViewController, withSender sender: Any) -> Bool {
-//        self.tableView.reloadData()
-//        return true
-//    }
-//
+    
+    override func viewWillAppear(_ animated: Bool) {
+        
+   
+        groupService.loadGroups()
+        
+    }
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        groupService.loadGroups(){ [weak self] groupsVK, error in
-            if let error = error {
-                print(error.localizedDescription)
-                return
-            } else if let groupsVK = groupsVK, let self = self {
-                self.groupsVK = groupsVK
-                
-                DispatchQueue.main.async {
-                    self.tableView.reloadData()
-                }
-            }
-        }
+        pairTableAndRealm()
         
-        //self.tableView.reloadData()
         
     }
     
-    // MARK: - Table view data source
     
     override func numberOfSections(in tableView: UITableView) -> Int {
         // #warning Incomplete implementation, return the number of sections
@@ -64,57 +62,42 @@ class GroupController: UITableViewController {
         return groupsVK.count
     }
     
-    
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "GroupCell", for: indexPath) as! GroupCell
-        
         cell.configured(with: groupsVK[indexPath.row])
         
         return cell
     }
     
-    
-    
-    
-    // Override to support editing the table view.
-    //    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-    //        if editingStyle == .delete {
-    //            groupsVK.remove(at: indexPath.row)
-    //            //groupService.leftGroups(for: groupsVK[indexPath.row].id)
-    //            tableView.deleteRows(at: [indexPath], with: .fade)
-    //            tableView.reloadData()
-    //        }
-    //    }
-    override func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
-        let ownerGroup = self.groupsVK[indexPath.row]
-        let delAction = UITableViewRowAction(style: .destructive, title: "Delete") { (action, indexpath) in
-            print("Del Action Tapped")
-            self.groupsVK.remove(at: indexPath.row)
-            tableView.reloadData()
+    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
             
+            
+            // Delete the row from the data source
+            let gr = groupsVK[indexPath.row]
+            self.groupService.leftGroups(for: gr.id)
+            RealmProvider.delete([gr])
+            //tableView.reloadData()
         }
-        delAction.backgroundColor = .red
-        self.groupService.leftGroups(for: ownerGroup.id)
-        self.tableView.reloadData()
-        return [delAction]
     }
     
-//        @IBAction func add(segue: UIStoryboardSegue) {
-//            if segue.identifier == "add" {
-//    
-//                let allGroupController = segue.source as! AllGroupController
-//                if let indexPath = allGroupController.tableView.indexPathForSelectedRow {
-//                    let gr = allGroupController.allgroupsVK[indexPath.row]
-//                    if  groupsVK[indexPath.row].name.contains(gr.name) {
-//                        groupsVK.append(allGroupController.filterGr[indexPath.row])
-//                        tableView.reloadData()
-//                    } else {
-//                        print("error")
-//                    }
-//                }
-//            }
-//        }
-    
+    private func pairTableAndRealm() {
+        
+        groupsVK = try! RealmProvider.get(Group.self)
+        notificationToken = groupsVK.observe { [weak self] changes in
+            guard let self = self else { return }
+            switch changes {
+            case .initial(_):
+                self.tableView.reloadData()
+            case .update(_, let dels, let ins, let mods):
+                self.tableView.applyChanges(deletions: dels, insertions: ins, updates: mods)
+            case .error(let error):
+                print(error)
+            }
+        }
+    }
     
     
 }
+
+

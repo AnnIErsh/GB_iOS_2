@@ -9,11 +9,11 @@
 import UIKit
 
 class LoadingIndicatorView: UIView {
-    // array with dots
+    
     private var dotLayers = [CAShapeLayer]()
     private var dotsScale = 1.3
     
-    //layer for dot
+    
     private func dotLayer() -> CAShapeLayer {
         let layer = CAShapeLayer()
         layer.bounds = CGRect(origin: .zero, size: CGSize(width: dotsRadius * 2.0, height: dotsRadius * 2.0))
@@ -88,10 +88,7 @@ class LoadingIndicatorView: UIView {
             layer.position = CGPoint(x: x, y: center.y)
         }
         
-        
-        
         startAnimating()
-        //        stopAnimating()
     }
     
     
@@ -134,22 +131,6 @@ class LoadingIndicatorView: UIView {
         group.animations = [scaleUp, opacityUp, scaleDown, opacityDown]
         //group.repeatCount = 4
         group.repeatCount = Float.infinity
-        
-        
-        //        let animation = CABasicAnimation(keyPath: "opacity")
-        //        animation.beginTime = CACurrentMediaTime() + 0.5
-        //        animation.fromValue = 0.5
-        //        animation.toValue = 0
-        //        animation.duration = 10
-        //        layer.add(animation, forKey: nil)
-        //
-        //
-        //        let endGrop = CAAnimationGroup()
-        //        endGrop.animations = [group, animation]
-        //        endGrop.repeatCount = 1
-        //        endGrop.duration = 10
-        
-        
         let sum = CGFloat(dotsCount) * 0.2 + CGFloat(0.4)
         group.duration = CFTimeInterval(sum)
         
@@ -174,10 +155,6 @@ class LoadingIndicatorView: UIView {
     public func stopAnimating() {
         
         let animation = CABasicAnimation(keyPath: "opacity")
-        //        animation.beginTime = CACurrentMediaTime() + 0.5
-        //        animation.fromValue = 0.5
-        //        animation.toValue = 0
-        //        animation.duration = 5
         animation.fillMode = CAMediaTimingFillMode.removed
         layer.add(animation, forKey: nil)
         
@@ -186,19 +163,4 @@ class LoadingIndicatorView: UIView {
 }
 
 
-//    let animation = CABasicAnimation(keyPath: "opacity")
-//    animation.beginTime = CACurrentMediaTime() + 0.5
-//    animation.fromValue = 0.5
-//    animation.toValue = 0
-//    animation.duration = 0.5
-//    layer.add(animation, forKey: nil)
 
-//        let animation = CABasicAnimation(keyPath: "opacity")
-//        animation.beginTime = CACurrentMediaTime() + 0.5
-//        animation.fromValue = 0.5
-//        animation.toValue = 0
-//        animation.duration = 5
-
-//       layer.removeFromSuperlayer()
-//        dotLayers.forEach { $0.add(animation, forKey: nil)}
-//        dotLayers.forEach{$0.removeFromSuperlayer()}
