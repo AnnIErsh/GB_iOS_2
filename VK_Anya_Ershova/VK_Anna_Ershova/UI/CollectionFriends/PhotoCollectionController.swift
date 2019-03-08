@@ -24,10 +24,7 @@ class PhotoCollectionController: UICollectionViewController {
     
     static var realm = try! Realm(configuration: Realm.Configuration(deleteRealmIfMigrationNeeded: true))
     
-    var photosFriends: Results<Photo> = {
-        let photoObject = realm.objects(Photo.self)
-        return photoObject
-    }()
+    lazy var photosFriends: Results<Photo>? = try? RealmProvider.get(Photo.self).filter("ANY photosForUser.id == %@", photoId)
     
     override func viewWillDisappear(_ animated: Bool) {
         notificationToken?.invalidate()
@@ -68,7 +65,7 @@ class PhotoCollectionController: UICollectionViewController {
     
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of items
-        return photosFriends.count
+        return photosFriends?.count ?? 0
     }
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -82,7 +79,7 @@ class PhotoCollectionController: UICollectionViewController {
         cell.photoFriendView.layer.shadowOpacity = 0.8
         cell.photoFriendView.layer.shadowRadius = 5
         cell.photoFriendView.layer.shadowOffset = CGSize(width: 10, height: 8)
-        cell.configured(with: photosFriends[indexPath.row])
+        cell.configured(with: (photosFriends?[indexPath.row] ?? nil)!)
         
         
         
@@ -92,9 +89,9 @@ class PhotoCollectionController: UICollectionViewController {
     
     func pairCollectionAndRealm() {
         
-        photosFriends = try! RealmProvider.get(Photo.self).filter("ANY photosForUser.id == %@", photoId)
+        //photosFriends = try! RealmProvider.get(Photo.self).filter("ANY photosForUser.id == %@", photoId)
         
-        notificationToken = photosFriends.observe { [weak self] (changes: RealmCollectionChange) in
+        notificationToken = photosFriends?.observe { [weak self] (changes: RealmCollectionChange) in
             guard let collectionView = self?.collectionView else { return }
             switch changes {
             case .initial:
