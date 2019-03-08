@@ -92,7 +92,7 @@ class PhotoCollectionController: UICollectionViewController {
     
     func pairCollectionAndRealm() {
         
-        photosFriends = try! Realm().objects(Photo.self).filter("photoOwnerId == %@", photoId)
+        photosFriends = try! RealmProvider.get(Photo.self).filter("ANY photosForUser.id == %@", photoId)
         
         notificationToken = photosFriends.observe { [weak self] (changes: RealmCollectionChange) in
             guard let collectionView = self?.collectionView else { return }

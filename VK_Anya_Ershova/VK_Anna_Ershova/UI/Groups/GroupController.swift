@@ -72,12 +72,10 @@ class GroupController: UITableViewController {
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
             
-            
-            // Delete the row from the data source
             let gr = groupsVK[indexPath.row]
             self.groupService.leftGroups(for: gr.id)
             RealmProvider.delete([gr])
-            //tableView.reloadData()
+    
         }
     }
     
