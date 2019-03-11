@@ -39,7 +39,18 @@ class GroupController: UITableViewController {
     override func viewWillAppear(_ animated: Bool) {
         
    
-        groupService.loadGroups()
+        groupService.loadGroups(){ [weak self] groups, error in
+            if let error = error {
+                print(error.localizedDescription)
+                return
+            } else if let groups = groups, let self = self {
+                
+                RealmProvider.saveItems(items: groups)
+                DispatchQueue.main.async {
+                    self.tableView.reloadData()
+                }
+            }
+        }
         
     }
     
@@ -73,7 +84,18 @@ class GroupController: UITableViewController {
         if editingStyle == .delete {
             
             let gr = groupsVK[indexPath.row]
-            self.groupService.leftGroups(for: gr.id)
+            self.groupService.leftGroups(for: gr.id){ [weak self] groups, error in
+                if let error = error {
+                    print(error.localizedDescription)
+                    return
+                } else if let groups = groups, let self = self {
+                    
+                    RealmProvider.saveItems(items: groups)
+                    DispatchQueue.main.async {
+                        self.tableView.reloadData()
+                    }
+                }
+            }
             RealmProvider.delete([gr])
     
         }
