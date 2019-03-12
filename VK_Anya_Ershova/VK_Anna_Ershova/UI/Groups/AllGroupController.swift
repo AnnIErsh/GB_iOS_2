@@ -15,7 +15,7 @@ import Firebase
 class AllGroupController: UITableViewController, UISearchBarDelegate {
     
     @IBOutlet weak var searchBarGroups: UISearchBar!
-    
+    var realm = RealmProvider()
     
     private var firebaseVK = [FirebaseVK]()
     private let ref = Database.database().reference(withPath: "Allroups")
@@ -99,9 +99,9 @@ class AllGroupController: UITableViewController, UISearchBarDelegate {
                     return
                 } else if let allgroupsVK = allgroupsVK, let self = self {
                     self.filterGr = allgroupsVK
-                    FirebaseVK.searchStory(searchText: searchText)
+                    //FirebaseVK.searchStory(searchText: searchText)
                     
-                    self.ref.setValue(FirebaseVK(uid: Session.shared.token, uidInt: Session.shared.userId).toAnyObject())
+                    //self.ref.setValue(FirebaseVK(uid: Session.shared.token, uidInt: Session.shared.userId).toAnyObject())
                     
                     DispatchQueue.main.async {
                         self.tableView.reloadData()
@@ -148,16 +148,28 @@ class AllGroupController: UITableViewController, UISearchBarDelegate {
         let addAction = UITableViewRowAction(style: .destructive, title: "Add") { (action, indexpath) in
             print("Add Action Tapped")
             //self.allgroupsVK.append(globalGroup)
-            self.filterGr.remove(at: indexPath.row)
-            self.tableView.reloadData()
+            //self.filterGr.remove(at: indexPath.row)
+            //self.tableView.reloadData()
             
         }
         
         
         addAction.backgroundColor = .green
-        self.allgroupService.addGroups(groupId: globalGroup.id)
-        FirebaseVK.checkedGroups(group: globalGroup)
-        self.performSegue(withIdentifier: "add", sender: indexPath)
+        self.allgroupService.addGroups(groupId: globalGroup.id){ [weak self] groups, error in
+            if let error = error {
+                print(error.localizedDescription)
+                return
+            } else if let groups = groups, let self = self {
+                
+                RealmProvider.saveItems(items: groups)
+                self.filterGr.remove(at: indexPath.row)
+                DispatchQueue.main.async {
+                    self.tableView.reloadData()
+                }
+            }
+        }
+        //FirebaseVK.checkedGroups(group: globalGroup)
+        //self.performSegue(withIdentifier: "add", sender: indexPath)
         return [addAction]
         
     }
